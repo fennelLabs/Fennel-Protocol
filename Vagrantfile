@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.33.11"
   config.vm.network :forwarded_port, guest: 22, host: 2222, id: 'ssh'
 
-  config.vm.synced_folder ".", "/home/vagrant/femr_onchain"
+  config.vm.synced_folder ".", "/home/vagrant"
 
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
