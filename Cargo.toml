@@ -4,8 +4,7 @@ panic = 'unwind'
 [workspace]
 members = [
     'node',
-    'pallets/template',
-    'pallets/peace_indicators',
+    'pallets/keystore',
     'pallets/trust',
     'runtime',
 ]

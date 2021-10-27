@@ -4,6 +4,3 @@
 [submodule "pallets/keystore"]
 	path = pallets/keystore
 	url = git@github.com:fennelLabs/fennel_keystore_pallet.git
-[submodule "pallets/peace_indictors"]
-	path = pallets/peace_indictors
-	url = git@github.com:fennelLabs/peace_indicators_pallet.git
