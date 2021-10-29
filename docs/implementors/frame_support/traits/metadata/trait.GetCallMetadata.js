@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["fennel_protocol_runtime"] = [{"text":"impl <a class=\"trait\" href=\"frame_support/traits/metadata/trait.GetCallMetadata.html\" title=\"trait frame_support::traits::metadata::GetCallMetadata\">GetCallMetadata</a> for <a class=\"enum\" href=\"fennel_protocol_runtime/enum.Call.html\" title=\"enum fennel_protocol_runtime::Call\">Call</a>","synthetic":false,"types":["fennel_protocol_runtime::Call"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
