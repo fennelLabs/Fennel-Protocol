@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["node_fennel_protocol"] = [{"text":"impl <a class=\"trait\" href=\"sc_executor/native_executor/trait.NativeExecutionDispatch.html\" title=\"trait sc_executor::native_executor::NativeExecutionDispatch\">NativeExecutionDispatch</a> for <a class=\"struct\" href=\"node_fennel_protocol/service/struct.ExecutorDispatch.html\" title=\"struct node_fennel_protocol::service::ExecutorDispatch\">ExecutorDispatch</a>","synthetic":false,"types":["node_fennel_protocol::service::ExecutorDispatch"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["check_execution_proof","Check remote contextual execution proof using given backend."]],"struct":[["GenesisCallExecutor","Call executor that is able to execute calls only on genesis state."]]});
