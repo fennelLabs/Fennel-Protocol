@@ -4,3 +4,6 @@
 [submodule "pallets/keystore"]
 	path = pallets/keystore
 	url = git@github.com:fennelLabs/fennel_keystore_pallet.git
+[submodule "pallets/signal"]
+	path = pallets/signal
+	url = git@github.com:fennelLabs/fennel-signal.git

@@ -26,6 +26,11 @@ default-features = false
 path = '../pallets/keystore'
 version = '2.0.0'
 
+[dependencies.pallet-signal]
+default-features = false
+path = '../pallets/signal'
+version = '2.0.0'
+
 [build-dependencies.substrate-wasm-builder]
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'monthly-2021-09+1'

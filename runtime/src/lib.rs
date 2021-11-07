@@ -44,6 +44,7 @@ pub use sp_runtime::{Perbill, Permill};
 pub use pallet_template;
 pub use pallet_keystore;
 pub use pallet_trust;
+pub use pallet_signal;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -281,6 +282,10 @@ impl pallet_trust::Config for Runtime {
 	type Event = Event;
 }
 
+impl pallet_signal::Config for Runtime {
+	type Event = Event;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime where
@@ -300,6 +305,7 @@ construct_runtime!(
 		TemplateModule: pallet_template::{Pallet, Call, Storage, Event<T>},
 		TrustModule: pallet_trust::{Pallet, Call, Storage, Event<T>},
 		KeystoreModule: pallet_keystore::{Pallet, Call, Storage, Event<T>},
+		SignalModule: pallet_signal::{Pallet, Call, Storage, Event<T>},
 	}
 );
 
