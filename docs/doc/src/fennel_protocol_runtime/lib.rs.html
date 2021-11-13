@@ -517,6 +517,12 @@
 <span id="517">517</span>
 <span id="518">518</span>
 <span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">no_std</span>)]</span>
 <span class="comment">// `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.</span>
 <span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;256&quot;</span>]</span>
@@ -563,6 +569,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet_template</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet_keystore</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet_trust</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet_signal</span>;
 
 <span class="doccomment">/// An index to a block.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">BlockNumber</span> <span class="op">=</span> <span class="ident">u32</span>;
@@ -800,6 +807,10 @@
 	<span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
 }
 
+<span class="kw">impl</span> <span class="ident">pallet_signal::Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+	<span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
+}
+
 <span class="comment">// Create the runtime by composing the FRAME pallets that were previously configured.</span>
 <span class="macro">construct_runtime!</span>(
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Runtime</span> <span class="kw">where</span>
@@ -819,6 +830,7 @@
 		<span class="ident">TemplateModule</span>: <span class="ident">pallet_template</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
 		<span class="ident">TrustModule</span>: <span class="ident">pallet_trust</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
 		<span class="ident">KeystoreModule</span>: <span class="ident">pallet_keystore</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
+		<span class="ident">SignalModule</span>: <span class="ident">pallet_signal</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
 	}
 );
 
