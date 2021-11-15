@@ -273,6 +273,7 @@ sourcesIndex["owning_ref"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_aura"] = {"name":"","files":["lib.rs","migrations.rs"]};
 sourcesIndex["pallet_authorship"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_balances"] = {"name":"","files":["lib.rs","weights.rs"]};
+sourcesIndex["pallet_fennel_identity"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_grandpa"] = {"name":"","dirs":[{"name":"migrations","files":["v4.rs"]}],"files":["default_weights.rs","equivocation.rs","lib.rs","migrations.rs"]};
 sourcesIndex["pallet_keystore"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_randomness_collective_flip"] = {"name":"","files":["lib.rs"]};

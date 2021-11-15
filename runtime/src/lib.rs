@@ -287,6 +287,10 @@ impl pallet_signal::Config for Runtime {
 	type Event = Event;
 }
 
+impl pallet_fennel_identity::Config for Runtime {
+	type Event = Event;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime where
