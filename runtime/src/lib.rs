@@ -45,6 +45,7 @@ pub use pallet_template;
 pub use pallet_keystore;
 pub use pallet_trust;
 pub use pallet_signal;
+pub use pallet_fennel_identity;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -306,6 +307,7 @@ construct_runtime!(
 		TrustModule: pallet_trust::{Pallet, Call, Storage, Event<T>},
 		KeystoreModule: pallet_keystore::{Pallet, Call, Storage, Event<T>},
 		SignalModule: pallet_signal::{Pallet, Call, Storage, Event<T>},
+		IdentityModule: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>}
 	}
 );
 

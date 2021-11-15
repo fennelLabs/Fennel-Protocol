@@ -31,6 +31,11 @@ default-features = false
 path = '../pallets/signal'
 version = '2.0.0'
 
+[dependencies.pallet-fennel-identity]
+default-features = false
+path = '../pallets/identity'
+version = '2.0.0'
+
 [build-dependencies.substrate-wasm-builder]
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'monthly-2021-09+1'
