@@ -277,6 +277,7 @@ sourcesIndex["pallet_grandpa"] = {"name":"","dirs":[{"name":"migrations","files"
 sourcesIndex["pallet_keystore"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_randomness_collective_flip"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_session"] = {"name":"","files":["lib.rs","weights.rs"]};
+sourcesIndex["pallet_signal"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_sudo"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_template"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_timestamp"] = {"name":"","files":["lib.rs","weights.rs"]};
