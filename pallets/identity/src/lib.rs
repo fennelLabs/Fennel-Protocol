@@ -58,6 +58,15 @@ pub mod pallet {
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         /// Create a new identity owned by origin.
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
+            let sender = ensure_signed(origin)?;
+
+            let identity_id: u32 = 0; // where is this supposed to come from?
+
+            IdentityNumber::<T>::insert(identity_id);
+            IdentityList::<T>::insert(&sender, identity_id, identity_id);
+
+            Self::deposit_event(Event::IdentityCreated(identity_id, sender));
+
             Ok(())
         }
 
