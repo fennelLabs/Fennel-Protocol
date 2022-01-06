@@ -25,7 +25,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn identity_list)]
     /// Maps accounts to a numbered list of their owned identities.
-    pub type IdentityList<T: Config> = StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, u32, u32>;
+    pub type IdentityList<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, u32>;
 
     #[pallet::storage]
     #[pallet::getter(fn identity_trait_list)]
@@ -70,7 +70,7 @@ pub mod pallet {
             };
 
             IdentityNumber::<T>::insert(identity_id);
-            IdentityList::<T>::insert(&sender, identity_id, identity_id);
+            IdentityList::<T>::insert(&sender, identity_id);
 
             Self::deposit_event(Event::IdentityCreated(identity_id, sender));
 
