@@ -62,7 +62,7 @@ pub mod pallet {
 
             let identity_id: u32 = match <IdentityNumber<T>>::get() {
                 None => Err(Error::<T>::NoneValue)?,
-                Ok(x) => {
+                Result(x) => {
                     let incremented = x.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
                     <IdentityNumber<T>>::put(incremented);
                     incremented
