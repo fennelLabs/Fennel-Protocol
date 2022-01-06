@@ -69,7 +69,6 @@ pub mod pallet {
                 },
             };
 
-            IdentityNumber::<T>::insert(identity_id);
             IdentityList::<T>::insert(&sender, identity_id);
 
             Self::deposit_event(Event::IdentityCreated(identity_id, sender));
