@@ -60,7 +60,14 @@ pub mod pallet {
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let sender = ensure_signed(origin)?;
 
-            let identity_id: u32 = 0; // where is this supposed to come from?
+            let identity_id: u32 = match <IdentityNumber<T>>::get() {
+                None => Err(Error::<T>::NoneValue)?,
+                Ok(x) => {
+                    let incremented = x.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                    <IdentityNumber<T>>::put(incremented);
+                    incremented
+                },
+            };
 
             IdentityNumber::<T>::insert(identity_id);
             IdentityList::<T>::insert(&sender, identity_id, identity_id);
