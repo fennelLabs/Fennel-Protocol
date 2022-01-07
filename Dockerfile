@@ -17,13 +17,3 @@ RUN /root/.cargo/bin/rustup update stable
 RUN /root/.cargo/bin/rustup default nightly
 RUN /root/.cargo/bin/rustup target add wasm32-unknown-unknown --toolchain nightly
 EXPOSE 9944
-
-COPY . /opt/app
-WORKDIR /opt/app
-
-RUN /root/.cargo/bin/cargo build
-RUN /root/.cargo/bin/cargo test
-RUN /root/.cargo/bin/cargo bench
-RUN /root/.cargo/bin/cargo doc
-
-ENTRYPOINT [ "/root/.cargo/bin/cargo", "run" ]
