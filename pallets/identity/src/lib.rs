@@ -1,5 +1,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(feature = "std")]
+extern crate core;
+
 pub use pallet::*;
 
 #[frame_support::pallet]
@@ -61,8 +64,8 @@ pub mod pallet {
             let sender = ensure_signed(origin)?;
 
             let identity_id: u32 = match <IdentityNumber<T>>::get() {
-                None => Err(Error::<T>::NoneValue)?,
-                Result(x) => {
+                core::option::Option::None => Err(Error::<T>::NoneValue)?,
+                core::option::Option::Some(x) => {
                     let incremented = x.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
                     <IdentityNumber<T>>::put(incremented);
                     incremented
