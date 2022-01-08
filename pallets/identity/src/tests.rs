@@ -46,6 +46,8 @@ fn revoke_identity() {
     new_test_ext().execute_with(|| {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(300), 1));
+
+        assert_eq!(IdentityModule::revoked_identity_number(), 1);
     });
 }
 
@@ -57,6 +59,8 @@ fn revoke_identity_multiple_from_different_accounts() {
         
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(300), 1));
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(200), 2));
+
+        assert_eq!(IdentityModule::revoked_identity_number(), 2);
     });
 }
 
@@ -68,6 +72,8 @@ fn revoke_identity_multiple_from_same_account() {
         
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(300), 2));
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(300), 1));
+
+        assert_eq!(IdentityModule::revoked_identity_number(), 2);
     });
 }
 
