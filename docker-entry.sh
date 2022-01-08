@@ -1,5 +1,5 @@
-/root/.cargo/bin/cargo build
-/root/.cargo/bin/cargo test
-/root/.cargo/bin/cargo doc
+#cargo build
+#cargo test
+#cargo doc
 
-/root/.cargo/bin/cargo run
+cargo run

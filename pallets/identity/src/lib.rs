@@ -2,11 +2,21 @@
 
 pub use pallet::*;
 
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+
 #[frame_support::pallet]
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
-	use frame_support::inherent::Vec;
+    use frame_support::inherent::Vec;
+    use codec::alloc::collections::BTreeSet;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
@@ -17,15 +27,18 @@ pub mod pallet {
     #[pallet::generate_store(pub(super) trait Store)]
     pub struct Pallet<T>(_);
 
+    #[pallet::type_value]
+    pub fn DefaultCurrent<T: Config>() -> u32 { 0 }
+
     #[pallet::storage]
     #[pallet::getter(fn identity_number)]
     /// Tracks the number of identities currently active on the network.
-    pub type IdentityNumber<T: Config> = StorageValue<_, u32>; 
+    pub type IdentityNumber<T: Config> =  StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
 
     #[pallet::storage]
     #[pallet::getter(fn identity_list)]
-    /// Maps accounts to a numbered list of their owned identities.
-    pub type IdentityList<T: Config> = StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, u32, u32>;
+    /// Maps accounts to the array of identities it owns.
+    pub type IdentityList<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, BTreeSet<u32>, ValueQuery>;
 
     #[pallet::storage]
     #[pallet::getter(fn identity_trait_list)]
@@ -58,6 +71,19 @@ pub mod pallet {
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         /// Create a new identity owned by origin.
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            let total_ids: u32 = <IdentityNumber<T>>::get();
+            let new_id: u32 = total_ids.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+
+            <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
+                ids.insert(new_id);
+                Ok(())
+            })?;
+
+            <IdentityNumber<T>>::put(new_id);
+            Self::deposit_event(Event::IdentityCreated(new_id, who));
+
             Ok(())
         }
 
