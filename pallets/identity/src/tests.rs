@@ -25,8 +25,8 @@ fn issue_identity_registers_different_account_ids_with_new_identities() {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
         assert_ok!(IdentityModule::create_identity(Origin::signed(200)));
 
-        assert_eq!(IdentityModule::identity_list(300), Some(1));
-        assert_eq!(IdentityModule::identity_list(200), Some(2));
+        assert_eq!(IdentityModule::identity_list(300).contains(&1), true);
+        assert_eq!(IdentityModule::identity_list(200).contains(&2), true);
     });
 }
 
@@ -36,8 +36,7 @@ fn issue_identity_registers_same_account_id_with_multiple_new_identities() {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
 
-        // this is where it begins to not make sense
-        assert_eq!(IdentityModule::identity_list(300), Some(1));
-        assert_eq!(IdentityModule::identity_list(300), Some(2));
+        assert_eq!(IdentityModule::identity_list(300).contains(&1), true);
+        assert_eq!(IdentityModule::identity_list(300).contains(&2), true);
     });
 }

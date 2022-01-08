@@ -16,6 +16,7 @@ pub mod pallet {
     use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
     use frame_support::inherent::Vec;
+    use codec::alloc::collections::BTreeSet;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
@@ -32,12 +33,12 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn identity_number)]
     /// Tracks the number of identities currently active on the network.
-    pub type IdentityNumber<T: Config> =  StorageValue<Value = u32, QueryKind= ValueQuery, OnEmpty = DefaultCurrent<T>>;
+    pub type IdentityNumber<T: Config> =  StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
 
     #[pallet::storage]
     #[pallet::getter(fn identity_list)]
-    /// Maps accounts to a numbered list of their owned identities.
-    pub type IdentityList<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, u32>;
+    /// Maps accounts to the array of identities it owns.
+    pub type IdentityList<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, BTreeSet<u32>, ValueQuery>;
 
     #[pallet::storage]
     #[pallet::getter(fn identity_trait_list)]
@@ -74,8 +75,13 @@ pub mod pallet {
 
             let total_ids: u32 = <IdentityNumber<T>>::get();
             let new_id: u32 = total_ids.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+
+            <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
+                ids.insert(new_id);
+                Ok(())
+            })?;
+
             <IdentityNumber<T>>::put(new_id);
-            <IdentityList<T>>::insert(&who, new_id);
             Self::deposit_event(Event::IdentityCreated(new_id, who));
 
             Ok(())
