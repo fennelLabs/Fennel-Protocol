@@ -69,6 +69,7 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        IdentityNotOwned,
     }
 
     #[pallet::call]
@@ -99,14 +100,13 @@ pub mod pallet {
 
             let new_total = <RevokedIdentityNumber<T>>::get().checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
 
-            let successfully_removed = <IdentityList<T>>::try_mutate(&who, |ids| -> Result<bool, DispatchError> {
-                Ok(ids.remove(&identity_id))
+            <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
+                ensure!(ids.remove(&identity_id), Error::<T>::IdentityNotOwned);
+                Ok(())
             })?;
 
-            if successfully_removed {
-                <RevokedIdentityNumber<T>>::put(new_total);
-                Self::deposit_event(Event::IdentityRevoked(identity_id, who));
-            }
+            <RevokedIdentityNumber<T>>::put(new_total);
+            Self::deposit_event(Event::IdentityRevoked(identity_id, who));
 
             Ok(())
         }
