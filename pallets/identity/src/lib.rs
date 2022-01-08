@@ -36,6 +36,11 @@ pub mod pallet {
     pub type IdentityNumber<T: Config> =  StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
 
     #[pallet::storage]
+    #[pallet::getter(fn revoked_identity_number)]
+    /// Tracks the number of identities currently active on the network.
+    pub type RevokedIdentityNumber<T: Config> =  StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
+
+    #[pallet::storage]
     #[pallet::getter(fn identity_list)]
     /// Maps accounts to the array of identities it owns.
     pub type IdentityList<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, BTreeSet<u32>, ValueQuery>;
@@ -73,8 +78,7 @@ pub mod pallet {
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            let total_ids: u32 = <IdentityNumber<T>>::get();
-            let new_id: u32 = total_ids.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            let new_id: u32 = <IdentityNumber<T>>::get().checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
 
             <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
                 ids.insert(new_id);
@@ -91,6 +95,19 @@ pub mod pallet {
         /// Revokes the identity with ID number identity_id, as long as the identity is owned by
         /// origin.
         pub fn revoke_identity(origin: OriginFor<T>, identity_id: u32) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            let new_total = <RevokedIdentityNumber<T>>::get().checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+
+            let successfully_removed = <IdentityList<T>>::try_mutate(&who, |ids| -> Result<bool, DispatchError> {
+                Ok(ids.remove(&identity_id))
+            })?;
+
+            if successfully_removed {
+                <RevokedIdentityNumber<T>>::put(new_total);
+                Self::deposit_event(Event::IdentityRevoked(identity_id, who));
+            }
+
             Ok(())
         }
 
