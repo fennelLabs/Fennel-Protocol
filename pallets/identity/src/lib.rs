@@ -41,6 +41,11 @@ pub mod pallet {
     pub type RevokedIdentityNumber<T: Config> =  StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
 
     #[pallet::storage]
+    #[pallet::getter(fn get_signal_count)]
+    /// Tracks the number of signals transmitted to the network.
+    pub type SignalCount<T: Config> =  StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
+
+    #[pallet::storage]
     #[pallet::getter(fn identity_list)]
     /// Maps accounts to the array of identities it owns.
     pub type IdentityList<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, BTreeSet<u32>, ValueQuery>;
@@ -49,6 +54,11 @@ pub mod pallet {
     #[pallet::getter(fn identity_trait_list)]
     /// Maps identity ID numbers to their key/value attributes.
     pub type IdentityTraitList<T: Config> = StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, Vec<u8>, Vec<u8>>;
+
+    #[pallet::storage]
+    #[pallet::getter(fn get_signal_record)]
+    /// Tracks all signals sent by an identity.
+    pub type FennelSignal<T: Config> = StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, u32, Vec<u8>>;
 
     #[pallet::event]
     #[pallet::metadata(T::AccountId = "AccountId")]
@@ -63,6 +73,9 @@ pub mod pallet {
         /// Announce that an identity has been updated. Contains the ID number of the identity and
         /// the owning AccountId.
         IdentityUpdated(u32, T::AccountId),
+        /// Announce that the given identity, owned by the given AccountId, has signed a signal
+        /// containing the given vector.
+        SignedSignal(u32, T::AccountId, Vec<u8>),
     }
 
     #[pallet::error]
@@ -142,6 +155,21 @@ pub mod pallet {
 
             <IdentityTraitList<T>>::remove(identity_id, key);
             Self::deposit_event(Event::IdentityUpdated(identity_id, who));
+
+            Ok(())
+        }
+
+        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        /// Issue a signed Fennel signal on behalf of an owned identity.
+        pub fn sign_for_identity(origin: OriginFor<T>, identity_id: u32, content: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
+            let signal_id: u32 = <SignalCount<T>>::get();
+            <FennelSignal<T>>::insert(&identity_id, &signal_id, &content);
+            let new_id: u32 = signal_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            <SignalCount<T>>::put(new_id);
+            Self::deposit_event(Event::SignedSignal(identity_id, who, content));
 
             Ok(())
         }

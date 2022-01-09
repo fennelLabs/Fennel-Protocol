@@ -103,3 +103,13 @@ fn remove_identity_trait() {
         assert_ok!(IdentityModule::remove_identity_trait(Origin::signed(300), 1, "name".as_bytes().to_vec()));
     });
 }
+
+#[test]
+fn issue_signed_signal() {
+    new_test_ext().execute_with(|| {
+        assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
+        assert_ok!(IdentityModule::sign_for_identity(Origin::signed(300), 1, "Test".as_bytes().to_vec()));
+
+        assert_eq!(IdentityModule::get_signal_count(), 1);
+    });
+}
