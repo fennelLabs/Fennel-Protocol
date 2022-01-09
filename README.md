@@ -25,6 +25,7 @@ Following the installation of Rust, ensure your environment is defaulting to the
 
 ```sh
 rustup default nightly
+rustup target add wasm32-unknown-unknown --toolchain nightly
 ```
 
 ### Run
