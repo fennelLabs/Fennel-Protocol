@@ -19,7 +19,7 @@ lorri `lorri shell`.
 
 ### Rust Setup
 
-First, complete the [basic Rust setup instructions](./docs/rust-setup.md).
+First, complete the [basic Rust setup instructions](https://www.rust-lang.org/tools/install).
 
 ### Run
 
