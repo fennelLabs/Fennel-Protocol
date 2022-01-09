@@ -25,7 +25,7 @@ Following the installation of Rust, ensure your environment is defaulting to the
 
 ```sh
 rustup default nightly
-```sh
+```
 
 ### Run
 
