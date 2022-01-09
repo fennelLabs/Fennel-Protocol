@@ -122,24 +122,7 @@ pub mod pallet {
 
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         /// Add a new identity trait to identity_id with key/value.
-        pub fn add_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
-            let who = ensure_signed(origin)?;
-
-            ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
-
-            <IdentityTraitList<T>>::try_mutate(identity_id, key, |v| -> DispatchResult {
-                *v = value;
-                Ok(())
-            })?;
-
-            Self::deposit_event(Event::IdentityUpdated(identity_id, who));
-
-            Ok(())
-        }
-
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
-        /// Edit an existing identity trait
-        pub fn edit_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
+        pub fn add_or_update_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
