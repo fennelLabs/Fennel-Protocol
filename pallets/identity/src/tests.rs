@@ -86,3 +86,20 @@ fn revoke_identity_from_non_owning_account() {
         );
     });
 }
+
+#[test]
+fn add_identity_trait() {
+    new_test_ext().execute_with(|| {
+        assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
+        assert_ok!(IdentityModule::add_identity_trait(Origin::signed(300), 1, "name".as_bytes().to_vec(), "Luke Skywalker".as_bytes().to_vec()));
+    });
+}
+
+#[test]
+fn remove_identity_trait() {
+    new_test_ext().execute_with(|| {
+        assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
+        assert_ok!(IdentityModule::add_identity_trait(Origin::signed(300), 1, "name".as_bytes().to_vec(), "Luke Skywalker".as_bytes().to_vec()));
+        assert_ok!(IdentityModule::remove_identity_trait(Origin::signed(300), 1, "name".as_bytes().to_vec()));
+    });
+}

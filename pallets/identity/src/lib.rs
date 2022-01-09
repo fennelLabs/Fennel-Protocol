@@ -72,6 +72,15 @@ pub mod pallet {
         IdentityNotOwned,
     }
 
+    impl<T: Config> Pallet<T> {
+        fn is_identity_owned_by_sender(account_id: &T::AccountId, identity_id: &u32) -> bool {
+            match <IdentityList<T>>::try_get(account_id) {
+                Result::Ok(ids) => { ids.contains(identity_id) },
+                Result::Err(_) => { false },
+            }
+        }
+    }
+
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
@@ -114,12 +123,26 @@ pub mod pallet {
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         /// Add a new identity trait to identity_id with key/value.
         pub fn add_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
+
+            <IdentityTraitList<T>>::insert(identity_id, key, value);
+            Self::deposit_event(Event::IdentityUpdated(identity_id, who));
+
             Ok(())
         }
 
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         /// Remove an identity trait named by trait_name from the identity with ID identity_id.
-        pub fn remove_identity_trait(origin: OriginFor<T>) -> DispatchResult {
+        pub fn remove_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
+
+            <IdentityTraitList<T>>::remove(identity_id, key);
+            Self::deposit_event(Event::IdentityUpdated(identity_id, who));
+
             Ok(())
         }
     }
