@@ -10,16 +10,18 @@ Follow the steps below to get started with the Node Template, or get it up and r
 your browser in just a few clicks using
 the [Substrate Playground](https://docs.substrate.io/playground/) :hammer_and_wrench:
 
-### Using Nix
+### Repository Set-Up
 
-Install [nix](https://nixos.org/) and optionally [direnv](https://github.com/direnv/direnv) and
-[lorri](https://github.com/target/lorri) for a fully plug and play experience for setting up the
-development environment. To get all the correct dependencies activate direnv `direnv allow` and
-lorri `lorri shell`.
+After cloning this repository, be sure to include necessary submodules.
+
+```sh
+git submodule init
+git submodule update
+```
 
 ### Rust Setup
 
-First, complete the [basic Rust setup instructions](https://www.rust-lang.org/tools/install).
+If you do not already have Rust installed, with the nightly build set as default, complete the [installation](https://www.rust-lang.org/tools/install).
 
 Following the installation of Rust, ensure your environment is defaulting to the nightly build:
 
