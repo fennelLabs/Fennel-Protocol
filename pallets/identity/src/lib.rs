@@ -48,7 +48,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn identity_trait_list)]
     /// Maps identity ID numbers to their key/value attributes.
-    pub type IdentityTraitList<T: Config> = StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, Vec<u8>, Vec<u8>>;
+    pub type IdentityTraitList<T: Config> = StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, Vec<u8>, Vec<u8>, ValueQuery>;
 
     #[pallet::event]
     #[pallet::metadata(T::AccountId = "AccountId")]
@@ -127,7 +127,28 @@ pub mod pallet {
 
             ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
 
-            <IdentityTraitList<T>>::insert(identity_id, key, value);
+            <IdentityTraitList<T>>::try_mutate(identity_id, key, |v| -> DispatchResult {
+                *v = value;
+                Ok(())
+            })?;
+
+            Self::deposit_event(Event::IdentityUpdated(identity_id, who));
+
+            Ok(())
+        }
+
+        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        /// Edit an existing identity trait
+        pub fn edit_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
+
+            <IdentityTraitList<T>>::try_mutate(identity_id, key, |v| -> DispatchResult {
+                *v = value;
+                Ok(())
+            })?;
+
             Self::deposit_event(Event::IdentityUpdated(identity_id, who));
 
             Ok(())

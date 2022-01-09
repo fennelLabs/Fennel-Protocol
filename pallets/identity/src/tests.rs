@@ -96,6 +96,24 @@ fn add_identity_trait() {
 }
 
 #[test]
+fn edit_identity_trait() {
+    new_test_ext().execute_with(|| {
+        let account_id = 300;
+        let key = "name".as_bytes().to_vec();
+
+        assert_ok!(IdentityModule::create_identity(Origin::signed(account_id)));
+
+        let luke = "Luke Skywalker".as_bytes().to_vec();
+        assert_ok!(IdentityModule::add_identity_trait(Origin::signed(account_id), 1, key.clone(), luke.clone()));
+        assert_eq!(IdentityModule::identity_trait_list(1, key.clone()), luke.clone());
+
+        let anakin = "Anakin Skywalker".as_bytes().to_vec();
+        assert_ok!(IdentityModule::edit_identity_trait(Origin::signed(300), 1, key.clone(), anakin.clone()));
+        assert_eq!(IdentityModule::identity_trait_list(1, key.clone()), anakin.clone());
+    });
+}
+
+#[test]
 fn remove_identity_trait() {
     new_test_ext().execute_with(|| {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
