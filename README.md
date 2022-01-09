@@ -21,6 +21,12 @@ lorri `lorri shell`.
 
 First, complete the [basic Rust setup instructions](https://www.rust-lang.org/tools/install).
 
+Following the installation of Rust, ensure your environment is defaulting to the nightly build:
+
+```sh
+rustup default nightly
+```sh
+
 ### Run
 
 Use Rust's native `cargo` command to build and launch the template node:
