@@ -166,8 +166,8 @@ pub mod pallet {
 
             ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
             let signal_id: u32 = <SignalCount<T>>::get();
-            <FennelSignal<T>>::insert(&identity_id, &signal_id, &content);
             let new_id: u32 = signal_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            <FennelSignal<T>>::insert(&identity_id, &signal_id, &content);
             <SignalCount<T>>::put(new_id);
             Self::deposit_event(Event::SignedSignal(identity_id, who, content));
 
