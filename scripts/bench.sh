@@ -1,0 +1,2 @@
+cargo build --features runtime-benchmarks
+./target/release/node-fennel-protocol benchmark --chain dev --execution wasm --wasm-execution compiled --pallet pallet_example --extrinsic '*' --steps 20 --repeat 10 --raw --output ./
