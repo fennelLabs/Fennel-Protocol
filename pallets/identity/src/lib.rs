@@ -87,11 +87,11 @@ pub mod pallet {
         /// Create a new identity owned by origin.
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
-
-            let new_id: u32 = <IdentityNumber<T>>::get().checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            let current_id: u32 = <IdentityNumber<T>>::get();
+            let new_id: u32 = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
 
             <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
-                ids.insert(new_id);
+                ids.insert(current_id);
                 Ok(())
             })?;
 
