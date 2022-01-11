@@ -2,7 +2,22 @@
 
 ## Getting Started
 
-Follow the steps below to get started:
+Follow the steps below to get started. Make sure you have `libclang` installed:
+
+#### Homebrew
+```sh
+brew install --with-toolchain llvm
+```
+
+#### Chocolatey
+```sh
+choco install llvm
+```
+
+#### Ubuntu
+```sh
+apt install libclang-dev
+```
 
 ### Repository Set-Up
 
