@@ -7,10 +7,10 @@ use frame_system::RawOrigin;
 
 benchmarks! {
 	create_identity {
-		let index in 0 .. 100;
+		let s in 0 .. 100;
 		let caller: T::AccountId = whitelisted_caller();
 	}: _(RawOrigin::Signed(caller))
 	verify {
-		assert_eq!(IdentityNumber::<T>::get(), Some(s));
+		assert_eq!(IdentityNumber::<T>::get(), s);
 	}
 }
