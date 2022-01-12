@@ -1,5 +1,9 @@
 services:
   dev:
     build: .
+    working_dir: /app
+    volumes:
+      - ./:/app
     ports:
       - "9944:9944"
+    entrypoint: sh docker-entry.sh
