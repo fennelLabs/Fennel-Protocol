@@ -53,7 +53,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn identity_trait_list)]
     /// Maps identity ID numbers to their key/value attributes.
-    pub type IdentityTraitList<T: Config> = StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, Vec<u8>, Vec<u8>>;
+    pub type IdentityTraitList<T: Config> = StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, Vec<u8>, Vec<u8>, ValueQuery>;
 
     #[pallet::storage]
     #[pallet::getter(fn get_signal_record)]
@@ -100,11 +100,11 @@ pub mod pallet {
         /// Create a new identity owned by origin.
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
-
-            let new_id: u32 = <IdentityNumber<T>>::get().checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            let current_id: u32 = <IdentityNumber<T>>::get();
+            let new_id: u32 = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
 
             <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
-                ids.insert(new_id);
+                ids.insert(current_id);
                 Ok(())
             })?;
 
@@ -135,12 +135,16 @@ pub mod pallet {
 
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         /// Add a new identity trait to identity_id with key/value.
-        pub fn add_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
+        pub fn add_or_update_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             ensure!(Self::is_identity_owned_by_sender(&who, &identity_id), Error::<T>::IdentityNotOwned);
 
-            <IdentityTraitList<T>>::insert(identity_id, key, value);
+            <IdentityTraitList<T>>::try_mutate(identity_id, key, |v| -> DispatchResult {
+                *v = value;
+                Ok(())
+            })?;
+
             Self::deposit_event(Event::IdentityUpdated(identity_id, who));
 
             Ok(())
