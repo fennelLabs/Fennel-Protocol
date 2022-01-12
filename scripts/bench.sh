@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cargo build --release --features runtime-benchmarks
 echo "template"
 ./target/release/node-fennel-protocol benchmark --chain dev --execution wasm --wasm-execution compiled --pallet pallet_template --extrinsic '*' --steps 20 --repeat 10 --raw --output ./

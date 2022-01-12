@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 rustup update nightly
 rustup update stable
 rustup default nightly
