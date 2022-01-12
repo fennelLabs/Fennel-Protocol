@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-# This script is meant to be run on Unix/Linux based systems
 set -e
+
+git submodule init
+git submodule update
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 
 echo "*** Initializing WASM build environment"
 
