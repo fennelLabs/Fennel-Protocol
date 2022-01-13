@@ -18,6 +18,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+        
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout with Submodules
         uses: actions/checkout@v2
@@ -35,11 +36,10 @@ jobs:
           rustup update nightly
           rustup update stable
           rustup target add wasm32-unknown-unknown --toolchain nightly
-
-      - name: Check Build
-        run: |
-          SKIP_WASM_BUILD=1 cargo check --release
       
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v1.3.0
+
       - name: Test Build
         run: >
           cargo test
