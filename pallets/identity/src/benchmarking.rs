@@ -38,6 +38,17 @@ benchmarks! {
 
     }: _(anakin.clone(), 0_u32.into(), name, value)
 
+
+    remove_identity_trait {
+        let s in 0 .. 100;
+        let anakin = get_origin::<T>("Anakin");
+        let name = from_str_to_vec("name".to_string());
+        let value = from_str_to_vec("Skywalker".to_string());
+
+        Identity::<T>::create_identity(anakin.clone().into())?;
+        Identity::<T>::add_or_update_identity_trait(anakin.clone().into(), 0_u32.into(), name.clone(), value)?;
+
+    }: _(anakin.clone(), 0_u32.into(), name)
 }
 
 impl_benchmark_test_suite!(Identity, crate::mock::new_test_ext(), crate::mock::Test);
