@@ -54,7 +54,8 @@ impl system::Config for Test {
 }
 
 impl pallet_fennel_identity::Config for Test {
-	type Event = Event;
+    type Event = Event;
+    type WeightInfo = ();
 }
 
 // Build genesis storage according to the mock runtime.

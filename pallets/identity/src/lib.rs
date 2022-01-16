@@ -1,7 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
-
 #[cfg(test)]
 mod mock;
 
@@ -11,8 +9,14 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
+mod default_weights;
+
+pub use pallet::*;
+pub use default_weights::WeightInfo;
+
 #[frame_support::pallet]
 pub mod pallet {
+    use super::*;
     use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
     use frame_support::inherent::Vec;
@@ -21,6 +25,7 @@ pub mod pallet {
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type WeightInfo: WeightInfo;
     }
 
     #[pallet::pallet]
@@ -96,7 +101,7 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::create_identity())]
         /// Create a new identity owned by origin.
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -133,7 +138,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::add_or_update_identity_trait())]
         /// Add a new identity trait to identity_id with key/value.
         pub fn add_or_update_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>, value: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -150,7 +155,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::remove_identity_trait())]
         /// Remove an identity trait named by trait_name from the identity with ID identity_id.
         pub fn remove_identity_trait(origin: OriginFor<T>, identity_id: u32, key: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
