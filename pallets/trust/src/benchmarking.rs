@@ -8,25 +8,25 @@ use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_call
 use frame_system::RawOrigin;
 
 benchmarks! {
-	issue_trust {
-		let target: T::AccountId = whitelisted_caller();
-		let caller: T::AccountId = whitelisted_caller();
-	}: _(RawOrigin::Signed(caller), target)
+    issue_trust {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target)
 
-	revoke_trust {
-		let target: T::AccountId = whitelisted_caller();
-		let caller: T::AccountId = whitelisted_caller();
-	}: _(RawOrigin::Signed(caller), target)
+    revoke_trust {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target)
 
-	remove_trust {
-		let target: T::AccountId = whitelisted_caller();
-		let caller: T::AccountId = whitelisted_caller();
-	}: _(RawOrigin::Signed(caller), target)
+    remove_trust {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target)
 
-	remove_revoked_trust {
-		let target: T::AccountId = whitelisted_caller();
-		let caller: T::AccountId = whitelisted_caller();
-	}: _(RawOrigin::Signed(caller), target)
+    remove_revoked_trust {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target)
 }
 
 impl_benchmark_test_suite!(Trust, crate::mock::new_test_ext(), crate::mock::Test);

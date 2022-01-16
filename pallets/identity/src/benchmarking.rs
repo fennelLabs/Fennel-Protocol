@@ -6,11 +6,11 @@ use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_call
 use frame_system::RawOrigin;
 
 benchmarks! {
-	create_identity {
-		let s in 0 .. 100;
-		let caller: T::AccountId = whitelisted_caller();
-	}: _(RawOrigin::Signed(caller))
-	verify {
-		assert_eq!(IdentityNumber::<T>::get(), s);
-	}
+    create_identity {
+        let s in 0 .. 100;
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller))
+    verify {
+        assert_eq!(IdentityNumber::<T>::get(), s);
+    }
 }
