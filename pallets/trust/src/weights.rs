@@ -32,7 +32,7 @@
 #![allow(unused_imports)]
 
 use frame_support::{traits::Get, weights::Weight};
-use std::marker::PhantomData;
+use core::marker::PhantomData;
 
 pub trait WeightInfo {
     fn issue_trust() -> Weight;
