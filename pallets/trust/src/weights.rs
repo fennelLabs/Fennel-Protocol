@@ -38,6 +38,8 @@ pub trait WeightInfo {
     fn revoke_trust() -> Weight;
     fn remove_trust() -> Weight;
     fn remove_revoked_trust() -> Weight;
+    fn request_trust() -> Weight;
+    fn cancel_trust_request() -> Weight;
 }
 
 /// Weight functions for pallet_trust.
@@ -46,25 +48,37 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn issue_trust() -> Weight {
-		(33_807_000 as Weight)
+		(37_637_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(2 as Weight))
 			.saturating_add(T::DbWeight::get().writes(2 as Weight))
 	}
 	// Storage: TrustModule TrustRevocation (r:1 w:1)
 	// Storage: TrustModule CurrentRevoked (r:1 w:1)
 	fn revoke_trust() -> Weight {
-		(33_776_000 as Weight)
+		(90_811_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(2 as Weight))
 			.saturating_add(T::DbWeight::get().writes(2 as Weight))
 	}
 	// Storage: TrustModule TrustIssuance (r:1 w:0)
 	fn remove_trust() -> Weight {
-		(7_800_000 as Weight)
+		(8_490_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 	}
 	// Storage: TrustModule TrustRevocation (r:1 w:0)
 	fn remove_revoked_trust() -> Weight {
-		(7_599_000 as Weight)
+		(8_510_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+	}
+	// Storage: TrustModule TrustRequestList (r:1 w:1)
+	// Storage: TrustModule CurrentRequests (r:1 w:1)
+	fn request_trust() -> Weight {
+		(36_766_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(2 as Weight))
+			.saturating_add(T::DbWeight::get().writes(2 as Weight))
+	}
+	// Storage: TrustModule TrustRequestList (r:1 w:0)
+	fn cancel_trust_request() -> Weight {
+		(10_089_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 	}
 }
@@ -73,25 +87,37 @@ impl WeightInfo for () {
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn issue_trust() -> Weight {
-		(33_807_000 as Weight)
+		(37_637_000 as Weight)
 			.saturating_add(RocksDbWeight::get().reads(2 as Weight))
 			.saturating_add(RocksDbWeight::get().writes(2 as Weight))
 	}
 	// Storage: TrustModule TrustRevocation (r:1 w:1)
 	// Storage: TrustModule CurrentRevoked (r:1 w:1)
 	fn revoke_trust() -> Weight {
-		(33_776_000 as Weight)
+		(90_811_000 as Weight)
 			.saturating_add(RocksDbWeight::get().reads(2 as Weight))
 			.saturating_add(RocksDbWeight::get().writes(2 as Weight))
 	}
 	// Storage: TrustModule TrustIssuance (r:1 w:0)
 	fn remove_trust() -> Weight {
-		(7_800_000 as Weight)
+		(8_490_000 as Weight)
 			.saturating_add(RocksDbWeight::get().reads(1 as Weight))
 	}
 	// Storage: TrustModule TrustRevocation (r:1 w:0)
 	fn remove_revoked_trust() -> Weight {
-		(7_599_000 as Weight)
+		(8_510_000 as Weight)
+			.saturating_add(RocksDbWeight::get().reads(1 as Weight))
+	}
+	// Storage: TrustModule TrustRequestList (r:1 w:1)
+	// Storage: TrustModule CurrentRequests (r:1 w:1)
+	fn request_trust() -> Weight {
+		(36_766_000 as Weight)
+			.saturating_add(RocksDbWeight::get().reads(2 as Weight))
+			.saturating_add(RocksDbWeight::get().writes(2 as Weight))
+	}
+	// Storage: TrustModule TrustRequestList (r:1 w:0)
+	fn cancel_trust_request() -> Weight {
+		(10_089_000 as Weight)
 			.saturating_add(RocksDbWeight::get().reads(1 as Weight))
 	}
 }

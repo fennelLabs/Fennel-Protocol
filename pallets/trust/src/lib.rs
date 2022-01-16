@@ -102,7 +102,7 @@ pub mod pallet {
         }
 
         /// Remove issued trust from an account `address`, making their trust status 'Unknown'
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(<T as Config>::WeightInfo::remove_trust())]
         pub fn remove_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -117,7 +117,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(<T as Config>::WeightInfo::request_trust())]
         pub fn request_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -132,7 +132,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(<T as Config>::WeightInfo::cancel_trust_request())]
         pub fn cancel_trust_request(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -148,7 +148,7 @@ pub mod pallet {
         }
 
         /// Explcitly mark an account as untrusted
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(<T as Config>::WeightInfo::revoke_trust())]
         pub fn revoke_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -164,7 +164,7 @@ pub mod pallet {
         }
 
         /// Return an untrusted `address` to an Unknown trust state
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(<T as Config>::WeightInfo::remove_revoked_trust())]
         pub fn remove_revoked_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 

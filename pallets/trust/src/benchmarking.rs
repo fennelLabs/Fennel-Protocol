@@ -27,6 +27,16 @@ benchmarks! {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
     }: _(RawOrigin::Signed(caller), target)
+
+    request_trust {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target)
+
+    cancel_trust_request {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target)
 }
 
 impl_benchmark_test_suite!(Trust, crate::mock::new_test_ext(), crate::mock::Test);
