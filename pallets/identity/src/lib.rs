@@ -9,10 +9,10 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
-mod default_weights;
+pub mod default_weights;
 
 pub use pallet::*;
-pub use default_weights::WeightInfo;
+pub use default_weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
