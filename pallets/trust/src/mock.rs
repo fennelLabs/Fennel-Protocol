@@ -1,4 +1,4 @@
-use crate as pallet_fennel_identity;
+use crate as pallet_trust;
 use frame_support::parameter_types;
 use frame_system as system;
 use sp_core::H256;
@@ -18,7 +18,7 @@ frame_support::construct_runtime!(
         UncheckedExtrinsic = UncheckedExtrinsic,
     {
         System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
-        IdentityModule: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>},
+        TrustModule: pallet_trust::{Pallet, Call, Storage, Event<T>},
     }
 );
 
@@ -53,8 +53,9 @@ impl system::Config for Test {
     type OnSetCode = ();
 }
 
-impl pallet_fennel_identity::Config for Test {
+impl pallet_trust::Config for Test {
     type Event = Event;
+    type WeightInfo = ();
 }
 
 // Build genesis storage according to the mock runtime.
