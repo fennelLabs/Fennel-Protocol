@@ -1,9 +1,0 @@
-[submodule "pallets/trust"]
-	path = pallets/trust
-	url = https://github.com/fennelLabs/fennel_trust_pallet.git
-[submodule "pallets/keystore"]
-	path = pallets/keystore
-	url = https://github.com/fennelLabs/fennel_keystore_pallet.git
-[submodule "pallets/signal"]
-	path = pallets/signal
-	url = https://github.com/fennelLabs/fennel-signal.git

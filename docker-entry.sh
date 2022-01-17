@@ -1,5 +1,5 @@
-#cargo build
+cargo build
 cargo test
-#cargo doc
+cargo doc
 
-#cargo run
+cargo run
