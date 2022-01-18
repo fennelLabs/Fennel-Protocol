@@ -37,6 +37,10 @@ jobs:
           rustup update stable
           rustup target add wasm32-unknown-unknown --toolchain nightly
       
+      - name: Check Formatting
+        run: >
+          cargo fmt --check
+
       - name: Enable caching
         uses: Swatinem/rust-cache@v1.3.0
 
