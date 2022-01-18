@@ -1,7 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
-
 #[cfg(test)]
 mod mock;
 
@@ -11,8 +9,14 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
+mod weights;
+
+pub use pallet::*;
+use weights::*;
+
 #[frame_support::pallet]
 pub mod pallet {
+    use super::*;
     use codec::alloc::collections::BTreeSet;
     use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
@@ -20,6 +24,7 @@ pub mod pallet {
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type WeightInfo: WeightInfo;
     }
 
     #[pallet::pallet]
@@ -103,7 +108,7 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::create_identity())]
         /// Create a new identity owned by origin.
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -121,7 +126,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::revoke_identity())]
         /// Revokes the identity with ID number identity_id, as long as the identity is owned by
         /// origin.
         pub fn revoke_identity(origin: OriginFor<T>, identity_id: u32) -> DispatchResult {
@@ -142,7 +147,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::add_or_update_identity_trait())]
         /// Add a new identity trait to identity_id with key/value.
         pub fn add_or_update_identity_trait(
             origin: OriginFor<T>,
@@ -167,7 +172,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::remove_identity_trait())]
         /// Remove an identity trait named by trait_name from the identity with ID identity_id.
         pub fn remove_identity_trait(
             origin: OriginFor<T>,
@@ -187,7 +192,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::sign_for_identity())]
         /// Issue a signed Fennel signal on behalf of an owned identity.
         pub fn sign_for_identity(
             origin: OriginFor<T>,

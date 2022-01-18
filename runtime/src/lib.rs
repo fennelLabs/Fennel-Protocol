@@ -290,6 +290,7 @@ impl pallet_signal::Config for Runtime {
 
 impl pallet_fennel_identity::Config for Runtime {
     type Event = Event;
+    type WeightInfo = ();
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
