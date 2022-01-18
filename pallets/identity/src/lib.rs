@@ -126,7 +126,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::revoke_identity())]
         /// Revokes the identity with ID number identity_id, as long as the identity is owned by
         /// origin.
         pub fn revoke_identity(origin: OriginFor<T>, identity_id: u32) -> DispatchResult {
@@ -192,7 +192,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::sign_for_identity())]
         /// Issue a signed Fennel signal on behalf of an owned identity.
         pub fn sign_for_identity(
             origin: OriginFor<T>,
