@@ -2,10 +2,12 @@ use super::*;
 
 #[allow(unused)]
 use crate::Pallet as Identity;
-use frame_benchmarking::{account as benchmark_account, benchmarks, impl_benchmark_test_suite, whitelisted_caller};
-use frame_system::RawOrigin;
+use codec::alloc::string::{String, ToString};
+use frame_benchmarking::{
+    account as benchmark_account, benchmarks, impl_benchmark_test_suite, whitelisted_caller,
+};
 use frame_support::inherent::Vec;
-use codec::alloc::string::{ToString, String};
+use frame_system::RawOrigin;
 
 pub fn from_str_to_vec(string: String) -> Vec<u8> {
     string.as_bytes().to_vec()
