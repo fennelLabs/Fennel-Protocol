@@ -2,7 +2,7 @@
 #![allow(unused_parens)]
 #![allow(unused_imports)]
 
-use frame_support::weights::{constants::RocksDbWeight as DbWeight, Weight};
+use frame_support::weights::{constants::RocksDbWeight, Weight};
 
 /// Weight functions for pallet_fennel_identity.
 pub trait WeightInfo {
