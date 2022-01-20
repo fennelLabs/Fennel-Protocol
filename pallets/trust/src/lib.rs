@@ -117,6 +117,7 @@ pub mod pallet {
             Ok(())
         }
 
+        /// Place a request for `address` to issue explicit trust to the sender.
         #[pallet::weight(<T as Config>::WeightInfo::request_trust())]
         pub fn request_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -132,6 +133,7 @@ pub mod pallet {
             Ok(())
         }
 
+        /// Rescind or cancel a trust request placed to `address`.
         #[pallet::weight(<T as Config>::WeightInfo::cancel_trust_request())]
         pub fn cancel_trust_request(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
