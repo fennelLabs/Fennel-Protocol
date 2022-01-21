@@ -103,11 +103,7 @@ Below are some screen captures to show resource utilizaiton for the lowest cost 
 
 ![Resource Utilization Screen 3](docs/images/install-node-8.png)
 
+# Interacting with the Chain
+Once the node is running locally, you can connect to it from your browser with the **Polkadot-JS Apps** [front-end](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944). This will open an interface exposing features for account management, staking, governance, and most importantly extrinsics calls. These are implementations of Fennel Protocol's core functionality, and might be considered similar to smart contract functions or API endpoints.
 
-
-
-
-
-
-
-
+The extrinsics included in Fennel Protocol are outlined along with scripts used to streamline testing the protocol at [Fennel Protocol wiki](https://github.com/fennelLabs/Fennel-Protocol/wiki/Testing-Milestone-1).
