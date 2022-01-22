@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;Users&#x2F;sean&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;libp2p-swarm-0.30.0&#x2F;src&#x2F;behaviour.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>behaviour.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../libp2p_swarm/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/sean/.cargo/registry/src/github.com-1ecc6299db9ec823/libp2p-swarm-0.30.0/src/behaviour.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>behaviour.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../libp2p_swarm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../libp2p_swarm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../libp2p_swarm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
+                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -483,7 +489,7 @@
     <span class="doccomment">/// spawned (ie. the objects returned by `new_handler`) can communicate by passing messages.</span>
     <span class="doccomment">/// Messages sent from the handler to the behaviour are injected with `inject_event`, and</span>
     <span class="doccomment">/// the behaviour can send a message to the handler by making `poll` return `SendEvent`.</span>
-    <span class="kw">fn</span> <span class="ident">new_handler</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::ProtocolsHandler</span>;
+    <span class="kw">fn</span> <span class="ident">new_handler</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::ProtocolsHandler</span>;
 
     <span class="doccomment">/// Addresses that this behaviour is aware of for this specific peer, and that may allow</span>
     <span class="doccomment">/// reaching the peer.</span>
@@ -491,7 +497,7 @@
     <span class="doccomment">/// The addresses will be tried in the order returned by this function, which means that they</span>
     <span class="doccomment">/// should be ordered by decreasing likelihood of reachability. In other words, the first</span>
     <span class="doccomment">/// address should be the most likely to be reachable.</span>
-    <span class="kw">fn</span> <span class="ident">addresses_of_peer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Multiaddr</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">addresses_of_peer</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Multiaddr</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Indicate to the behaviour that we connected to the node with the given peer id.</span>
     <span class="doccomment">///</span>
@@ -499,7 +505,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method is only called when the first connection to the peer is established, preceded by</span>
     <span class="doccomment">/// [`inject_connection_established`](NetworkBehaviour::inject_connection_established).</span>
-    <span class="kw">fn</span> <span class="ident">inject_connected</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>);
+    <span class="kw">fn</span> <span class="ident">inject_connected</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>);
 
     <span class="doccomment">/// Indicates to the behaviour that we disconnected from the node with the given peer id.</span>
     <span class="doccomment">///</span>
@@ -508,10 +514,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method is only called when the last established connection to the peer is closed,</span>
     <span class="doccomment">/// preceded by [`inject_connection_closed`](NetworkBehaviour::inject_connection_closed).</span>
-    <span class="kw">fn</span> <span class="ident">inject_disconnected</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>);
+    <span class="kw">fn</span> <span class="ident">inject_disconnected</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>);
 
     <span class="doccomment">/// Informs the behaviour about a newly established connection to a peer.</span>
-    <span class="kw">fn</span> <span class="ident">inject_connection_established</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectionId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectedPoint</span>)
+    <span class="kw">fn</span> <span class="ident">inject_connection_established</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectionId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectedPoint</span>)
     {}
 
     <span class="doccomment">/// Informs the behaviour about a closed connection to a peer.</span>
@@ -519,12 +525,12 @@
     <span class="doccomment">/// A call to this method is always paired with an earlier call to</span>
     <span class="doccomment">/// `inject_connection_established` with the same peer ID, connection ID and</span>
     <span class="doccomment">/// endpoint.</span>
-    <span class="kw">fn</span> <span class="ident">inject_connection_closed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectionId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectedPoint</span>)
+    <span class="kw">fn</span> <span class="ident">inject_connection_closed</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectionId</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectedPoint</span>)
     {}
 
     <span class="doccomment">/// Informs the behaviour that the [`ConnectedPoint`] of an existing connection has changed.</span>
     <span class="kw">fn</span> <span class="ident">inject_address_change</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
         <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectionId</span>,
         <span class="ident">_old</span>: <span class="kw-2">&amp;</span><span class="ident">ConnectedPoint</span>,
@@ -537,7 +543,7 @@
     <span class="doccomment">/// The `peer_id` is guaranteed to be in a connected state. In other words, `inject_connected`</span>
     <span class="doccomment">/// has previously been called with this `PeerId`.</span>
     <span class="kw">fn</span> <span class="ident">inject_event</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">peer_id</span>: <span class="ident">PeerId</span>,
         <span class="ident">connection</span>: <span class="ident">ConnectionId</span>,
         <span class="ident">event</span>: <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::ProtocolsHandler</span> <span class="kw">as</span> <span class="ident">IntoProtocolsHandler</span><span class="op">&gt;</span><span class="ident">::Handler</span> <span class="kw">as</span> <span class="ident">ProtocolsHandler</span><span class="op">&gt;</span><span class="ident">::OutEvent</span>
@@ -547,7 +553,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// If we were trying to reach a specific node, its ID is passed as parameter. If this is the</span>
     <span class="doccomment">/// last address to attempt for the given node, then `inject_dial_failure` is called afterwards.</span>
-    <span class="kw">fn</span> <span class="ident">inject_addr_reach_failure</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_peer_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PeerId</span><span class="op">&gt;</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>, <span class="ident">_error</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">error::Error</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_addr_reach_failure</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_peer_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PeerId</span><span class="op">&gt;</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>, <span class="ident">_error</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">error::Error</span>) {
     }
 
     <span class="doccomment">/// Indicates to the behaviour that we tried to dial all the addresses known for a node, but</span>
@@ -555,43 +561,43 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `peer_id` is guaranteed to be in a disconnected state. In other words,</span>
     <span class="doccomment">/// `inject_connected` has not been called, or `inject_disconnected` has been called since then.</span>
-    <span class="kw">fn</span> <span class="ident">inject_dial_failure</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_dial_failure</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) {
     }
 
     <span class="doccomment">/// Indicates to the behaviour that a new listener was created.</span>
-    <span class="kw">fn</span> <span class="ident">inject_new_listener</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_new_listener</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>) {
     }
 
     <span class="doccomment">/// Indicates to the behaviour that we have started listening on a new multiaddr.</span>
-    <span class="kw">fn</span> <span class="ident">inject_new_listen_addr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_new_listen_addr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
     }
 
     <span class="doccomment">/// Indicates to the behaviour that a multiaddr we were listening on has expired,</span>
     <span class="doccomment">/// which means that we are no longer listening in it.</span>
-    <span class="kw">fn</span> <span class="ident">inject_expired_listen_addr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_expired_listen_addr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
     }
 
     <span class="doccomment">/// A listener experienced an error.</span>
-    <span class="kw">fn</span> <span class="ident">inject_listener_error</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_err</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">std::error::Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)) {
+    <span class="kw">fn</span> <span class="ident">inject_listener_error</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_err</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">std::error::Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)) {
     }
 
     <span class="doccomment">/// A listener closed.</span>
-    <span class="kw">fn</span> <span class="ident">inject_listener_closed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_reason</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="kw-2">&amp;</span><span class="ident">std::io::Error</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_listener_closed</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_id</span>: <span class="ident">ListenerId</span>, <span class="ident">_reason</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="kw-2">&amp;</span><span class="ident">std::io::Error</span><span class="op">&gt;</span>) {
     }
 
     <span class="doccomment">/// Indicates to the behaviour that we have discovered a new external address for us.</span>
-    <span class="kw">fn</span> <span class="ident">inject_new_external_addr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_new_external_addr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
     }
 
     <span class="doccomment">/// Indicates to the behaviour that an external address was removed.</span>
-    <span class="kw">fn</span> <span class="ident">inject_expired_external_addr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
+    <span class="kw">fn</span> <span class="ident">inject_expired_external_addr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_addr</span>: <span class="kw-2">&amp;</span><span class="ident">Multiaddr</span>) {
     }
 
     <span class="doccomment">/// Polls for things that swarm should do.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This API mimics the API of the `Stream` trait. The method may register the current task in</span>
     <span class="doccomment">/// order to wake it up at a later point in time.</span>
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">params</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">PollParameters</span>)
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">params</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">PollParameters</span>)
         -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">NetworkBehaviourAction</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::ProtocolsHandler</span> <span class="kw">as</span> <span class="ident">IntoProtocolsHandler</span><span class="op">&gt;</span><span class="ident">::Handler</span> <span class="kw">as</span> <span class="ident">ProtocolsHandler</span><span class="op">&gt;</span><span class="ident">::InEvent</span>, <span class="ident"><span class="self">Self</span>::OutEvent</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
@@ -630,7 +636,7 @@
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">NetworkBehaviourEventProcess</span><span class="op">&lt;</span><span class="ident">TEvent</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Called when one of the fields of the type you&#39;re deriving `NetworkBehaviour` on generates</span>
     <span class="doccomment">/// an event.</span>
-    <span class="kw">fn</span> <span class="ident">inject_event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="ident">TEvent</span>);
+    <span class="kw">fn</span> <span class="ident">inject_event</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="ident">TEvent</span>);
 }
 
 <span class="doccomment">/// An action that a [`NetworkBehaviour`] can trigger in the [`Swarm`]</span>
@@ -821,6 +827,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="libp2p_swarm" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="libp2p_swarm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>

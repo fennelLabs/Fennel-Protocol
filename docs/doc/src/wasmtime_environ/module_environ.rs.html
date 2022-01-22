@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;Users&#x2F;sean&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;wasmtime-environ-0.27.0&#x2F;src&#x2F;module_environ.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>module_environ.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../wasmtime_environ/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/sean/.cargo/registry/src/github.com-1ecc6299db9ec823/wasmtime-environ-0.27.0/src/module_environ.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>module_environ.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../wasmtime_environ/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../wasmtime_environ/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../wasmtime_environ/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
+                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1281,12 +1287,12 @@
         <span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>],
     ) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ModuleTranslation</span><span class="op">&lt;</span><span class="lifetime">&#39;data</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">TypeTables</span>)<span class="op">&gt;</span> {
-        <span class="ident">translate_module</span>(<span class="ident">data</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>)<span class="question-mark">?</span>;
+        <span class="ident">translate_module</span>(<span class="ident">data</span>, <span class="kw-2">&amp;mut</span> <span class="self">self</span>)<span class="question-mark">?</span>;
         <span class="macro">assert!</span>(<span class="self">self</span>.<span class="ident">results</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">0</span>);
         <span class="prelude-val">Ok</span>((<span class="self">self</span>.<span class="ident">results</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>, <span class="self">self</span>.<span class="ident">results</span>, <span class="self">self</span>.<span class="ident">types</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_export</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">export</span>: <span class="ident">EntityIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_export</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">export</span>: <span class="ident">EntityIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">exports</span>
@@ -1294,7 +1300,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">register_dwarf_section</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>]) {
+    <span class="kw">fn</span> <span class="ident">register_dwarf_section</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>]) {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">generate_native_debuginfo</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">parse_wasm_debuginfo</span> {
             <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">has_unparsed_debuginfo</span> <span class="op">=</span> <span class="bool-val">true</span>;
             <span class="kw">return</span>;
@@ -1303,8 +1309,8 @@
         <span class="kw">if</span> <span class="op">!</span><span class="ident">name</span>.<span class="ident">starts_with</span>(<span class="string">&quot;.debug_&quot;</span>) {
             <span class="kw">return</span>;
         }
-        <span class="kw">let</span> <span class="ident">info</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">debuginfo</span>;
-        <span class="kw">let</span> <span class="ident">dwarf</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>.<span class="ident">dwarf</span>;
+        <span class="kw">let</span> <span class="ident">info</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">debuginfo</span>;
+        <span class="kw">let</span> <span class="ident">dwarf</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">info</span>.<span class="ident">dwarf</span>;
         <span class="kw">let</span> <span class="ident">endian</span> <span class="op">=</span> <span class="ident">gimli::LittleEndian</span>;
         <span class="kw">let</span> <span class="ident">slice</span> <span class="op">=</span> <span class="ident">gimli::EndianSlice::new</span>(<span class="ident">data</span>, <span class="ident">endian</span>);
 
@@ -1353,7 +1359,7 @@
     <span class="doccomment">/// When the module linking proposal is disabled, however, disregard this</span>
     <span class="doccomment">/// logic and instead work directly with two-level imports since no</span>
     <span class="doccomment">/// instances are defined.</span>
-    <span class="kw">fn</span> <span class="ident">declare_import</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">ty</span>: <span class="ident">EntityType</span>) {
+    <span class="kw">fn</span> <span class="ident">declare_import</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">ty</span>: <span class="ident">EntityType</span>) {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">features</span>.<span class="ident">module_linking</span> {
             <span class="macro">assert!</span>(<span class="ident">field</span>.<span class="ident">is_some</span>());
             <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">push_type</span>(<span class="ident">ty</span>);
@@ -1424,7 +1430,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">push_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ty</span>: <span class="ident">EntityType</span>) -&gt; <span class="ident">EntityIndex</span> {
+    <span class="kw">fn</span> <span class="ident">push_type</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ty</span>: <span class="ident">EntityType</span>) -&gt; <span class="ident">EntityIndex</span> {
         <span class="kw">match</span> <span class="ident">ty</span> {
             <span class="ident">EntityType::Function</span>(<span class="ident">ty</span>) =&gt; {
                 <span class="ident">EntityIndex::Function</span>(<span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">functions</span>.<span class="ident">push</span>(<span class="ident">ty</span>))
@@ -1446,7 +1452,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">gen_type_of_module</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">Module</span>) -&gt; <span class="ident">ModuleTypeIndex</span> {
+    <span class="kw">fn</span> <span class="ident">gen_type_of_module</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">Module</span>) -&gt; <span class="ident">ModuleTypeIndex</span> {
         <span class="kw">let</span> <span class="ident">imports</span> <span class="op">=</span> <span class="ident">module</span>
             .<span class="ident">imports</span>()
             .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">s</span>, <span class="ident">field</span>, <span class="ident">ty</span>)<span class="op">|</span> {
@@ -1471,7 +1477,7 @@
             .<span class="ident">push</span>(<span class="ident">ModuleSignature</span> { <span class="ident">imports</span>, <span class="ident">exports</span> })
     }
 
-    <span class="kw">fn</span> <span class="ident">flag_func_possibly_exported</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">func</span>: <span class="ident">FuncIndex</span>) {
+    <span class="kw">fn</span> <span class="ident">flag_func_possibly_exported</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">func</span>: <span class="ident">FuncIndex</span>) {
         <span class="kw">if</span> <span class="ident">func</span>.<span class="ident">is_reserved_value</span>() {
             <span class="kw">return</span>;
         }
@@ -1494,14 +1500,14 @@
 <span class="doccomment">/// This trait is useful for `translate_module` because it tells how to translate</span>
 <span class="doccomment">/// environment-dependent wasm instructions. These functions should not be called by the user.</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;data</span><span class="op">&gt;</span> <span class="ident">cranelift_wasm::ModuleEnvironment</span><span class="op">&lt;</span><span class="lifetime">&#39;data</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ModuleEnvironment</span><span class="op">&lt;</span><span class="lifetime">&#39;data</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">reserve_types</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_types</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">usize::try_from</span>(<span class="ident">num</span>).<span class="ident">unwrap</span>();
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">types</span>.<span class="ident">reserve</span>(<span class="ident">num</span>);
         <span class="self">self</span>.<span class="ident">types</span>.<span class="ident">wasm_signatures</span>.<span class="ident">reserve</span>(<span class="ident">num</span>);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_type_func</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">wasm</span>: <span class="ident">WasmFuncType</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_type_func</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">wasm</span>: <span class="ident">WasmFuncType</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Deduplicate wasm function signatures through `interned_func_types`,</span>
         <span class="comment">// which also deduplicates across wasm modules with module linking.</span>
         <span class="kw">let</span> <span class="ident">sig_index</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">interned_func_types</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">wasm</span>) {
@@ -1520,7 +1526,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_type_module</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">declared_imports</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">EntityType</span>)],
         <span class="ident">exports</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">EntityType</span>)],
     ) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
@@ -1564,7 +1570,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_type_instance</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">exports</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">EntityType</span>)]) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_type_instance</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">exports</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">EntityType</span>)]) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">exports</span> <span class="op">=</span> <span class="ident">exports</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> (<span class="ident">e</span>.<span class="number">0</span>.<span class="ident">to_string</span>(), <span class="ident">e</span>.<span class="number">1</span>.<span class="ident">clone</span>()))
@@ -1603,7 +1609,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_imports</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_imports</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>
             .<span class="ident">result</span>
             .<span class="ident">module</span>
@@ -1612,7 +1618,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_func_import</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">index</span>: <span class="ident">TypeIndex</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>,
         <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>,
@@ -1630,7 +1636,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_table_import</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">table</span>: <span class="ident">Table</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>,
         <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>,
@@ -1646,7 +1652,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_memory_import</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">memory</span>: <span class="ident">Memory</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>,
         <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>,
@@ -1665,7 +1671,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_global_import</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">global</span>: <span class="ident">Global</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>,
         <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>,
@@ -1681,7 +1687,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_module_import</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">ty_index</span>: <span class="ident">TypeIndex</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>,
         <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>,
@@ -1692,7 +1698,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_instance_import</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">ty_index</span>: <span class="ident">TypeIndex</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>,
         <span class="ident">field</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span><span class="op">&gt;</span>,
@@ -1702,7 +1708,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_func_types</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_func_types</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">functions</span>
@@ -1713,13 +1719,13 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_func_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">TypeIndex</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_func_type</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">TypeIndex</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">sig_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">types</span>[<span class="ident">index</span>].<span class="ident">unwrap_function</span>();
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">functions</span>.<span class="ident">push</span>(<span class="ident">sig_index</span>);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_tables</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_tables</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">table_plans</span>
@@ -1727,13 +1733,13 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_table</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">table</span>: <span class="ident">Table</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_table</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">table</span>: <span class="ident">Table</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">plan</span> <span class="op">=</span> <span class="ident">TablePlan::for_table</span>(<span class="ident">table</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">tunables</span>);
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">table_plans</span>.<span class="ident">push</span>(<span class="ident">plan</span>);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_memories</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_memories</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">memory_plans</span>
@@ -1741,7 +1747,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_memory</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">memory</span>: <span class="ident">Memory</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_memory</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">memory</span>: <span class="ident">Memory</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">memory</span>.<span class="ident">shared</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">WasmError::Unsupported</span>(<span class="string">&quot;shared memories&quot;</span>.<span class="ident">to_owned</span>()));
         }
@@ -1750,7 +1756,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_globals</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_globals</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">globals</span>
@@ -1758,7 +1764,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_global</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">global</span>: <span class="ident">Global</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_global</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">global</span>: <span class="ident">Global</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GlobalInit::RefFunc</span>(<span class="ident">index</span>) <span class="op">=</span> <span class="ident">global</span>.<span class="ident">initializer</span> {
             <span class="self">self</span>.<span class="ident">flag_func_possibly_exported</span>(<span class="ident">index</span>);
         }
@@ -1766,7 +1772,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_exports</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_exports</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">exports</span>
@@ -1774,39 +1780,39 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_func_export</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_func_export</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">flag_func_possibly_exported</span>(<span class="ident">func_index</span>);
         <span class="self">self</span>.<span class="ident">declare_export</span>(<span class="ident">EntityIndex::Function</span>(<span class="ident">func_index</span>), <span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_table_export</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">table_index</span>: <span class="ident">TableIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_table_export</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">table_index</span>: <span class="ident">TableIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">declare_export</span>(<span class="ident">EntityIndex::Table</span>(<span class="ident">table_index</span>), <span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_memory_export</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">memory_index</span>: <span class="ident">MemoryIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_memory_export</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">memory_index</span>: <span class="ident">MemoryIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">declare_export</span>(<span class="ident">EntityIndex::Memory</span>(<span class="ident">memory_index</span>), <span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_global_export</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">global_index</span>: <span class="ident">GlobalIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_global_export</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">global_index</span>: <span class="ident">GlobalIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">declare_export</span>(<span class="ident">EntityIndex::Global</span>(<span class="ident">global_index</span>), <span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_module_export</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">ModuleIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_module_export</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">ModuleIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">declare_export</span>(<span class="ident">EntityIndex::Module</span>(<span class="ident">index</span>), <span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_instance_export</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">InstanceIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_instance_export</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">InstanceIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">declare_export</span>(<span class="ident">EntityIndex::Instance</span>(<span class="ident">index</span>), <span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_start_func</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_start_func</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">flag_func_possibly_exported</span>(<span class="ident">func_index</span>);
         <span class="macro">debug_assert!</span>(<span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">start_func</span>.<span class="ident">is_none</span>());
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">start_func</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">func_index</span>);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_table_elements</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_table_elements</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">table_initializers</span>
@@ -1815,7 +1821,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_table_elements</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">table_index</span>: <span class="ident">TableIndex</span>,
         <span class="ident">base</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GlobalIndex</span><span class="op">&gt;</span>,
         <span class="ident">offset</span>: <span class="ident">u32</span>,
@@ -1837,7 +1843,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_passive_element</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">elem_index</span>: <span class="ident">ElemIndex</span>,
         <span class="ident">segments</span>: <span class="ident">Box</span><span class="op">&lt;</span>[<span class="ident">FuncIndex</span>]<span class="op">&gt;</span>,
     ) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
@@ -1859,19 +1865,19 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_elements</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">segments</span>: <span class="ident">Box</span><span class="op">&lt;</span>[<span class="ident">FuncIndex</span>]<span class="op">&gt;</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_elements</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">segments</span>: <span class="ident">Box</span><span class="op">&lt;</span>[<span class="ident">FuncIndex</span>]<span class="op">&gt;</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">for</span> <span class="ident">element</span> <span class="kw">in</span> <span class="ident">segments</span>.<span class="ident">iter</span>() {
             <span class="self">self</span>.<span class="ident">flag_func_possibly_exported</span>(<span class="kw-2">*</span><span class="ident">element</span>);
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_function_bodies</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_count</span>: <span class="ident">u32</span>, <span class="ident">offset</span>: <span class="ident">u64</span>) {
+    <span class="kw">fn</span> <span class="ident">reserve_function_bodies</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_count</span>: <span class="ident">u32</span>, <span class="ident">offset</span>: <span class="ident">u64</span>) {
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">debuginfo</span>.<span class="ident">wasm_file</span>.<span class="ident">code_section_offset</span> <span class="op">=</span> <span class="ident">offset</span>;
     }
 
     <span class="kw">fn</span> <span class="ident">define_function_body</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">validator</span>: <span class="ident">FuncValidator</span><span class="op">&lt;</span><span class="ident">ValidatorResources</span><span class="op">&gt;</span>,
         <span class="ident">body</span>: <span class="ident">FunctionBody</span><span class="op">&lt;</span><span class="lifetime">&#39;data</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
@@ -1900,8 +1906,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_data_initializers</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">memory_initialization</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_data_initializers</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">memory_initialization</span> {
             <span class="ident">MemoryInitialization::Segmented</span>(<span class="ident">initializers</span>) =&gt; {
                 <span class="ident">initializers</span>.<span class="ident">reserve_exact</span>(<span class="ident">usize::try_from</span>(<span class="ident">num</span>).<span class="ident">unwrap</span>())
             }
@@ -1911,13 +1917,13 @@
     }
 
     <span class="kw">fn</span> <span class="ident">declare_data_initialization</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">memory_index</span>: <span class="ident">MemoryIndex</span>,
         <span class="ident">base</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GlobalIndex</span><span class="op">&gt;</span>,
         <span class="ident">offset</span>: <span class="ident">u32</span>,
         <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>],
     ) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">memory_initialization</span> {
+        <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">memory_initialization</span> {
             <span class="ident">MemoryInitialization::Segmented</span>(<span class="ident">initializers</span>) =&gt; {
                 <span class="ident">initializers</span>.<span class="ident">push</span>(<span class="ident">MemoryInitializer</span> {
                     <span class="ident">memory_index</span>,
@@ -1931,14 +1937,14 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_passive_data</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_count</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reserve_passive_data</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">_count</span>: <span class="ident">u32</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Note: the count passed in here is the *total* segment count</span>
         <span class="comment">// There is no way to reserve for just the passive segments as they are discovered when iterating the data section entries</span>
         <span class="comment">// Given that the total segment count might be much larger than the passive count, do not reserve</span>
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_passive_data</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data_index</span>: <span class="ident">DataIndex</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_passive_data</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">data_index</span>: <span class="ident">DataIndex</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">passive_data</span>.<span class="ident">len</span>();
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">passive_data</span>.<span class="ident">push</span>(<span class="ident">Arc::from</span>(<span class="ident">data</span>));
         <span class="kw">let</span> <span class="ident">old</span> <span class="op">=</span> <span class="self">self</span>
@@ -1953,14 +1959,14 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_module_name</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>) {
+    <span class="kw">fn</span> <span class="ident">declare_module_name</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>) {
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">name</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>());
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">generate_native_debuginfo</span> {
             <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">debuginfo</span>.<span class="ident">name_section</span>.<span class="ident">module_name</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>);
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_func_name</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>) {
+    <span class="kw">fn</span> <span class="ident">declare_func_name</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>) {
         <span class="self">self</span>.<span class="ident">result</span>
             .<span class="ident">module</span>
             .<span class="ident">func_names</span>
@@ -1974,7 +1980,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_local_name</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>, <span class="ident">local</span>: <span class="ident">u32</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>) {
+    <span class="kw">fn</span> <span class="ident">declare_local_name</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">func_index</span>: <span class="ident">FuncIndex</span>, <span class="ident">local</span>: <span class="ident">u32</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>) {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">generate_native_debuginfo</span> {
             <span class="self">self</span>.<span class="ident">result</span>
                 .<span class="ident">debuginfo</span>
@@ -1986,7 +1992,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">custom_section</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">custom_section</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">register_dwarf_section</span>(<span class="ident">name</span>, <span class="ident">data</span>);
 
         <span class="kw">match</span> <span class="ident">name</span> {
@@ -2014,7 +2020,7 @@ and for re-adding support for interface types you can see this issue:
         <span class="self">self</span>.<span class="ident">features</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_modules</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">u32</span>) {
+    <span class="kw">fn</span> <span class="ident">reserve_modules</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">u32</span>) {
         <span class="comment">// Go ahead and reserve space in the final `results` array for `amount`</span>
         <span class="comment">// more modules.</span>
         <span class="self">self</span>.<span class="ident">modules_to_be</span> <span class="op">+</span><span class="op">=</span> <span class="ident">amount</span> <span class="kw">as</span> <span class="ident">usize</span>;
@@ -2026,7 +2032,7 @@ and for re-adding support for interface types you can see this issue:
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">initializers</span>.<span class="ident">reserve</span>(<span class="ident">amount</span> <span class="kw">as</span> <span class="ident">usize</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">module_start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">module_start</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="comment">// If this is the first time this method is called, nothing to do.</span>
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">first_module</span> {
             <span class="self">self</span>.<span class="ident">first_module</span> <span class="op">=</span> <span class="bool-val">false</span>;
@@ -2034,18 +2040,18 @@ and for re-adding support for interface types you can see this issue:
         }
         <span class="comment">// Reset our internal state for a new module by saving the current</span>
         <span class="comment">// module in `results`.</span>
-        <span class="kw">let</span> <span class="ident">in_progress</span> <span class="op">=</span> <span class="ident">mem::replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">result</span>, <span class="ident">ModuleTranslation::default</span>());
+        <span class="kw">let</span> <span class="ident">in_progress</span> <span class="op">=</span> <span class="ident">mem::replace</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">result</span>, <span class="ident">ModuleTranslation::default</span>());
         <span class="self">self</span>.<span class="ident">in_progress</span>.<span class="ident">push</span>(<span class="ident">in_progress</span>);
         <span class="self">self</span>.<span class="ident">modules_to_be</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
     }
 
-    <span class="kw">fn</span> <span class="ident">module_end</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">module_end</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">creation_artifacts</span>.<span class="ident">shrink_to_fit</span>();
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">creation_modules</span>.<span class="ident">shrink_to_fit</span>();
 
         <span class="kw">let</span> (<span class="ident">record_initializer</span>, <span class="kw-2">mut</span> <span class="ident">done</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">in_progress</span>.<span class="ident">pop</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">m</span>) =&gt; (<span class="bool-val">true</span>, <span class="ident">mem::replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">result</span>, <span class="ident">m</span>)),
-            <span class="prelude-val">None</span> =&gt; (<span class="bool-val">false</span>, <span class="ident">mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">result</span>)),
+            <span class="prelude-val">Some</span>(<span class="ident">m</span>) =&gt; (<span class="bool-val">true</span>, <span class="ident">mem::replace</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">result</span>, <span class="ident">m</span>)),
+            <span class="prelude-val">None</span> =&gt; (<span class="bool-val">false</span>, <span class="ident">mem::take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">result</span>)),
         };
 
         <span class="kw">if</span> <span class="ident">record_initializer</span> {
@@ -2058,7 +2064,7 @@ and for re-adding support for interface types you can see this issue:
             <span class="comment">// module at `artifact_index`. This then needs to be inherited by</span>
             <span class="comment">// all later modules coming down to our now-current `self.result`...</span>
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">artifact_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">results</span>.<span class="ident">len</span>();
-            <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">in_progress</span>.<span class="ident">iter_mut</span>().<span class="ident">chain</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">result</span>)) {
+            <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">in_progress</span>.<span class="ident">iter_mut</span>().<span class="ident">chain</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">result</span>)) {
                 <span class="ident">result</span>.<span class="ident">creation_artifacts</span>.<span class="ident">push</span>(<span class="ident">artifact_index</span>);
                 <span class="ident">artifact_index</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">creation_artifacts</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>;
             }
@@ -2069,8 +2075,8 @@ and for re-adding support for interface types you can see this issue:
                 .<span class="ident">initializers</span>
                 .<span class="ident">push</span>(<span class="ident">Initializer::CreateModule</span> {
                     <span class="ident">artifact_index</span>,
-                    <span class="ident">artifacts</span>: <span class="ident">mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">done</span>.<span class="ident">creation_artifacts</span>),
-                    <span class="ident">modules</span>: <span class="ident">mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">done</span>.<span class="ident">creation_modules</span>),
+                    <span class="ident">artifacts</span>: <span class="ident">mem::take</span>(<span class="kw-2">&amp;mut</span> <span class="ident">done</span>.<span class="ident">creation_artifacts</span>),
+                    <span class="ident">modules</span>: <span class="ident">mem::take</span>(<span class="kw-2">&amp;mut</span> <span class="ident">done</span>.<span class="ident">creation_modules</span>),
                 });
         }
 
@@ -2079,13 +2085,13 @@ and for re-adding support for interface types you can see this issue:
         <span class="self">self</span>.<span class="ident">results</span>.<span class="ident">push</span>(<span class="ident">done</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">reserve_instances</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">amt</span>: <span class="ident">u32</span>) {
+    <span class="kw">fn</span> <span class="ident">reserve_instances</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">amt</span>: <span class="ident">u32</span>) {
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">instances</span>.<span class="ident">reserve</span>(<span class="ident">amt</span> <span class="kw">as</span> <span class="ident">usize</span>);
         <span class="self">self</span>.<span class="ident">result</span>.<span class="ident">module</span>.<span class="ident">initializers</span>.<span class="ident">reserve</span>(<span class="ident">amt</span> <span class="kw">as</span> <span class="ident">usize</span>);
     }
 
     <span class="kw">fn</span> <span class="ident">declare_instance</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">module</span>: <span class="ident">ModuleIndex</span>,
         <span class="ident">args</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;data</span> <span class="ident">str</span>, <span class="ident">EntityIndex</span>)<span class="op">&gt;</span>,
     ) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
@@ -2103,7 +2109,7 @@ and for re-adding support for interface types you can see this issue:
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">declare_alias</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">alias</span>: <span class="ident">Alias</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">declare_alias</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">alias</span>: <span class="ident">Alias</span>) -&gt; <span class="ident">WasmResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">alias</span> {
             <span class="comment">// Types are easy, we statically know everything so we&#39;re just</span>
             <span class="comment">// copying some pointers from our parent module to our own module.</span>
@@ -2151,7 +2157,7 @@ and for re-adding support for interface types you can see this issue:
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">upvar</span> <span class="op">=</span> <span class="ident">ModuleUpvar::Local</span>(<span class="ident">index</span>);
                 <span class="kw">for</span> <span class="ident">outer</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">in_progress</span>[<span class="ident">module_idx</span> <span class="op">+</span> <span class="number">1</span>..].<span class="ident">iter_mut</span>() {
                     <span class="kw">let</span> <span class="ident">upvar</span> <span class="op">=</span> <span class="ident">mem::replace</span>(
-                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">upvar</span>,
+                        <span class="kw-2">&amp;mut</span> <span class="ident">upvar</span>,
                         <span class="ident">ModuleUpvar::Inherit</span>(<span class="ident">outer</span>.<span class="ident">creation_modules</span>.<span class="ident">len</span>()),
                     );
                     <span class="ident">outer</span>.<span class="ident">creation_modules</span>.<span class="ident">push</span>(<span class="ident">upvar</span>);
@@ -2207,6 +2213,5 @@ and for re-adding support for interface types you can see this issue:
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmtime_environ" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmtime_environ" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>

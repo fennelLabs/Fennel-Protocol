@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;Users&#x2F;sean&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;wasmtime-0.27.0&#x2F;src&#x2F;config.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>config.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../wasmtime/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/sean/.cargo/registry/src/github.com-1ecc6299db9ec823/wasmtime-0.27.0/src/config.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>config.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../wasmtime/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../wasmtime/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../wasmtime/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
+                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1748,7 +1754,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">async_required</span>: <span class="ident">bool</span>, <span class="ident">func</span>: <span class="ident">HostFunc</span>) {
+    <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">async_required</span>: <span class="ident">bool</span>, <span class="ident">func</span>: <span class="ident">HostFunc</span>) {
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">intern_str</span>(<span class="ident">module</span>), <span class="self">self</span>.<span class="ident">intern_str</span>(<span class="ident">name</span>));
         <span class="self">self</span>.<span class="ident">funcs</span>.<span class="ident">insert</span>(<span class="ident">key</span>, (<span class="ident">Arc::new</span>(<span class="ident">func</span>), <span class="ident">async_required</span>));
     }
@@ -1761,7 +1767,7 @@
         <span class="self">self</span>.<span class="ident">funcs</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">f</span>.<span class="number">0</span>.<span class="ident">as_ref</span>())
     }
 
-    <span class="kw">fn</span> <span class="ident">intern_str</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">string</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">intern_str</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">string</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">usize</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">idx</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">index_map</span>.<span class="ident">get</span>(<span class="ident">string</span>) {
             <span class="kw">return</span> <span class="kw-2">*</span><span class="ident">idx</span>;
         }
@@ -1792,7 +1798,7 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
         <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">nightlydoc</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)))]</span>
         <span class="kw">pub</span> <span class="kw">fn</span> [<span class="op">&lt;</span><span class="ident">wrap</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num</span> <span class="ident">_host_func_async</span><span class="op">&gt;</span>]<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>,)<span class="op">*</span> <span class="ident">R</span><span class="op">&gt;</span>(
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+            <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
             <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
             <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
             <span class="ident">func</span>: <span class="kw">impl</span> <span class="kw">for</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Fn</span>(<span class="ident">Caller</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>),<span class="kw-2">*</span>) -&gt; <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">R</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -1901,7 +1907,7 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method will error if the given target triple is not supported.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">target</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">target</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">target</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">target</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
         <span class="self">self</span>.<span class="ident">isa_flags</span> <span class="op">=</span> <span class="ident">native::lookup</span>(
             <span class="ident">target_lexicon::Triple::from_str</span>(<span class="ident">target</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">anyhow::anyhow!</span>(<span class="ident">e</span>))<span class="question-mark">?</span>,
@@ -1989,7 +1995,7 @@
     <span class="doccomment">/// feel free to open an issue!</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">nightlydoc</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">async_support</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">async_support</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">async_support</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -1998,7 +2004,7 @@
     <span class="doccomment">/// compilation.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default this option is `false`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">debug_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">debug_info</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">generate_native_debuginfo</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -2014,7 +2020,7 @@
     <span class="doccomment">/// By default this option is `WasmBacktraceDetails::Environment`, meaning</span>
     <span class="doccomment">/// that wasm will read `WASMTIME_BACKTRACE_DETAILS` to indicate whether details</span>
     <span class="doccomment">/// should be parsed.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_backtrace_details</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">WasmBacktraceDetails</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_backtrace_details</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">WasmBacktraceDetails</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">wasm_backtrace_details_env_used</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">parse_wasm_debuginfo</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">enable</span> {
             <span class="ident">WasmBacktraceDetails::Enable</span> =&gt; <span class="bool-val">true</span>,
@@ -2036,7 +2042,7 @@
     <span class="doccomment">/// [`Store::interrupt_handle`](crate::Store::interrupt_handle).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default this option is `false`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">interruptable</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">interruptable</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">interruptable</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -2058,7 +2064,7 @@
     <span class="doccomment">/// By default this option is `false`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`Store`]: crate::Store</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">consume_fuel</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">consume_fuel</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">consume_fuel</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -2083,7 +2089,7 @@
     <span class="doccomment">/// abort the process.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default this option is 1 MiB.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_wasm_stack</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_wasm_stack</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
         <span class="kw">if</span> <span class="ident">size</span> <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">async_stack_size</span> {
             <span class="macro">bail!</span>(<span class="string">&quot;wasm stack size cannot exceed the async stack size&quot;</span>);
@@ -2109,7 +2115,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default this option is 2 MiB.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">async_stack_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">async_stack_size</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">size</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">max_wasm_stack</span> {
             <span class="macro">bail!</span>(<span class="string">&quot;async stack size cannot be less than the maximum wasm stack size&quot;</span>);
         }
@@ -2137,7 +2143,7 @@
     <span class="doccomment">/// &gt; now.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [threads]: https://github.com/webassembly/threads</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_threads</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_threads</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">threads</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="comment">// The threads proposal depends on the bulk memory proposal</span>
         <span class="kw">if</span> <span class="ident">enable</span> {
@@ -2159,7 +2165,7 @@
     <span class="doccomment">/// architectures.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [proposal]: https://github.com/webassembly/reference-types</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_reference_types</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_reference_types</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">reference_types</span> <span class="op">=</span> <span class="ident">enable</span>;
 
         <span class="self">self</span>.<span class="ident">flags</span>
@@ -2194,7 +2200,7 @@
     <span class="doccomment">/// &gt; now.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [proposal]: https://github.com/webassembly/simd</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_simd</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_simd</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">simd</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">enable</span> { <span class="string">&quot;true&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;false&quot;</span> };
         <span class="self">self</span>.<span class="ident">flags</span>
@@ -2212,7 +2218,7 @@
     <span class="doccomment">/// This is `true` by default.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [proposal]: https://github.com/webassembly/bulk-memory-operations</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_bulk_memory</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_bulk_memory</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">bulk_memory</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -2226,7 +2232,7 @@
     <span class="doccomment">/// This is `true` by default.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [proposal]: https://github.com/webassembly/multi-value</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_multi_value</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_multi_value</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">multi_value</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -2240,7 +2246,7 @@
     <span class="doccomment">/// This is `false` by default.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [proposal]: https://github.com/webassembly/multi-memory</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_multi_memory</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_multi_memory</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">multi_memory</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -2254,7 +2260,7 @@
     <span class="doccomment">/// This is `false` by default.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [proposal]: https://github.com/webassembly/module-linking</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_module_linking</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_module_linking</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">module_linking</span> <span class="op">=</span> <span class="ident">enable</span>;
         <span class="self">self</span>
     }
@@ -2272,7 +2278,7 @@
     <span class="doccomment">/// Some compilation strategies require compile-time options of `wasmtime`</span>
     <span class="doccomment">/// itself to be set, but if they&#39;re not set and the strategy is specified</span>
     <span class="doccomment">/// here then an error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">strategy</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">strategy</span>: <span class="ident">Strategy</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">strategy</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">strategy</span>: <span class="ident">Strategy</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">strategy</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">strategy</span> {
             <span class="ident">Strategy::Auto</span> =&gt; <span class="ident">CompilationStrategy::Auto</span>,
             <span class="ident">Strategy::Cranelift</span> =&gt; <span class="ident">CompilationStrategy::Cranelift</span>,
@@ -2290,7 +2296,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Profiler creation calls the type&#39;s default initializer where the purpose is</span>
     <span class="doccomment">/// really just to put in place the type used for profiling.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">profiler</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">profile</span>: <span class="ident">ProfilingStrategy</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">profiler</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">profile</span>: <span class="ident">ProfilingStrategy</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">profiler</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">profile</span> {
             <span class="ident">ProfilingStrategy::JitDump</span> =&gt; <span class="ident">Arc::new</span>(<span class="ident">JitDumpAgent::new</span>()<span class="question-mark">?</span>) <span class="kw">as</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ProfilingAgent</span><span class="op">&gt;</span>,
             <span class="ident">ProfilingStrategy::VTune</span> =&gt; <span class="ident">Arc::new</span>(<span class="ident">VTuneAgent::new</span>()<span class="question-mark">?</span>) <span class="kw">as</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ProfilingAgent</span><span class="op">&gt;</span>,
@@ -2307,7 +2313,7 @@
     <span class="doccomment">/// developers of wasmtime itself.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The default value for this is `false`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cranelift_debug_verifier</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cranelift_debug_verifier</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">enable</span> { <span class="string">&quot;true&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;false&quot;</span> };
         <span class="self">self</span>.<span class="ident">flags</span>
             .<span class="ident">set</span>(<span class="string">&quot;enable_verifier&quot;</span>, <span class="ident">val</span>)
@@ -2322,7 +2328,7 @@
     <span class="doccomment">/// more information see the documentation of [`OptLevel`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The default value for this is `OptLevel::None`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cranelift_opt_level</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">level</span>: <span class="ident">OptLevel</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cranelift_opt_level</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">level</span>: <span class="ident">OptLevel</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">level</span> {
             <span class="ident">OptLevel::None</span> =&gt; <span class="string">&quot;none&quot;</span>,
             <span class="ident">OptLevel::Speed</span> =&gt; <span class="string">&quot;speed&quot;</span>,
@@ -2342,7 +2348,7 @@
     <span class="doccomment">/// This is not required by the WebAssembly spec, so it is not enabled by default.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The default value for this is `false`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cranelift_nan_canonicalization</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cranelift_nan_canonicalization</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">enable</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">enable</span> { <span class="string">&quot;true&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;false&quot;</span> };
         <span class="self">self</span>.<span class="ident">flags</span>
             .<span class="ident">set</span>(<span class="string">&quot;enable_nan_canonicalization&quot;</span>, <span class="ident">val</span>)
@@ -2364,7 +2370,7 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method can fail if the flag&#39;s name does not exist.</span>
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cranelift_flag_enable</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">flag</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cranelift_flag_enable</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">flag</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">enable</span>(<span class="ident">flag</span>) {
             <span class="kw">match</span> <span class="ident">err</span> {
                 <span class="ident">SetError::BadName</span>(<span class="kw">_</span>) =&gt; {
@@ -2390,7 +2396,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method can fail if the flag&#39;s name does not exist, or the value is not appropriate for</span>
     <span class="doccomment">/// the flag type.</span>
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cranelift_flag_set</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cranelift_flag_set</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">set</span>(<span class="ident">name</span>, <span class="ident">value</span>) {
             <span class="kw">match</span> <span class="ident">err</span> {
                 <span class="ident">SetError::BadName</span>(<span class="kw">_</span>) =&gt; {
@@ -2423,7 +2429,7 @@
     <span class="doccomment">/// [docs]: https://bytecodealliance.github.io/wasmtime/cli-cache.html</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">nightlydoc</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cache_config_load</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cache_config_load</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">cache_config</span> <span class="op">=</span> <span class="ident">CacheConfig::from_file</span>(<span class="prelude-val">Some</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>()))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
@@ -2451,7 +2457,7 @@
     <span class="doccomment">/// [docs]: https://bytecodealliance.github.io/wasmtime/cli-cache.html</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">nightlydoc</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cache_config_load_default</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cache_config_load_default</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">cache_config</span> <span class="op">=</span> <span class="ident">CacheConfig::from_file</span>(<span class="prelude-val">None</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
@@ -2460,7 +2466,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Custom memory creators are used when creating host `Memory` objects or when</span>
     <span class="doccomment">/// creating instance linear memories for the on-demand instance allocation strategy.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_host_memory</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mem_creator</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">MemoryCreator</span><span class="op">&gt;</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_host_memory</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">mem_creator</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">MemoryCreator</span><span class="op">&gt;</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">mem_creator</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Arc::new</span>(<span class="ident">MemoryCreatorProxy</span>(<span class="ident">mem_creator</span>)));
         <span class="self">self</span>
     }
@@ -2472,7 +2478,7 @@
     <span class="doccomment">/// This means the [`Config::static_memory_maximum_size`] and [`Config::static_memory_guard_size`] options</span>
     <span class="doccomment">/// will be ignored in favor of [`InstanceLimits::memory_reservation_size`] when the pooling instance</span>
     <span class="doccomment">/// allocation strategy is used.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">allocation_strategy</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">strategy</span>: <span class="ident">InstanceAllocationStrategy</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">allocation_strategy</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">strategy</span>: <span class="ident">InstanceAllocationStrategy</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">allocation_strategy</span> <span class="op">=</span> <span class="ident">strategy</span>;
         <span class="self">self</span>
     }
@@ -2555,7 +2561,7 @@
     <span class="doccomment">/// For 32-bit platforms this value defaults to 1GB. This means that wasm</span>
     <span class="doccomment">/// memories whose maximum size is less than 1GB will be allocated</span>
     <span class="doccomment">/// statically, otherwise they&#39;ll be considered dynamic.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">static_memory_maximum_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_size</span>: <span class="ident">u64</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">static_memory_maximum_size</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">max_size</span>: <span class="ident">u64</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">max_pages</span> <span class="op">=</span> <span class="ident">max_size</span> <span class="op">/</span> <span class="ident">u64::from</span>(<span class="ident">wasmtime_environ::WASM_PAGE_SIZE</span>);
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">static_memory_bound</span> <span class="op">=</span> <span class="ident">u32::try_from</span>(<span class="ident">max_pages</span>).<span class="ident">unwrap_or</span>(<span class="ident">u32::max_value</span>());
         <span class="self">self</span>
@@ -2609,7 +2615,7 @@
     <span class="doccomment">/// Note that for now the static memory guard size must be at least as large</span>
     <span class="doccomment">/// as the dynamic memory guard size, so configuring this property to be</span>
     <span class="doccomment">/// smaller than the dynamic memory guard size will have no effect.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">static_memory_guard_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">guard_size</span>: <span class="ident">u64</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">static_memory_guard_size</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">guard_size</span>: <span class="ident">u64</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">guard_size</span> <span class="op">=</span> <span class="ident">round_up_to_pages</span>(<span class="ident">guard_size</span>);
         <span class="kw">let</span> <span class="ident">guard_size</span> <span class="op">=</span> <span class="ident">cmp::max</span>(<span class="ident">guard_size</span>, <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">dynamic_memory_offset_guard_size</span>);
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">static_memory_offset_guard_size</span> <span class="op">=</span> <span class="ident">guard_size</span>;
@@ -2638,7 +2644,7 @@
     <span class="doccomment">/// ## Default</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This value defaults to 64KB.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dynamic_memory_guard_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">guard_size</span>: <span class="ident">u64</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dynamic_memory_guard_size</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">guard_size</span>: <span class="ident">u64</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">guard_size</span> <span class="op">=</span> <span class="ident">round_up_to_pages</span>(<span class="ident">guard_size</span>);
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">dynamic_memory_offset_guard_size</span> <span class="op">=</span> <span class="ident">guard_size</span>;
         <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">static_memory_offset_guard_size</span> <span class="op">=</span>
@@ -2662,11 +2668,11 @@
     <span class="doccomment">/// The callback must be `Send` and `Sync` as it is shared between all engines created</span>
     <span class="doccomment">/// from the `Config`.  For more relaxed bounds, use [`Func::new`](crate::Func::new) to define the function.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">define_host_func</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">ty</span>: <span class="ident">FuncType</span>,
-        <span class="ident">func</span>: <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="ident">Caller</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="kw-2">&amp;</span>[<span class="ident">Val</span>], <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">Val</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">func</span>: <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="ident">Caller</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="kw-2">&amp;</span>[<span class="ident">Val</span>], <span class="kw-2">&amp;mut</span> [<span class="ident">Val</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     ) {
         <span class="self">self</span>.<span class="ident">host_funcs</span>
             .<span class="ident">insert</span>(<span class="ident">module</span>, <span class="ident">name</span>, <span class="bool-val">false</span>, <span class="ident">HostFunc::new</span>(<span class="self">self</span>, <span class="ident">ty</span>, <span class="ident">func</span>));
@@ -2691,7 +2697,7 @@
     <span class="doccomment">/// is not enabled.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">nightlydoc</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">define_host_func_async</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">ty</span>: <span class="ident">FuncType</span>, <span class="ident">func</span>: <span class="ident">F</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">define_host_func_async</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">ty</span>: <span class="ident">FuncType</span>, <span class="ident">func</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Fn</span>(
                 <span class="ident">Caller</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
@@ -2728,7 +2734,7 @@
     <span class="doccomment">/// The closure must be `Send` and `Sync` as it is shared between all engines created</span>
     <span class="doccomment">/// from the `Config`.  For more relaxed bounds, use [`Func::wrap`](crate::Func::wrap) to wrap the closure.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap_host_func</span><span class="op">&lt;</span><span class="ident">Params</span>, <span class="ident">Results</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">func</span>: <span class="kw">impl</span> <span class="ident">IntoFunc</span><span class="op">&lt;</span><span class="ident">Params</span>, <span class="ident">Results</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
@@ -2774,7 +2780,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">build_compiler</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">allocator</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">InstanceAllocator</span>) -&gt; <span class="ident">Compiler</span> {
         <span class="kw">let</span> <span class="ident">isa</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">target_isa</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tunables</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">clone</span>();
-        <span class="ident">allocator</span>.<span class="ident">adjust_tunables</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">tunables</span>);
+        <span class="ident">allocator</span>.<span class="ident">adjust_tunables</span>(<span class="kw-2">&amp;mut</span> <span class="ident">tunables</span>);
         <span class="ident">Compiler::new</span>(<span class="ident">isa</span>, <span class="self">self</span>.<span class="ident">strategy</span>, <span class="ident">tunables</span>, <span class="self">self</span>.<span class="ident">features</span>)
     }
 
@@ -2819,7 +2825,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">Config</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Config&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;debug_info&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">generate_native_debuginfo</span>)
             .<span class="ident">field</span>(<span class="string">&quot;parse_wasm_debuginfo&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">tunables</span>.<span class="ident">parse_wasm_debuginfo</span>)
@@ -2911,6 +2917,5 @@
     <span class="ident">Environment</span>,
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmtime" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmtime" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>

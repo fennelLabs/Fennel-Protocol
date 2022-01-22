@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;Users&#x2F;sean&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;cranelift-codegen-0.74.0&#x2F;src&#x2F;regalloc&#x2F;solver.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>solver.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../cranelift_codegen/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/sean/.cargo/registry/src/github.com-1ecc6299db9ec823/cranelift-codegen-0.74.0/src/regalloc/solver.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>solver.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../cranelift_codegen/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../cranelift_codegen/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../cranelift_codegen/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
+                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1587,7 +1593,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Variable</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}({}&quot;</span>, <span class="self">self</span>.<span class="ident">value</span>, <span class="self">self</span>.<span class="ident">constraint</span>)<span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">reg</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">from</span> {
             <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;, from {}&quot;</span>, <span class="self">self</span>.<span class="ident">constraint</span>.<span class="ident">info</span>.<span class="ident">display_regunit</span>(<span class="ident">reg</span>))<span class="question-mark">?</span>;
@@ -1626,7 +1632,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Assignment</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">let</span> <span class="ident">ri</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">rc</span>.<span class="ident">info</span>;
         <span class="macro">write!</span>(
             <span class="ident">f</span>,
@@ -1696,7 +1702,7 @@
     }
 
     <span class="doccomment">/// Replace the &quot;to&quot; register with `new` and return the old value.</span>
-    <span class="kw">fn</span> <span class="ident">replace_to_reg</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">new</span>: <span class="ident">RegUnit</span>) -&gt; <span class="ident">RegUnit</span> {
+    <span class="kw">fn</span> <span class="ident">replace_to_reg</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">new</span>: <span class="ident">RegUnit</span>) -&gt; <span class="ident">RegUnit</span> {
         <span class="ident">mem::replace</span>(
             <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
                 <span class="ident"><span class="self">Self</span>::Reg</span> { <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">to</span>, .. } <span class="op">|</span> <span class="ident"><span class="self">Self</span>::Fill</span> { <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">to</span>, .. } =&gt; <span class="ident">to</span>,
@@ -1707,7 +1713,7 @@
     }
 
     <span class="doccomment">/// Convert this `Reg` move to a spill to `slot` and return the old &quot;to&quot; register.</span>
-    <span class="kw">fn</span> <span class="ident">change_to_spill</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">slot</span>: <span class="ident">usize</span>) -&gt; <span class="ident">RegUnit</span> {
+    <span class="kw">fn</span> <span class="ident">change_to_spill</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">slot</span>: <span class="ident">usize</span>) -&gt; <span class="ident">RegUnit</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">clone</span>() {
             <span class="ident"><span class="self">Self</span>::Reg</span> {
                 <span class="ident">value</span>,
@@ -1743,7 +1749,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Move</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Reg</span> {
                 <span class="ident">value</span>,
@@ -1789,7 +1795,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">Move</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">let</span> <span class="ident">as_display</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">fmt::Display</span> <span class="op">=</span> <span class="self">self</span>;
         <span class="ident">as_display</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)
     }
@@ -1884,7 +1890,7 @@
     }
 
     <span class="doccomment">/// Clear all data structures in this coloring pass.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">assignments</span>.<span class="ident">clear</span>();
         <span class="self">self</span>.<span class="ident">vars</span>.<span class="ident">clear</span>();
         <span class="self">self</span>.<span class="ident">inputs_done</span> <span class="op">=</span> <span class="bool-val">false</span>;
@@ -1898,7 +1904,7 @@
     <span class="doccomment">/// allocatable registers.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `regs` set is the allocatable registers before any reassignments are applied.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">regs</span>: <span class="kw-2">&amp;</span><span class="ident">RegisterSet</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">regs</span>: <span class="kw-2">&amp;</span><span class="ident">RegisterSet</span>) {
         <span class="self">self</span>.<span class="ident">assignments</span>.<span class="ident">clear</span>();
         <span class="self">self</span>.<span class="ident">vars</span>.<span class="ident">clear</span>();
         <span class="self">self</span>.<span class="ident">inputs_done</span> <span class="op">=</span> <span class="bool-val">false</span>;
@@ -1916,7 +1922,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// In either case, `to` will not be available for variables on the input side of the</span>
     <span class="doccomment">/// instruction.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reassign_in</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>, <span class="ident">to</span>: <span class="ident">RegUnit</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reassign_in</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>, <span class="ident">to</span>: <span class="ident">RegUnit</span>) {
         <span class="macro">debug!</span>(
             <span class="string">&quot;reassign_in({}:{}, {} -&gt; {})&quot;</span>,
             <span class="ident">value</span>,
@@ -1962,7 +1968,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function can only be used before calling `inputs_done()`. Afterwards, more input-side</span>
     <span class="doccomment">/// variables can be added by calling `add_killed_var()` and `add_through_var()`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_var</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">constraint</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_var</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">constraint</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) {
         <span class="macro">debug!</span>(
             <span class="string">&quot;add_var({}:{}, from={})&quot;</span>,
             <span class="ident">value</span>,
@@ -1977,7 +1983,7 @@
     <span class="doccomment">/// instruction.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function should be called after `inputs_done()` only. Use `add_var()` before.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_killed_var</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_killed_var</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) {
         <span class="macro">debug!</span>(
             <span class="string">&quot;add_killed_var({}:{}, from={})&quot;</span>,
             <span class="ident">value</span>,
@@ -1992,7 +1998,7 @@
     <span class="doccomment">/// instruction.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function should be called after `inputs_done()` only. Use `add_var()` before.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_through_var</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_through_var</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) {
         <span class="macro">debug!</span>(
             <span class="string">&quot;add_through_var({}:{}, from={})&quot;</span>,
             <span class="ident">value</span>,
@@ -2007,7 +2013,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Add a variable that is live before the instruction, and possibly live through. Merge</span>
     <span class="doccomment">/// constraints if the value has already been added as a variable or fixed assignment.</span>
-    <span class="kw">fn</span> <span class="ident">add_live_var</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>, <span class="ident">live_through</span>: <span class="ident">bool</span>) {
+    <span class="kw">fn</span> <span class="ident">add_live_var</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>, <span class="ident">live_through</span>: <span class="ident">bool</span>) {
         <span class="comment">// Check for existing entries for this value.</span>
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">can_add_var</span>(<span class="ident">rc</span>, <span class="ident">from</span>) {
             <span class="comment">// There could be an existing variable entry.</span>
@@ -2065,7 +2071,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Call this method to indicate that there will be no more fixed input reassignments added</span>
     <span class="doccomment">/// and prepare for the output side constraints.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inputs_done</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inputs_done</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="macro">debug_assert!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">has_fixed_input_conflicts</span>());
 
         <span class="comment">// At this point, `regs_out` contains the `to` side of the input reassignments, and the</span>
@@ -2090,7 +2096,7 @@
     <span class="doccomment">/// original location before the reassignments.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This means that the register is available on the output side.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_kill</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">reg</span>: <span class="ident">RegUnit</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_kill</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">reg</span>: <span class="ident">RegUnit</span>) {
         <span class="macro">debug_assert!</span>(<span class="self">self</span>.<span class="ident">inputs_done</span>);
 
         <span class="comment">// If a fixed assignment is killed, the `to` register becomes available on the output side.</span>
@@ -2123,7 +2129,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// If the value has already been assigned to a fixed register, return that.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_tied_input</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">value</span>: <span class="ident">Value</span>,
         <span class="ident">rc</span>: <span class="ident">RegClass</span>,
         <span class="ident">reg</span>: <span class="ident">RegUnit</span>,
@@ -2171,7 +2177,7 @@
     <span class="doccomment">/// conflicting live-through value and turn it into a variable before calling this method</span>
     <span class="doccomment">/// again.</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_fixed_output</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">reg</span>: <span class="ident">RegUnit</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_fixed_output</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">rc</span>: <span class="ident">RegClass</span>, <span class="ident">reg</span>: <span class="ident">RegUnit</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">debug_assert!</span>(<span class="self">self</span>.<span class="ident">inputs_done</span>);
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">regs_out</span>.<span class="ident">is_avail</span>(<span class="ident">rc</span>, <span class="ident">reg</span>) {
             <span class="self">self</span>.<span class="ident">regs_out</span>.<span class="ident">take</span>(<span class="ident">rc</span>, <span class="ident">reg</span>);
@@ -2184,7 +2190,7 @@
     <span class="doccomment">/// Add a defined output value.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is similar to `add_var`, except the value doesn&#39;t have a prior register assignment.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_def</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">constraint</span>: <span class="ident">RegClass</span>, <span class="ident">is_global</span>: <span class="ident">bool</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_def</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">constraint</span>: <span class="ident">RegClass</span>, <span class="ident">is_global</span>: <span class="ident">bool</span>) {
         <span class="macro">debug_assert!</span>(<span class="self">self</span>.<span class="ident">inputs_done</span>);
         <span class="self">self</span>.<span class="ident">vars</span>
             .<span class="ident">push</span>(<span class="ident">Variable::new_def</span>(<span class="ident">value</span>, <span class="ident">constraint</span>, <span class="ident">is_global</span>));
@@ -2194,8 +2200,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is used when there are not enough global registers available, and global defines have</span>
     <span class="doccomment">/// to be replaced with local defines followed by a copy.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_all_global_flags</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">vars</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_all_global_flags</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+        <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">vars</span> {
             <span class="ident">v</span>.<span class="ident">is_global</span> <span class="op">=</span> <span class="bool-val">false</span>;
         }
     }
@@ -2227,7 +2233,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `Ok(regs)` if a solution was found.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">quick_solve</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">global_regs</span>: <span class="kw-2">&amp;</span><span class="ident">RegisterSet</span>,
         <span class="ident">is_reload</span>: <span class="ident">bool</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RegisterSet</span>, <span class="ident">SolverError</span><span class="op">&gt;</span> {
@@ -2242,12 +2248,12 @@
     <span class="doccomment">/// can be freed up in the starving class, this method can be called again after adding</span>
     <span class="doccomment">/// variables for the freed registers.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">real_solve</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">global_regs</span>: <span class="kw-2">&amp;</span><span class="ident">RegisterSet</span>,
         <span class="ident">is_reload</span>: <span class="ident">bool</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RegisterSet</span>, <span class="ident">SolverError</span><span class="op">&gt;</span> {
         <span class="comment">// Compute domain sizes for all the variables given the current register sets.</span>
-        <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">vars</span> {
+        <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">vars</span> {
             <span class="kw">let</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">regs_in</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">regs_out</span>, <span class="ident">global_regs</span>).<span class="ident">len</span>();
             <span class="ident">v</span>.<span class="ident">domain</span> <span class="op">=</span> <span class="ident">cmp::min</span>(<span class="ident">d</span>, <span class="ident">u16::MAX</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="kw">as</span> <span class="ident">u16</span>;
         }
@@ -2293,7 +2299,7 @@
     <span class="doccomment">/// output side after the solution. If no solution could be found, returns `Err(rc)` with the</span>
     <span class="doccomment">/// constraint register class that needs more available registers.</span>
     <span class="kw">fn</span> <span class="ident">find_solution</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">global_regs</span>: <span class="kw-2">&amp;</span><span class="ident">RegisterSet</span>,
         <span class="ident">is_reload</span>: <span class="ident">bool</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RegisterSet</span>, <span class="ident">SolverError</span><span class="op">&gt;</span> {
@@ -2302,7 +2308,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">oregs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs_out</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gregs</span> <span class="op">=</span> <span class="ident">global_regs</span>.<span class="ident">clone</span>();
 
-        <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">vars</span> {
+        <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">vars</span> {
             <span class="kw">let</span> <span class="ident">rc</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">constraint</span>;
 
             <span class="comment">// Decide which register to assign.  In order to try and keep registers holding</span>
@@ -2350,7 +2356,7 @@
     }
 
     <span class="doccomment">/// Check if `value` can be added as a variable to help find a solution.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_add_var</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">constraint</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_add_var</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">constraint</span>: <span class="ident">RegClass</span>, <span class="ident">from</span>: <span class="ident">RegUnit</span>) -&gt; <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">regs_in</span>.<span class="ident">is_avail</span>(<span class="ident">constraint</span>, <span class="ident">from</span>)
             <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">vars</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">var</span><span class="op">|</span> <span class="ident">var</span>.<span class="ident">from</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">from</span>))
     }
@@ -2359,7 +2365,7 @@
 <span class="doccomment">/// Interface for working with parallel copies once a solution has been found.</span>
 <span class="kw">impl</span> <span class="ident">Solver</span> {
     <span class="doccomment">/// Collect all the register moves we need to execute.</span>
-    <span class="kw">fn</span> <span class="ident">collect_moves</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">collect_moves</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">moves</span>.<span class="ident">clear</span>();
 
         <span class="comment">// Collect moves from the chosen solution for all non-define variables.</span>
@@ -2397,7 +2403,7 @@
     <span class="doccomment">/// a register.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns the number of spills that had to be emitted.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">schedule_moves</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">regs</span>: <span class="kw-2">&amp;</span><span class="ident">RegisterSet</span>) -&gt; <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">schedule_moves</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">regs</span>: <span class="kw-2">&amp;</span><span class="ident">RegisterSet</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">collect_moves</span>();
         <span class="macro">debug_assert!</span>(<span class="self">self</span>.<span class="ident">fills</span>.<span class="ident">is_empty</span>());
 
@@ -2408,7 +2414,7 @@
             <span class="comment">// Don&#39;t even look at the fills until we&#39;ve spent all the moves. Deferring these lets</span>
             <span class="comment">// us potentially reuse the claimed registers to resolve multiple cycles.</span>
             <span class="kw">if</span> <span class="ident">i</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">moves</span>.<span class="ident">len</span>() {
-                <span class="self">self</span>.<span class="ident">moves</span>.<span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">fills</span>);
+                <span class="self">self</span>.<span class="ident">moves</span>.<span class="ident">append</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">fills</span>);
             }
 
             <span class="comment">// Find the first move that can be executed now.</span>
@@ -2510,7 +2516,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Solver</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">let</span> <span class="ident">reginfo</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">vars</span>.<span class="ident">first</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">constraint</span>.<span class="ident">info</span>);
         <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;Solver {{ inputs_done: {},&quot;</span>, <span class="self">self</span>.<span class="ident">inputs_done</span>)<span class="question-mark">?</span>;
         <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;  in:  {}&quot;</span>, <span class="self">self</span>.<span class="ident">regs_in</span>.<span class="ident">display</span>(<span class="ident">reginfo</span>))<span class="question-mark">?</span>;
@@ -2765,6 +2771,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="cranelift_codegen" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
-    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="cranelift_codegen" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>
