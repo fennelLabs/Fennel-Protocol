@@ -74,6 +74,7 @@
 <span id="68">68</span>
 <span id="69">69</span>
 <span id="70">70</span>
+<span id="71">71</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">no_std</span>)]</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet</span>::<span class="kw-2">*</span>;
@@ -132,7 +133,8 @@
             <span class="prelude-val">Ok</span>(())
         }
 
-        <span class="doccomment">/// If a key needs to be removed from circulation, this extrinsic will handle deleting it.</span>
+        <span class="doccomment">/// If a key needs to be removed from circulation, this extrinsic will handle deleting it</span>
+        <span class="doccomment">/// and informing the network.</span>
         <span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="number">10_000</span> <span class="op">+</span> <span class="ident">T::DbWeight::get</span>().<span class="ident">reads_writes</span>(<span class="number">1</span>,<span class="number">1</span>))]</span>
         <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">revoke_key</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">key_index</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispatchResult</span> {
             <span class="kw">let</span> <span class="ident">who</span> <span class="op">=</span> <span class="ident">ensure_signed</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
@@ -145,5 +147,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="pallet_keystore" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="pallet_keystore" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (bfe156467 2022-01-22)" ></div>
 </body></html>
