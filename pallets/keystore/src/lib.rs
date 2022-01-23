@@ -56,7 +56,8 @@ pub mod pallet {
             Ok(())
         }
 
-        /// If a key needs to be removed from circulation, this extrinsic will handle deleting it.
+        /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
+        /// and informing the network.
         #[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
         pub fn revoke_key(origin: OriginFor<T>, key_index: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
