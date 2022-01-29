@@ -1,5 +1,5 @@
-use crate::{mock::*};
-use frame_support::{assert_ok};
+use crate::mock::*;
+use frame_support::assert_ok;
 
 #[test]
 fn issue_key() {
@@ -20,4 +20,3 @@ fn revoke_key() {
         assert_ok!(KeystoreModule::revoke_key(Origin::signed(1), key_index));
     });
 }
-
