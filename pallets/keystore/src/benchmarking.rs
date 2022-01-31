@@ -22,9 +22,6 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
     RawOrigin::Signed(get_account::<T>(name))
 }
 
-benchmarks! {
-    
-   
-}
+benchmarks! {}
 
 impl_benchmark_test_suite!(Identity, crate::mock::new_test_ext(), crate::mock::Test);
