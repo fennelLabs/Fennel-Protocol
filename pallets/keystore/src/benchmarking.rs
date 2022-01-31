@@ -14,8 +14,7 @@ pub fn from_str_to_vec(string: String) -> Vec<u8> {
 }
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
-    let account: T::AccountId = benchmark_account(name, 0, 0);
-    account
+    benchmark_account(name, 0, 0)
 }
 
 pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
