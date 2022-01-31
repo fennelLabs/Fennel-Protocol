@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;Users&#x2F;sean&#x2F;.cargo&#x2F;git&#x2F;checkouts&#x2F;substrate-7e08433d4c370a21&#x2F;20a9bbb&#x2F;client&#x2F;network&#x2F;src&#x2F;protocol&#x2F;sync.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sync.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../sc_network/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/sean/.cargo/git/checkouts/substrate-7e08433d4c370a21/20a9bbb/client/network/src/protocol/sync.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sync.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../sc_network/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../sc_network/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../sc_network/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
+                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -3180,7 +3186,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PendingRequests</span> {
-	<span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) {
+	<span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) {
 		<span class="kw">match</span> <span class="self">self</span> {
 			<span class="ident">PendingRequests::Some</span>(<span class="ident">set</span>) =&gt; {
 				<span class="ident">set</span>.<span class="ident">insert</span>(<span class="ident">id</span>.<span class="ident">clone</span>());
@@ -3189,11 +3195,11 @@
 		}
 	}
 
-	<span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">PendingRequests</span> {
+	<span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">PendingRequests</span> {
 		<span class="ident">std::mem::take</span>(<span class="self">self</span>)
 	}
 
-	<span class="kw">fn</span> <span class="ident">set_all</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+	<span class="kw">fn</span> <span class="ident">set_all</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
 		<span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">PendingRequests::All</span>;
 	}
 
@@ -3283,7 +3289,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">BlockT</span><span class="op">&gt;</span> <span class="ident">PeerSync</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
 	<span class="doccomment">/// Update the `common_number` iff `new_common &gt; common_number`.</span>
-	<span class="kw">fn</span> <span class="ident">update_common_number</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">new_common</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+	<span class="kw">fn</span> <span class="ident">update_common_number</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">new_common</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
 		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">common_number</span> <span class="op">&lt;</span> <span class="ident">new_common</span> {
 			<span class="macro">trace!</span>(
 				<span class="ident">target</span>: <span class="string">&quot;sync&quot;</span>,
@@ -3374,7 +3380,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">WarpSyncPhase</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
 		<span class="kw">match</span> <span class="self">self</span> {
 			<span class="ident">WarpSyncPhase::AwaitingPeers</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Waiting for peers&quot;</span>),
 			<span class="ident">WarpSyncPhase::DownloadingWarpProofs</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Downloading finality proofs&quot;</span>),
@@ -3415,7 +3421,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BadPeer</span>(<span class="kw">pub</span> <span class="ident">PeerId</span>, <span class="kw">pub</span> <span class="ident">sc_peerset::ReputationChange</span>);
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">BadPeer</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
+	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
 		<span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Bad peer {}; Reputation change: {:?}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
 	}
 }
@@ -3679,7 +3685,7 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Call this method whenever we connect to a new peer.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_peer</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">who</span>: <span class="ident">PeerId</span>,
 		<span class="ident">best_hash</span>: <span class="ident">B::Hash</span>,
 		<span class="ident">best_number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
@@ -3804,26 +3810,26 @@
 
 	<span class="doccomment">/// Signal that a new best block has been imported.</span>
 	<span class="doccomment">/// `ChainSync` state with that information.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_chain_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">best_hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">best_number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_chain_info</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">best_hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">best_number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
 		<span class="self">self</span>.<span class="ident">on_block_queued</span>(<span class="ident">best_hash</span>, <span class="ident">best_number</span>);
 	}
 
 	<span class="doccomment">/// Schedule a justification request for the given block.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">request_justification</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">request_justification</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
 		<span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">client</span>;
 		<span class="self">self</span>.<span class="ident">extra_justifications</span>
 			.<span class="ident">schedule</span>((<span class="kw-2">*</span><span class="ident">hash</span>, <span class="ident">number</span>), <span class="op">|</span><span class="ident">base</span>, <span class="ident">block</span><span class="op">|</span> <span class="ident">is_descendent_of</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">client</span>, <span class="ident">base</span>, <span class="ident">block</span>))
 	}
 
 	<span class="doccomment">/// Clear all pending justification requests.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_justification_requests</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_justification_requests</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
 		<span class="self">self</span>.<span class="ident">extra_justifications</span>.<span class="ident">reset</span>();
 	}
 
 	<span class="doccomment">/// Request syncing for the given block from given set of peers.</span>
 	<span class="comment">// The implementation is similar to on_block_announce with unknown parent hash.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_sync_fork_request</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="kw-2">mut</span> <span class="ident">peers</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PeerId</span><span class="op">&gt;</span>,
 		<span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>,
 		<span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
@@ -3876,9 +3882,9 @@
 
 	<span class="doccomment">/// Get an iterator over all scheduled justification requests.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">justification_requests</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 	) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">PeerId</span>, <span class="ident">BlockRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>)<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
-		<span class="kw">let</span> <span class="ident">peers</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">peers</span>;
+		<span class="kw">let</span> <span class="ident">peers</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">peers</span>;
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">matcher</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">extra_justifications</span>.<span class="ident">matcher</span>();
 		<span class="ident">std::iter::from_fn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
 			<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">peer</span>, <span class="ident">request</span>)) <span class="op">=</span> <span class="ident">matcher</span>.<span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="ident">peers</span>) {
@@ -3904,7 +3910,7 @@
 	}
 
 	<span class="doccomment">/// Get an iterator over all block requests of all peers.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">block_requests</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="ident">BlockRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>)<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">block_requests</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="ident">BlockRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>)<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
 		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">pending_requests</span>.<span class="ident">is_empty</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">state_sync</span>.<span class="ident">is_some</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">warp_sync</span>.<span class="ident">is_some</span>()
 		{
 			<span class="kw">return</span> <span class="ident">Either::Left</span>(<span class="ident">std::iter::empty</span>())
@@ -3915,8 +3921,8 @@
 		}
 		<span class="kw">let</span> <span class="ident">major_sync</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">status</span>().<span class="ident">state</span> <span class="op">==</span> <span class="ident">SyncState::Downloading</span>;
 		<span class="kw">let</span> <span class="ident">attrs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">required_block_attributes</span>();
-		<span class="kw">let</span> <span class="ident">blocks</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">blocks</span>;
-		<span class="kw">let</span> <span class="ident">fork_targets</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">fork_targets</span>;
+		<span class="kw">let</span> <span class="ident">blocks</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">blocks</span>;
+		<span class="kw">let</span> <span class="ident">fork_targets</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">fork_targets</span>;
 		<span class="kw">let</span> <span class="ident">last_finalized</span> <span class="op">=</span>
 			<span class="ident">std::cmp::min</span>(<span class="self">self</span>.<span class="ident">best_queued_number</span>, <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">info</span>().<span class="ident">finalized_number</span>);
 		<span class="kw">let</span> <span class="ident">best_queued</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">best_queued_number</span>;
@@ -3991,7 +3997,7 @@
 	}
 
 	<span class="doccomment">/// Get a state request, if any.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">state_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">PeerId</span>, <span class="ident">StateRequest</span>)<span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">state_request</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">PeerId</span>, <span class="ident">StateRequest</span>)<span class="op">&gt;</span> {
 		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">peers</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">peer</span>)<span class="op">|</span> <span class="ident">peer</span>.<span class="ident">state</span> <span class="op">==</span> <span class="ident">PeerSyncState::DownloadingState</span>) {
 			<span class="comment">// Only one pending state request is allowed.</span>
 			<span class="kw">return</span> <span class="prelude-val">None</span>
@@ -4029,7 +4035,7 @@
 	}
 
 	<span class="doccomment">/// Get a warp sync request, if any.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">warp_sync_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">PeerId</span>, <span class="ident">WarpProofRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">warp_sync_request</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">PeerId</span>, <span class="ident">WarpProofRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
 		<span class="kw">if</span> <span class="self">self</span>
 			.<span class="ident">peers</span>
 			.<span class="ident">iter</span>()
@@ -4069,7 +4075,7 @@
 	<span class="doccomment">/// If this corresponds to a valid block, this outputs the block that</span>
 	<span class="doccomment">/// must be imported in the import queue.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_block_data</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">who</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
 		<span class="ident">request</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BlockRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 		<span class="ident">response</span>: <span class="ident">BlockResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
@@ -4086,7 +4092,7 @@
 			}
 			<span class="self">self</span>.<span class="ident">pending_requests</span>.<span class="ident">add</span>(<span class="ident">who</span>);
 			<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">request</span>) <span class="op">=</span> <span class="ident">request</span> {
-				<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">peer</span>.<span class="ident">state</span> {
+				<span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="ident">peer</span>.<span class="ident">state</span> {
 					<span class="ident">PeerSyncState::DownloadingNew</span>(<span class="ident">start_block</span>) =&gt; {
 						<span class="self">self</span>.<span class="ident">blocks</span>.<span class="ident">clear_peer_download</span>(<span class="ident">who</span>);
 						<span class="kw">let</span> <span class="ident">start_block</span> <span class="op">=</span> <span class="kw-2">*</span><span class="ident">start_block</span>;
@@ -4256,11 +4262,11 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Returns next request if any.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_state_data</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">who</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
 		<span class="ident">response</span>: <span class="ident">StateResponse</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OnStateData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">BadPeer</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">import_result</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sync</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">state_sync</span> {
+		<span class="kw">let</span> <span class="ident">import_result</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sync</span>) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">state_sync</span> {
 			<span class="macro">debug!</span>(
 				<span class="ident">target</span>: <span class="string">&quot;sync&quot;</span>,
 				<span class="string">&quot;Importing state data from {} with {} keys, {} proof nodes.&quot;</span>,
@@ -4269,7 +4275,7 @@
 				<span class="ident">response</span>.<span class="ident">proof</span>.<span class="ident">len</span>(),
 			);
 			<span class="ident">sync</span>.<span class="ident">import</span>(<span class="ident">response</span>)
-		} <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sync</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">warp_sync</span> {
+		} <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sync</span>) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">warp_sync</span> {
 			<span class="macro">debug!</span>(
 				<span class="ident">target</span>: <span class="string">&quot;sync&quot;</span>,
 				<span class="string">&quot;Importing state data from {} with {} keys, {} proof nodes.&quot;</span>,
@@ -4314,11 +4320,11 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Returns next request.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_warp_sync_data</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">who</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
 		<span class="ident">response</span>: <span class="ident">warp::EncodedProof</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OnWarpSyncData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">BadPeer</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">import_result</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sync</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">warp_sync</span> {
+		<span class="kw">let</span> <span class="ident">import_result</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sync</span>) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">warp_sync</span> {
 			<span class="macro">debug!</span>(
 				<span class="ident">target</span>: <span class="string">&quot;sync&quot;</span>,
 				<span class="string">&quot;Importing warp proof data from {}, {} bytes.&quot;</span>,
@@ -4344,7 +4350,7 @@
 	}
 
 	<span class="kw">fn</span> <span class="ident">validate_and_queue_blocks</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="kw-2">mut</span> <span class="ident">new_blocks</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingBlock</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 	) -&gt; <span class="ident">OnBlockData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">orig_len</span> <span class="op">=</span> <span class="ident">new_blocks</span>.<span class="ident">len</span>();
@@ -4383,7 +4389,7 @@
 	<span class="doccomment">/// Returns `Some` if this produces a justification that must be imported</span>
 	<span class="doccomment">/// into the import queue.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_block_justification</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">who</span>: <span class="ident">PeerId</span>,
 		<span class="ident">response</span>: <span class="ident">BlockResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OnBlockJustification</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">BadPeer</span><span class="op">&gt;</span> {
@@ -4577,7 +4583,7 @@
 
 	<span class="doccomment">/// Call this when a justification has been processed by the import queue,</span>
 	<span class="doccomment">/// with or without errors.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_justification_import</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">success</span>: <span class="ident">bool</span>) {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_justification_import</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">success</span>: <span class="ident">bool</span>) {
 		<span class="kw">let</span> <span class="ident">finalization_result</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">success</span> { <span class="prelude-val">Ok</span>((<span class="ident">hash</span>, <span class="ident">number</span>)) } <span class="kw">else</span> { <span class="prelude-val">Err</span>(()) };
 		<span class="self">self</span>.<span class="ident">extra_justifications</span>
 			.<span class="ident">try_finalize_root</span>((<span class="ident">hash</span>, <span class="ident">number</span>), <span class="ident">finalization_result</span>, <span class="bool-val">true</span>);
@@ -4585,7 +4591,7 @@
 	}
 
 	<span class="doccomment">/// Notify about finalization of the given block.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_block_finalized</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_block_finalized</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
 		<span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">client</span>;
 		<span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">extra_justifications</span>.<span class="ident">on_block_finalized</span>(<span class="ident">hash</span>, <span class="ident">number</span>, <span class="op">|</span><span class="ident">base</span>, <span class="ident">block</span><span class="op">|</span> {
 			<span class="ident">is_descendent_of</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">client</span>, <span class="ident">base</span>, <span class="ident">block</span>)
@@ -4626,7 +4632,7 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Updates our internal state for best queued block and then goes</span>
 	<span class="doccomment">/// through all peers to update our view of their state as well.</span>
-	<span class="kw">fn</span> <span class="ident">on_block_queued</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+	<span class="kw">fn</span> <span class="ident">on_block_queued</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">B::Hash</span>, <span class="ident">number</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
 		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">fork_targets</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">hash</span>).<span class="ident">is_some</span>() {
 			<span class="macro">trace!</span>(<span class="ident">target</span>: <span class="string">&quot;sync&quot;</span>, <span class="string">&quot;Completed fork sync {:?}&quot;</span>, <span class="ident">hash</span>);
 		}
@@ -4668,7 +4674,7 @@
 	<span class="doccomment">/// It is *required* to call [`Self::peer_block_announce_validation_finished`] when the</span>
 	<span class="doccomment">/// validation is finished to clear the slot.</span>
 	<span class="kw">fn</span> <span class="ident">has_slot_for_block_announce_validation</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">peer</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
 	) -&gt; <span class="ident">HasSlotForBlockAnnounceValidation</span> {
 		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">block_announce_validation</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MAX_CONCURRENT_BLOCK_ANNOUNCE_VALIDATIONS</span> {
@@ -4696,7 +4702,7 @@
 	<span class="doccomment">/// It is required that [`ChainSync::poll_block_announce_validation`] is called</span>
 	<span class="doccomment">/// to check for finished block announce validations.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push_block_announce_validation</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">who</span>: <span class="ident">PeerId</span>,
 		<span class="ident">hash</span>: <span class="ident">B::Hash</span>,
 		<span class="ident">announce</span>: <span class="ident">BlockAnnounce</span><span class="op">&lt;</span><span class="ident">B::Header</span><span class="op">&gt;</span>,
@@ -4809,8 +4815,8 @@
 	<span class="doccomment">/// If [`PollBlockAnnounceValidation::ImportHeader`] is returned, then the caller MUST try to</span>
 	<span class="doccomment">/// import passed header (call `on_block_data`). The network request isn&#39;t sent in this case.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_block_announce_validation</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-		<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::task::Context</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+		<span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::task::Context</span>,
 	) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">PollBlockAnnounceValidation</span><span class="op">&lt;</span><span class="ident">B::Header</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="kw">match</span> <span class="self">self</span>.<span class="ident">block_announce_validation</span>.<span class="ident">poll_next_unpin</span>(<span class="ident">cx</span>) {
 			<span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="ident">res</span>)) =&gt; {
@@ -4824,7 +4830,7 @@
 	<span class="doccomment">/// Should be called when a block announce validation is finished, to update the slots</span>
 	<span class="doccomment">/// of the peer that send the block announce.</span>
 	<span class="kw">fn</span> <span class="ident">peer_block_announce_validation_finished</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">res</span>: <span class="kw-2">&amp;</span><span class="ident">PreValidateBlockAnnounce</span><span class="op">&lt;</span><span class="ident">B::Header</span><span class="op">&gt;</span>,
 	) {
 		<span class="kw">let</span> <span class="ident">peer</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">res</span> {
@@ -4853,7 +4859,7 @@
 
 	<span class="doccomment">/// This will finish processing of the block announcement.</span>
 	<span class="kw">fn</span> <span class="ident">finish_block_announce_validation</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">pre_validation_result</span>: <span class="ident">PreValidateBlockAnnounce</span><span class="op">&lt;</span><span class="ident">B::Header</span><span class="op">&gt;</span>,
 	) -&gt; <span class="ident">PollBlockAnnounceValidation</span><span class="op">&lt;</span><span class="ident">B::Header</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> (<span class="ident">announce</span>, <span class="ident">is_best</span>, <span class="ident">who</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">pre_validation_result</span> {
@@ -4981,7 +4987,7 @@
 	<span class="doccomment">/// Call when a peer has disconnected.</span>
 	<span class="doccomment">/// Canceled obsolete block request may result in some blocks being ready for</span>
 	<span class="doccomment">/// import, so this functions checks for such blocks and returns them.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peer_disconnected</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">who</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OnBlockData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peer_disconnected</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">who</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OnBlockData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="self">self</span>.<span class="ident">blocks</span>.<span class="ident">clear_peer_download</span>(<span class="ident">who</span>);
 		<span class="self">self</span>.<span class="ident">peers</span>.<span class="ident">remove</span>(<span class="ident">who</span>);
 		<span class="self">self</span>.<span class="ident">extra_justifications</span>.<span class="ident">peer_disconnected</span>(<span class="ident">who</span>);
@@ -5010,7 +5016,7 @@
 		}
 		<span class="self">self</span>.<span class="ident">pending_requests</span>.<span class="ident">set_all</span>();
 		<span class="macro">debug!</span>(<span class="ident">target</span>:<span class="string">&quot;sync&quot;</span>, <span class="string">&quot;Restarted with {} ({})&quot;</span>, <span class="self">self</span>.<span class="ident">best_queued_number</span>, <span class="self">self</span>.<span class="ident">best_queued_hash</span>);
-		<span class="kw">let</span> <span class="ident">old_peers</span> <span class="op">=</span> <span class="ident">std::mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">peers</span>);
+		<span class="kw">let</span> <span class="ident">old_peers</span> <span class="op">=</span> <span class="ident">std::mem::take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">peers</span>);
 
 		<span class="ident">old_peers</span>.<span class="ident">into_iter</span>().<span class="ident">filter_map</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">id</span>, <span class="kw-2">mut</span> <span class="ident">p</span>)<span class="op">|</span> {
 			<span class="comment">// peers that were downloading justifications</span>
@@ -5036,7 +5042,7 @@
 
 	<span class="doccomment">/// Find a block to start sync from. If we sync with state, that&#39;s the latest block we have</span>
 	<span class="doccomment">/// state for.</span>
-	<span class="kw">fn</span> <span class="ident">reset_sync_start_point</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ClientError</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">reset_sync_start_point</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ClientError</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">info</span>();
 		<span class="kw">if</span> <span class="macro">matches!</span>(<span class="self">self</span>.<span class="ident">mode</span>, <span class="ident">SyncMode::LightState</span> { .. }) <span class="op">&amp;&amp;</span> <span class="ident">info</span>.<span class="ident">finalized_state</span>.<span class="ident">is_some</span>() {
 			<span class="macro">log::warn!</span>(
@@ -5108,7 +5114,7 @@
 	}
 
 	<span class="doccomment">/// Drain the downloaded block set up to the first gap.</span>
-	<span class="kw">fn</span> <span class="ident">drain_blocks</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingBlock</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">drain_blocks</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingBlock</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="self">self</span>.<span class="ident">blocks</span>
 			.<span class="ident">drain</span>(<span class="self">self</span>.<span class="ident">best_queued_number</span> <span class="op">+</span> <span class="ident">One::one</span>())
 			.<span class="ident">into_iter</span>()
@@ -5233,7 +5239,7 @@
 <span class="kw">fn</span> <span class="ident">peer_block_request</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">BlockT</span><span class="op">&gt;</span>(
 	<span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
 	<span class="ident">peer</span>: <span class="kw-2">&amp;</span><span class="ident">PeerSync</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-	<span class="ident">blocks</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">BlockCollection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+	<span class="ident">blocks</span>: <span class="kw-2">&amp;mut</span> <span class="ident">BlockCollection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 	<span class="ident">attrs</span>: <span class="ident">message::BlockAttributes</span>,
 	<span class="ident">max_parallel_downloads</span>: <span class="ident">u32</span>,
 	<span class="ident">finalized</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
@@ -5282,7 +5288,7 @@
 <span class="doccomment">/// Get pending fork sync targets for a peer.</span>
 <span class="kw">fn</span> <span class="ident">fork_sync_request</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">BlockT</span><span class="op">&gt;</span>(
 	<span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
-	<span class="ident">targets</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">B::Hash</span>, <span class="ident">ForkTarget</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+	<span class="ident">targets</span>: <span class="kw-2">&amp;mut</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">B::Hash</span>, <span class="ident">ForkTarget</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 	<span class="ident">best_num</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 	<span class="ident">finalized</span>: <span class="ident">NumberFor</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 	<span class="ident">attributes</span>: <span class="ident">message::BlockAttributes</span>,
@@ -5602,7 +5608,7 @@
 	}
 
 	<span class="doccomment">/// Send a block annoucnement for the given `header`.</span>
-	<span class="kw">fn</span> <span class="ident">send_block_announce</span>(<span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="ident">sync</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ChainSync</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>) {
+	<span class="kw">fn</span> <span class="ident">send_block_announce</span>(<span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">peer_id</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>, <span class="ident">sync</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ChainSync</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>) {
 		<span class="kw">let</span> <span class="ident">block_annnounce</span> <span class="op">=</span> <span class="ident">BlockAnnounce</span> {
 			<span class="ident">header</span>: <span class="ident">header</span>.<span class="ident">clone</span>(),
 			<span class="ident">state</span>: <span class="prelude-val">Some</span>(<span class="ident">BlockState::Best</span>),
@@ -5641,7 +5647,7 @@
 
 	<span class="doccomment">/// Get a block request from `sync` and check that is matches the expected request.</span>
 	<span class="kw">fn</span> <span class="ident">get_block_request</span>(
-		<span class="ident">sync</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ChainSync</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>,
+		<span class="ident">sync</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ChainSync</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>,
 		<span class="ident">from</span>: <span class="ident">FromBlock</span><span class="op">&lt;</span><span class="ident">Hash</span>, <span class="ident">u64</span><span class="op">&gt;</span>,
 		<span class="ident">max</span>: <span class="ident">u32</span>,
 		<span class="ident">peer</span>: <span class="kw-2">&amp;</span><span class="ident">PeerId</span>,
@@ -5661,7 +5667,7 @@
 	}
 
 	<span class="doccomment">/// Build and import a new best block.</span>
-	<span class="kw">fn</span> <span class="ident">build_block</span>(<span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">TestClient</span><span class="op">&gt;</span>, <span class="ident">at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Hash</span><span class="op">&gt;</span>, <span class="ident">fork</span>: <span class="ident">bool</span>) -&gt; <span class="ident">Block</span> {
+	<span class="kw">fn</span> <span class="ident">build_block</span>(<span class="ident">client</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">TestClient</span><span class="op">&gt;</span>, <span class="ident">at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Hash</span><span class="op">&gt;</span>, <span class="ident">fork</span>: <span class="ident">bool</span>) -&gt; <span class="ident">Block</span> {
 		<span class="kw">let</span> <span class="ident">at</span> <span class="op">=</span> <span class="ident">at</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">client</span>.<span class="ident">info</span>().<span class="ident">best_hash</span>);
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">block_builder</span> <span class="op">=</span>
@@ -5720,9 +5726,9 @@
 			<span class="ident">block</span>
 		};
 
-		<span class="kw">let</span> <span class="ident">block1</span> <span class="op">=</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>);
-		<span class="kw">let</span> <span class="ident">block2</span> <span class="op">=</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>);
-		<span class="kw">let</span> <span class="ident">block3</span> <span class="op">=</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>);
+		<span class="kw">let</span> <span class="ident">block1</span> <span class="op">=</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>);
+		<span class="kw">let</span> <span class="ident">block2</span> <span class="op">=</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>);
+		<span class="kw">let</span> <span class="ident">block3</span> <span class="op">=</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>);
 		<span class="kw">let</span> <span class="ident">block3_fork</span> <span class="op">=</span> <span class="ident">build_block_at</span>(<span class="ident">block2</span>.<span class="ident">hash</span>(), <span class="bool-val">false</span>);
 
 		<span class="comment">// Add two peers which are on block 1.</span>
@@ -5736,7 +5742,7 @@
 		<span class="macro">assert!</span>(<span class="ident">sync</span>.<span class="ident">block_requests</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">is_empty</span>());
 
 		<span class="comment">// Let peer2 announce a fork of block 3</span>
-		<span class="ident">send_block_announce</span>(<span class="ident">block3_fork</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>);
+		<span class="ident">send_block_announce</span>(<span class="ident">block3_fork</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sync</span>);
 
 		<span class="comment">// Import and tell sync that we now have the fork.</span>
 		<span class="ident">block_on</span>(<span class="ident">client</span>.<span class="ident">import</span>(<span class="ident">BlockOrigin::Own</span>, <span class="ident">block3_fork</span>.<span class="ident">clone</span>())).<span class="ident">unwrap</span>();
@@ -5745,15 +5751,15 @@
 		<span class="kw">let</span> <span class="ident">block4</span> <span class="op">=</span> <span class="ident">build_block_at</span>(<span class="ident">block3_fork</span>.<span class="ident">hash</span>(), <span class="bool-val">false</span>);
 
 		<span class="comment">// Let peer2 announce block 4 and check that sync wants to get the block.</span>
-		<span class="ident">send_block_announce</span>(<span class="ident">block4</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>);
+		<span class="ident">send_block_announce</span>(<span class="ident">block4</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sync</span>);
 
-		<span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">get_block_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Hash</span>(<span class="ident">block4</span>.<span class="ident">hash</span>()), <span class="number">2</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>);
+		<span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">get_block_request</span>(<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Hash</span>(<span class="ident">block4</span>.<span class="ident">hash</span>()), <span class="number">2</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>);
 
 		<span class="comment">// Peer1 announces the same block, but as the common block is still `1`, sync will request</span>
 		<span class="comment">// block 2 again.</span>
-		<span class="ident">send_block_announce</span>(<span class="ident">block4</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>);
+		<span class="ident">send_block_announce</span>(<span class="ident">block4</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sync</span>);
 
-		<span class="kw">let</span> <span class="ident">request2</span> <span class="op">=</span> <span class="ident">get_block_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Number</span>(<span class="number">2</span>), <span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>);
+		<span class="kw">let</span> <span class="ident">request2</span> <span class="op">=</span> <span class="ident">get_block_request</span>(<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Number</span>(<span class="number">2</span>), <span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>);
 
 		<span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">create_block_response</span>(<span class="macro">vec!</span>[<span class="ident">block4</span>.<span class="ident">clone</span>(), <span class="ident">block3_fork</span>.<span class="ident">clone</span>()]);
 		<span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">sync</span>.<span class="ident">on_block_data</span>(<span class="kw-2">&amp;</span><span class="ident">peer_id2</span>, <span class="prelude-val">Some</span>(<span class="ident">request</span>), <span class="ident">response</span>).<span class="ident">unwrap</span>();
@@ -5762,7 +5768,7 @@
 		<span class="comment">// block `2` which blocks the import.</span>
 		<span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">res</span>, <span class="ident">OnBlockData::Import</span>(<span class="kw">_</span>, <span class="ident">blocks</span>) <span class="kw">if</span> <span class="ident">blocks</span>.<span class="ident">is_empty</span>()));
 
-		<span class="kw">let</span> <span class="ident">request3</span> <span class="op">=</span> <span class="ident">get_block_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Number</span>(<span class="number">2</span>), <span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>);
+		<span class="kw">let</span> <span class="ident">request3</span> <span class="op">=</span> <span class="ident">get_block_request</span>(<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Number</span>(<span class="number">2</span>), <span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>);
 
 		<span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">create_block_response</span>(<span class="macro">vec!</span>[<span class="ident">block2</span>.<span class="ident">clone</span>()]);
 		<span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">sync</span>.<span class="ident">on_block_data</span>(<span class="kw-2">&amp;</span><span class="ident">peer_id1</span>, <span class="prelude-val">Some</span>(<span class="ident">request2</span>), <span class="ident">response</span>).<span class="ident">unwrap</span>();
@@ -5800,7 +5806,7 @@
 		<span class="kw">let</span> <span class="ident">blocks</span> <span class="op">=</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">TestClientBuilder::new</span>().<span class="ident">build</span>());
 			(<span class="number">0</span>..<span class="ident">MAX_DOWNLOAD_AHEAD</span> <span class="op">*</span> <span class="number">2</span>)
-				.<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>))
+				.<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>))
 				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
 		};
 
@@ -5828,7 +5834,7 @@
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">best_block_num</span> <span class="op">=</span> <span class="number">0</span>;
 		<span class="kw">while</span> <span class="ident">best_block_num</span> <span class="op">&lt;</span> <span class="ident">MAX_DOWNLOAD_AHEAD</span> {
 			<span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">get_block_request</span>(
-				<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>,
+				<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>,
 				<span class="ident">FromBlock::Number</span>(<span class="ident">MAX_BLOCKS_TO_REQUEST</span> <span class="kw">as</span> <span class="ident">u64</span> <span class="op">+</span> <span class="ident">best_block_num</span> <span class="kw">as</span> <span class="ident">u64</span>),
 				<span class="ident">MAX_BLOCKS_TO_REQUEST</span> <span class="kw">as</span> <span class="ident">u32</span>,
 				<span class="kw-2">&amp;</span><span class="ident">peer_id1</span>,
@@ -5859,7 +5865,7 @@
 		<span class="ident">sync</span>.<span class="ident">queue_blocks</span>.<span class="ident">clear</span>();
 
 		<span class="comment">// Let peer2 announce that it finished syncing</span>
-		<span class="ident">send_block_announce</span>(<span class="ident">best_block</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>);
+		<span class="ident">send_block_announce</span>(<span class="ident">best_block</span>.<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id2</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sync</span>);
 
 		<span class="kw">let</span> (<span class="ident">peer1_req</span>, <span class="ident">peer2_req</span>) <span class="op">=</span> <span class="ident">sync</span>.<span class="ident">block_requests</span>().<span class="ident">fold</span>((<span class="prelude-val">None</span>, <span class="prelude-val">None</span>), <span class="op">|</span><span class="ident">res</span>, <span class="ident">req</span><span class="op">|</span> {
 			<span class="kw">if</span> <span class="ident">req</span>.<span class="number">0</span> <span class="op">==</span> <span class="kw-2">&amp;</span><span class="ident">peer_id1</span> {
@@ -5888,7 +5894,7 @@
 		<span class="comment">// As we are on the same chain, we should directly continue with requesting blocks from</span>
 		<span class="comment">// peer 2 as well.</span>
 		<span class="ident">get_block_request</span>(
-			<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>,
+			<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>,
 			<span class="ident">FromBlock::Number</span>(<span class="ident">peer1_from</span> <span class="op">+</span> <span class="ident">MAX_BLOCKS_TO_REQUEST</span> <span class="kw">as</span> <span class="ident">u64</span>),
 			<span class="ident">MAX_BLOCKS_TO_REQUEST</span> <span class="kw">as</span> <span class="ident">u32</span>,
 			<span class="kw-2">&amp;</span><span class="ident">peer_id2</span>,
@@ -5909,7 +5915,7 @@
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">TestClientBuilder::new</span>().<span class="ident">build</span>());
 		<span class="kw">let</span> <span class="ident">blocks</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">MAX_BLOCKS_TO_LOOK_BACKWARDS</span> <span class="op">*</span> <span class="number">4</span>)
-			.<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>))
+			.<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>))
 			.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
 
 		<span class="kw">let</span> <span class="ident">fork_blocks</span> <span class="op">=</span> {
@@ -5924,7 +5930,7 @@
 				.<span class="ident">into_iter</span>()
 				.<span class="ident">chain</span>(
 					(<span class="number">0</span>..<span class="ident">MAX_BLOCKS_TO_LOOK_BACKWARDS</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>)
-						.<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>)),
+						.<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>)),
 				)
 				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
 		};
@@ -5954,10 +5960,10 @@
 		<span class="ident">sync</span>.<span class="ident">new_peer</span>(<span class="ident">peer_id1</span>.<span class="ident">clone</span>(), <span class="ident">common_block</span>.<span class="ident">hash</span>(), <span class="kw-2">*</span><span class="ident">common_block</span>.<span class="ident">header</span>().<span class="ident">number</span>())
 			.<span class="ident">unwrap</span>();
 
-		<span class="ident">send_block_announce</span>(<span class="ident">fork_blocks</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>().<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>);
+		<span class="ident">send_block_announce</span>(<span class="ident">fork_blocks</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>().<span class="ident">header</span>().<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sync</span>);
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span>
-			<span class="ident">get_block_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Number</span>(<span class="ident">info</span>.<span class="ident">best_number</span>), <span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>);
+			<span class="ident">get_block_request</span>(<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>, <span class="ident">FromBlock::Number</span>(<span class="ident">info</span>.<span class="ident">best_number</span>), <span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>);
 
 		<span class="comment">// Do the ancestor search</span>
 		<span class="kw">loop</span> {
@@ -5978,7 +5984,7 @@
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">best_block_num</span> <span class="op">=</span> <span class="ident">finalized_block</span>.<span class="ident">header</span>().<span class="ident">number</span>().<span class="ident">clone</span>() <span class="kw">as</span> <span class="ident">u32</span>;
 		<span class="kw">while</span> <span class="ident">best_block_num</span> <span class="op">&lt;</span> <span class="kw-2">*</span><span class="ident">fork_blocks</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>().<span class="ident">header</span>().<span class="ident">number</span>() <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="number">1</span> {
 			<span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">get_block_request</span>(
-				<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>,
+				<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>,
 				<span class="ident">FromBlock::Number</span>(<span class="ident">MAX_BLOCKS_TO_REQUEST</span> <span class="kw">as</span> <span class="ident">u64</span> <span class="op">+</span> <span class="ident">best_block_num</span> <span class="kw">as</span> <span class="ident">u64</span>),
 				<span class="ident">MAX_BLOCKS_TO_REQUEST</span> <span class="kw">as</span> <span class="ident">u32</span>,
 				<span class="kw-2">&amp;</span><span class="ident">peer_id1</span>,
@@ -6026,7 +6032,7 @@
 
 		<span class="comment">// Request the tip</span>
 		<span class="ident">get_block_request</span>(
-			<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>,
+			<span class="kw-2">&amp;mut</span> <span class="ident">sync</span>,
 			<span class="ident">FromBlock::Hash</span>(<span class="ident">fork_blocks</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>().<span class="ident">hash</span>()),
 			<span class="number">1</span>,
 			<span class="kw-2">&amp;</span><span class="ident">peer_id1</span>,
@@ -6037,7 +6043,7 @@
 	<span class="kw">fn</span> <span class="ident">removes_target_fork_on_disconnect</span>() {
 		<span class="ident">sp_tracing::try_init_simple</span>();
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">TestClientBuilder::new</span>().<span class="ident">build</span>());
-		<span class="kw">let</span> <span class="ident">blocks</span> <span class="op">=</span> (<span class="number">0</span>..<span class="number">3</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>)).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+		<span class="kw">let</span> <span class="ident">blocks</span> <span class="op">=</span> (<span class="number">0</span>..<span class="number">3</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">build_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">client</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>)).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sync</span> <span class="op">=</span> <span class="ident">ChainSync::new</span>(
 			<span class="ident">SyncMode::Full</span>,
@@ -6057,7 +6063,7 @@
 		<span class="comment">// Create a &quot;new&quot; header and announce it</span>
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">blocks</span>[<span class="number">0</span>].<span class="ident">header</span>().<span class="ident">clone</span>();
 		<span class="ident">header</span>.<span class="ident">number</span> <span class="op">=</span> <span class="number">4</span>;
-		<span class="ident">send_block_announce</span>(<span class="ident">header</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sync</span>);
+		<span class="ident">send_block_announce</span>(<span class="ident">header</span>, <span class="kw-2">&amp;</span><span class="ident">peer_id1</span>, <span class="kw-2">&amp;mut</span> <span class="ident">sync</span>);
 		<span class="macro">assert!</span>(<span class="ident">sync</span>.<span class="ident">fork_targets</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span>);
 
 		<span class="ident">sync</span>.<span class="ident">peer_disconnected</span>(<span class="kw-2">&amp;</span><span class="ident">peer_id1</span>);
@@ -6065,6 +6071,5 @@
 	}
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="sc_network" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
-    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="sc_network" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>

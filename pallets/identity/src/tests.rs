@@ -1,5 +1,5 @@
-use crate::{Error, mock::*};
-use frame_support::{assert_ok, assert_noop};
+use crate::{mock::*, Error};
+use frame_support::{assert_noop, assert_ok};
 
 #[test]
 fn issue_identity() {
@@ -56,7 +56,7 @@ fn revoke_identity_multiple_from_different_accounts() {
     new_test_ext().execute_with(|| {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
         assert_ok!(IdentityModule::create_identity(Origin::signed(200)));
-        
+
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(300), 0));
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(200), 1));
 
@@ -69,7 +69,7 @@ fn revoke_identity_multiple_from_same_account() {
     new_test_ext().execute_with(|| {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
-        
+
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(300), 1));
         assert_ok!(IdentityModule::revoke_identity(Origin::signed(300), 0));
 
@@ -97,11 +97,21 @@ fn add_or_update_identity_trait() {
         assert_ok!(IdentityModule::create_identity(Origin::signed(account_id)));
 
         let luke = "Luke Skywalker".as_bytes().to_vec();
-        assert_ok!(IdentityModule::add_or_update_identity_trait(Origin::signed(account_id), identity, key.clone(), luke.clone()));
+        assert_ok!(IdentityModule::add_or_update_identity_trait(
+            Origin::signed(account_id),
+            identity,
+            key.clone(),
+            luke.clone()
+        ));
         assert_eq!(IdentityModule::identity_trait_list(identity, key.clone()), luke.clone());
 
         let anakin = "Anakin Skywalker".as_bytes().to_vec();
-        assert_ok!(IdentityModule::add_or_update_identity_trait(Origin::signed(300), identity, key.clone(), anakin.clone()));
+        assert_ok!(IdentityModule::add_or_update_identity_trait(
+            Origin::signed(300),
+            identity,
+            key.clone(),
+            anakin.clone()
+        ));
         assert_eq!(IdentityModule::identity_trait_list(identity, key.clone()), anakin.clone());
     });
 }
@@ -110,8 +120,17 @@ fn add_or_update_identity_trait() {
 fn remove_identity_trait() {
     new_test_ext().execute_with(|| {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
-        assert_ok!(IdentityModule::add_or_update_identity_trait(Origin::signed(300), 0, "name".as_bytes().to_vec(), "Luke Skywalker".as_bytes().to_vec()));
-        assert_ok!(IdentityModule::remove_identity_trait(Origin::signed(300), 0, "name".as_bytes().to_vec()));
+        assert_ok!(IdentityModule::add_or_update_identity_trait(
+            Origin::signed(300),
+            0,
+            "name".as_bytes().to_vec(),
+            "Luke Skywalker".as_bytes().to_vec()
+        ));
+        assert_ok!(IdentityModule::remove_identity_trait(
+            Origin::signed(300),
+            0,
+            "name".as_bytes().to_vec()
+        ));
     });
 }
 
@@ -119,7 +138,11 @@ fn remove_identity_trait() {
 fn issue_signed_signal() {
     new_test_ext().execute_with(|| {
         assert_ok!(IdentityModule::create_identity(Origin::signed(300)));
-        assert_ok!(IdentityModule::sign_for_identity(Origin::signed(300), 0, "Test".as_bytes().to_vec()));
+        assert_ok!(IdentityModule::sign_for_identity(
+            Origin::signed(300),
+            0,
+            "Test".as_bytes().to_vec()
+        ));
 
         assert_eq!(IdentityModule::get_signal_count(), 1);
     });

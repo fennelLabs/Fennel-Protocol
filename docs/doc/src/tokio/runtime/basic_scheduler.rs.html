@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;Users&#x2F;sean&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;tokio-1.12.0&#x2F;src&#x2F;runtime&#x2F;basic_scheduler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>basic_scheduler.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../tokio/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/sean/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.15.0/src/runtime/basic_scheduler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>basic_scheduler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../tokio/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../tokio/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
+                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -505,10 +511,23 @@
 <span id="505">505</span>
 <span id="506">506</span>
 <span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::future::poll_fn</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::loom::sync::atomic::AtomicBool</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::loom::sync::Mutex</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::park</span>::{<span class="ident">Park</span>, <span class="ident">Unpark</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::context::EnterGuard</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::stats</span>::{<span class="ident">RuntimeStats</span>, <span class="ident">WorkerStatsBatcher</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::task</span>::{<span class="self">self</span>, <span class="ident">JoinHandle</span>, <span class="ident">OwnedTasks</span>, <span class="ident">Schedule</span>, <span class="ident">Task</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::runtime::Callback</span>;
@@ -519,7 +538,7 @@
 <span class="kw">use</span> <span class="ident">std::collections::VecDeque</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::future::Future</span>;
-<span class="kw">use</span> <span class="ident">std::sync::atomic::Ordering</span>::{<span class="ident">AcqRel</span>, <span class="ident">Acquire</span>, <span class="ident">Release</span>};
+<span class="kw">use</span> <span class="ident">std::sync::atomic::Ordering</span>::{<span class="ident">AcqRel</span>, <span class="ident">Release</span>};
 <span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
 <span class="kw">use</span> <span class="ident">std::task::Poll</span>::{<span class="ident">Pending</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
@@ -536,6 +555,12 @@
 
     <span class="doccomment">/// Sendable task spawner</span>
     <span class="ident">spawner</span>: <span class="ident">Spawner</span>,
+
+    <span class="doccomment">/// This is usually None, but right before dropping the BasicScheduler, it</span>
+    <span class="doccomment">/// is changed to `Some` with the context being the runtime&#39;s own context.</span>
+    <span class="doccomment">/// This ensures that any tasks dropped in the `BasicScheduler`s destructor</span>
+    <span class="doccomment">/// run in that runtime&#39;s context.</span>
+    <span class="ident">context_guard</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">EnterGuard</span><span class="op">&gt;</span>,
 }
 
 <span class="doccomment">/// The inner scheduler that owns the task queue and the main parker P.</span>
@@ -667,6 +692,7 @@
             <span class="ident">inner</span>,
             <span class="ident">notify</span>: <span class="ident">Notify::new</span>(),
             <span class="ident">spawner</span>,
+            <span class="ident">context_guard</span>: <span class="prelude-val">None</span>,
         }
     }
 
@@ -681,7 +707,7 @@
         <span class="comment">// otherwise, lets select on a notification that the parker is available</span>
         <span class="comment">// or the future is complete.</span>
         <span class="kw">loop</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">inner</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">take_inner</span>() {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">inner</span>) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">take_inner</span>() {
                 <span class="kw">return</span> <span class="ident">inner</span>.<span class="ident">block_on</span>(<span class="ident">future</span>);
             } <span class="kw">else</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">enter</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::runtime::enter</span>(<span class="bool-val">false</span>);
@@ -717,24 +743,26 @@
             <span class="ident">basic_scheduler</span>: <span class="self">self</span>,
         })
     }
+
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">set_context_guard</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">guard</span>: <span class="ident">EnterGuard</span>) {
+        <span class="self">self</span>.<span class="ident">context_guard</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">guard</span>);
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Park</span><span class="op">&gt;</span> <span class="ident">Inner</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Block on the future provided and drive the runtime&#39;s driver.</span>
-    <span class="kw">fn</span> <span class="ident">block_on</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Future</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">future</span>: <span class="ident">F</span>) -&gt; <span class="ident">F::Output</span> {
+    <span class="doccomment">/// Blocks on the provided future and drives the runtime&#39;s driver.</span>
+    <span class="kw">fn</span> <span class="ident">block_on</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Future</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">future</span>: <span class="ident">F</span>) -&gt; <span class="ident">F::Output</span> {
         <span class="ident">enter</span>(<span class="self">self</span>, <span class="op">|</span><span class="ident">scheduler</span>, <span class="ident">context</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">_enter</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::runtime::enter</span>(<span class="bool-val">false</span>);
             <span class="kw">let</span> <span class="ident">waker</span> <span class="op">=</span> <span class="ident">scheduler</span>.<span class="ident">spawner</span>.<span class="ident">waker_ref</span>();
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cx</span> <span class="op">=</span> <span class="ident">std::task::Context::from_waker</span>(<span class="kw-2">&amp;</span><span class="ident">waker</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">polled</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
             <span class="macro">pin!</span>(<span class="ident">future</span>);
 
             <span class="lifetime">&#39;outer</span>: <span class="kw">loop</span> {
-                <span class="kw">if</span> <span class="ident">scheduler</span>.<span class="ident">spawner</span>.<span class="ident">was_woken</span>() <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">polled</span> {
-                    <span class="ident">polled</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                <span class="kw">if</span> <span class="ident">scheduler</span>.<span class="ident">spawner</span>.<span class="ident">reset_woken</span>() {
                     <span class="ident">scheduler</span>.<span class="ident">stats</span>.<span class="ident">incr_poll_count</span>();
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Ready</span>(<span class="ident">v</span>) <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::coop::budget</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">future</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cx</span>)) {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Ready</span>(<span class="ident">v</span>) <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::coop::budget</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">future</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cx</span>)) {
                         <span class="kw">return</span> <span class="ident">v</span>;
                     }
                 }
@@ -808,11 +836,11 @@
     }
 }
 
-<span class="doccomment">/// Enter the scheduler context. This sets the queue and other necessary</span>
-<span class="doccomment">/// scheduler state in the thread-local</span>
-<span class="kw">fn</span> <span class="ident">enter</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span>, <span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Inner</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span>
+<span class="doccomment">/// Enters the scheduler context. This sets the queue and other necessary</span>
+<span class="doccomment">/// scheduler state in the thread-local.</span>
+<span class="kw">fn</span> <span class="ident">enter</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span>, <span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">scheduler</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Inner</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Inner</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="kw-2">&amp;</span><span class="ident">Context</span>) -&gt; <span class="ident">R</span>,
+    <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">Inner</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="kw-2">&amp;</span><span class="ident">Context</span>) -&gt; <span class="ident">R</span>,
     <span class="ident">P</span>: <span class="ident">Park</span>,
 {
     <span class="comment">// Ensures the run queue is placed back in the `BasicScheduler` instance</span>
@@ -823,7 +851,7 @@
     }
 
     <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Park</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Guard</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">P</span><span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
             <span class="kw">let</span> <span class="ident">Context</span> { <span class="ident">tasks</span>, .. } <span class="op">=</span> <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">take</span>().<span class="ident">expect</span>(<span class="string">&quot;context missing&quot;</span>);
             <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">tasks</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">tasks</span>.<span class="ident">into_inner</span>());
         }
@@ -841,13 +869,13 @@
     };
 
     <span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="ident">guard</span>.<span class="ident">context</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>();
-    <span class="kw">let</span> <span class="ident">scheduler</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">guard</span>.<span class="ident">scheduler</span>;
+    <span class="kw">let</span> <span class="ident">scheduler</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="ident">guard</span>.<span class="ident">scheduler</span>;
 
     <span class="ident">CURRENT</span>.<span class="ident">set</span>(<span class="ident">context</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">f</span>(<span class="ident">scheduler</span>, <span class="ident">context</span>))
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Park</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">BasicScheduler</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="comment">// Avoid a double panic if we are currently panicking and</span>
         <span class="comment">// the lock may be poisoned.</span>
 
@@ -857,7 +885,7 @@
             <span class="prelude-val">None</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Oh no! We never placed the Inner state back, this is a bug!&quot;</span>),
         };
 
-        <span class="ident">enter</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">inner</span>, <span class="op">|</span><span class="ident">scheduler</span>, <span class="ident">context</span><span class="op">|</span> {
+        <span class="ident">enter</span>(<span class="kw-2">&amp;mut</span> <span class="ident">inner</span>, <span class="op">|</span><span class="ident">scheduler</span>, <span class="ident">context</span><span class="op">|</span> {
             <span class="comment">// Drain the OwnedTasks collection. This call also closes the</span>
             <span class="comment">// collection, ensuring that no tasks are ever pushed after this</span>
             <span class="comment">// call returns.</span>
@@ -890,7 +918,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Park</span><span class="op">&gt;</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">BasicScheduler</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="ident">fmt</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;BasicScheduler&quot;</span>).<span class="ident">finish</span>()
     }
 }
@@ -925,18 +953,20 @@
     }
 
     <span class="kw">fn</span> <span class="ident">waker_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">WakerRef</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-        <span class="comment">// clear the woken bit</span>
-        <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">woken</span>.<span class="ident">swap</span>(<span class="bool-val">false</span>, <span class="ident">AcqRel</span>);
+        <span class="comment">// Set woken to true when enter block_on, ensure outer future</span>
+        <span class="comment">// be polled for the first time when enter loop</span>
+        <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">woken</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Release</span>);
         <span class="ident">waker_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">shared</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">was_woken</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">woken</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>)
+    <span class="comment">// reset woken to false and return original value</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset_woken</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">woken</span>.<span class="ident">swap</span>(<span class="bool-val">false</span>, <span class="ident">AcqRel</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">Spawner</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="ident">fmt</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Spawner&quot;</span>).<span class="ident">finish</span>()
     }
 }
@@ -990,7 +1020,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Park</span><span class="op">&gt;</span> <span class="ident">InnerGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">block_on</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Future</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">future</span>: <span class="ident">F</span>) -&gt; <span class="ident">F::Output</span> {
+    <span class="kw">fn</span> <span class="ident">block_on</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Future</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">future</span>: <span class="ident">F</span>) -&gt; <span class="ident">F::Output</span> {
         <span class="comment">// The only time inner gets set to `None` is if we have dropped</span>
         <span class="comment">// already so this unwrap is safe.</span>
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>().<span class="ident">block_on</span>(<span class="ident">future</span>)
@@ -998,7 +1028,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Park</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">InnerGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">scheduler</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">take</span>() {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">basic_scheduler</span>.<span class="ident">inner</span>.<span class="ident">lock</span>();
 
@@ -1013,6 +1043,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="tokio" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
-    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="tokio" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>

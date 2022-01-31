@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;Users&#x2F;sean&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;wasmtime-0.27.0&#x2F;src&#x2F;trampoline&#x2F;func.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>func.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../wasmtime/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/sean/.cargo/registry/src/github.com-1ecc6299db9ec823/wasmtime-0.27.0/src/trampoline/func.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>func.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../wasmtime/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../wasmtime/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../wasmtime/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
+                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -352,15 +358,15 @@
 };
 
 <span class="kw">struct</span> <span class="ident">TrampolineState</span> {
-    <span class="ident">func</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">VMContext</span>, <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u128</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">func</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">*mut</span> <span class="ident">VMContext</span>, <span class="kw-2">*mut</span> <span class="ident">u128</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
     <span class="ident">code_memory</span>: <span class="ident">CodeMemory</span>,
 }
 
 <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">stub_fn</span>(
-    <span class="ident">vmctx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">VMContext</span>,
-    <span class="ident">caller_vmctx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">VMContext</span>,
-    <span class="ident">values_vec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u128</span>,
+    <span class="ident">vmctx</span>: <span class="kw-2">*mut</span> <span class="ident">VMContext</span>,
+    <span class="ident">caller_vmctx</span>: <span class="kw-2">*mut</span> <span class="ident">VMContext</span>,
+    <span class="ident">values_vec</span>: <span class="kw-2">*mut</span> <span class="ident">u128</span>,
 ) {
     <span class="comment">// Here we are careful to use `catch_unwind` to ensure Rust panics don&#39;t</span>
     <span class="comment">// unwind past us. The primary reason for this is that Rust considers it UB</span>
@@ -396,9 +402,9 @@
     }
 
     <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">call_stub</span>(
-        <span class="ident">vmctx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">VMContext</span>,
-        <span class="ident">caller_vmctx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">VMContext</span>,
-        <span class="ident">values_vec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u128</span>,
+        <span class="ident">vmctx</span>: <span class="kw-2">*mut</span> <span class="ident">VMContext</span>,
+        <span class="ident">caller_vmctx</span>: <span class="kw-2">*mut</span> <span class="ident">VMContext</span>,
+        <span class="ident">values_vec</span>: <span class="kw-2">*mut</span> <span class="ident">u128</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">instance</span> <span class="op">=</span> <span class="ident">InstanceHandle::from_vmctx</span>(<span class="ident">vmctx</span>);
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">instance</span>
@@ -412,10 +418,10 @@
 <span class="doccomment">/// Create a trampoline for invoking a function.</span>
 <span class="kw">fn</span> <span class="ident">make_trampoline</span>(
     <span class="ident">isa</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">TargetIsa</span>,
-    <span class="ident">code_memory</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CodeMemory</span>,
-    <span class="ident">fn_builder_ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FunctionBuilderContext</span>,
+    <span class="ident">code_memory</span>: <span class="kw-2">&amp;mut</span> <span class="ident">CodeMemory</span>,
+    <span class="ident">fn_builder_ctx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">FunctionBuilderContext</span>,
     <span class="ident">signature</span>: <span class="kw-2">&amp;</span><span class="ident">ir::Signature</span>,
-) -&gt; <span class="kw-2">*</span><span class="kw-2">mut</span> [<span class="ident">VMFunctionBody</span>] {
+) -&gt; <span class="kw-2">*mut</span> [<span class="ident">VMFunctionBody</span>] {
     <span class="comment">// Mostly reverse copy of the similar method from wasmtime&#39;s</span>
     <span class="comment">// wasmtime-jit/src/compiler.rs.</span>
     <span class="kw">let</span> <span class="ident">pointer_type</span> <span class="op">=</span> <span class="ident">isa</span>.<span class="ident">pointer_type</span>();
@@ -439,7 +445,7 @@
     ));
 
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">FunctionBuilder::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">context</span>.<span class="ident">func</span>, <span class="ident">fn_builder_ctx</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">FunctionBuilder::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">context</span>.<span class="ident">func</span>, <span class="ident">fn_builder_ctx</span>);
         <span class="kw">let</span> <span class="ident">block0</span> <span class="op">=</span> <span class="ident">builder</span>.<span class="ident">create_block</span>();
 
         <span class="ident">builder</span>.<span class="ident">append_block_params_for_function_params</span>(<span class="ident">block0</span>);
@@ -468,7 +474,7 @@
 
         <span class="kw">let</span> <span class="ident">callee_value</span> <span class="op">=</span> <span class="ident">builder</span>
             .<span class="ident">ins</span>()
-            .<span class="ident">iconst</span>(<span class="ident">pointer_type</span>, <span class="ident">stub_fn</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">VMFunctionBody</span> <span class="kw">as</span> <span class="ident">i64</span>);
+            .<span class="ident">iconst</span>(<span class="ident">pointer_type</span>, <span class="ident">stub_fn</span> <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">VMFunctionBody</span> <span class="kw">as</span> <span class="ident">i64</span>);
         <span class="ident">builder</span>
             .<span class="ident">ins</span>()
             .<span class="ident">call_indirect</span>(<span class="ident">new_sig</span>, <span class="ident">callee_value</span>, <span class="kw-2">&amp;</span><span class="ident">callee_args</span>);
@@ -495,10 +501,10 @@
     <span class="ident">context</span>
         .<span class="ident">compile_and_emit</span>(
             <span class="ident">isa</span>,
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">code_buf</span>,
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">reloc_sink</span>,
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">trap_sink</span>,
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stack_map_sink</span>,
+            <span class="kw-2">&amp;mut</span> <span class="ident">code_buf</span>,
+            <span class="kw-2">&amp;mut</span> <span class="ident">reloc_sink</span>,
+            <span class="kw-2">&amp;mut</span> <span class="ident">trap_sink</span>,
+            <span class="kw-2">&amp;mut</span> <span class="ident">stack_map_sink</span>,
         )
         .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> <span class="ident">pretty_error</span>(<span class="kw-2">&amp;</span><span class="ident">context</span>.<span class="ident">func</span>, <span class="prelude-val">Some</span>(<span class="ident">isa</span>), <span class="ident">error</span>))
         .<span class="ident">expect</span>(<span class="string">&quot;compile_and_emit&quot;</span>);
@@ -527,10 +533,10 @@
 <span class="kw">fn</span> <span class="ident">create_function_trampoline</span>(
     <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
     <span class="ident">ft</span>: <span class="kw-2">&amp;</span><span class="ident">FuncType</span>,
-    <span class="ident">func</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">VMContext</span>, <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u128</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">func</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">*mut</span> <span class="ident">VMContext</span>, <span class="kw-2">*mut</span> <span class="ident">u128</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(
     <span class="ident">Module</span>,
-    <span class="ident">PrimaryMap</span><span class="op">&lt;</span><span class="ident">DefinedFuncIndex</span>, <span class="kw-2">*</span><span class="kw-2">mut</span> [<span class="ident">VMFunctionBody</span>]<span class="op">&gt;</span>,
+    <span class="ident">PrimaryMap</span><span class="op">&lt;</span><span class="ident">DefinedFuncIndex</span>, <span class="kw-2">*mut</span> [<span class="ident">VMFunctionBody</span>]<span class="op">&gt;</span>,
     <span class="ident">VMTrampoline</span>,
     <span class="ident">TrampolineState</span>,
 )<span class="op">&gt;</span> {
@@ -564,7 +570,7 @@
         .<span class="ident">exports</span>
         .<span class="ident">insert</span>(<span class="ident">String::new</span>(), <span class="ident">wasm::EntityIndex::Function</span>(<span class="ident">func_id</span>));
 
-    <span class="kw">let</span> <span class="ident">trampoline</span> <span class="op">=</span> <span class="ident">make_trampoline</span>(<span class="ident">isa</span>.<span class="ident">as_ref</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">code_memory</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fn_builder_ctx</span>, <span class="kw-2">&amp;</span><span class="ident">sig</span>);
+    <span class="kw">let</span> <span class="ident">trampoline</span> <span class="op">=</span> <span class="ident">make_trampoline</span>(<span class="ident">isa</span>.<span class="ident">as_ref</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">code_memory</span>, <span class="kw-2">&amp;mut</span> <span class="ident">fn_builder_ctx</span>, <span class="kw-2">&amp;</span><span class="ident">sig</span>);
     <span class="ident">finished_functions</span>.<span class="ident">push</span>(<span class="ident">trampoline</span>);
 
     <span class="comment">// ... and then we also need a trampoline with the standard &quot;trampoline ABI&quot;</span>
@@ -572,8 +578,8 @@
     <span class="comment">// if `Func::call` is called on an object created by `Func::new`.</span>
     <span class="kw">let</span> <span class="ident">trampoline</span> <span class="op">=</span> <span class="ident">trampoline::make_trampoline</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">isa</span>,
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">code_memory</span>,
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fn_builder_ctx</span>,
+        <span class="kw-2">&amp;mut</span> <span class="ident">code_memory</span>,
+        <span class="kw-2">&amp;mut</span> <span class="ident">fn_builder_ctx</span>,
         <span class="kw-2">&amp;</span><span class="ident">sig</span>,
         <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">u128</span><span class="op">&gt;</span>(),
     )<span class="question-mark">?</span>;
@@ -587,7 +593,7 @@
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_function</span>(
     <span class="ident">ft</span>: <span class="kw-2">&amp;</span><span class="ident">FuncType</span>,
-    <span class="ident">func</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">VMContext</span>, <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u128</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">func</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">*mut</span> <span class="ident">VMContext</span>, <span class="kw-2">*mut</span> <span class="ident">u128</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Trap</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
     <span class="ident">store</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Store</span><span class="op">&gt;</span>,
 ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">InstanceHandle</span>, <span class="ident">VMTrampoline</span>)<span class="op">&gt;</span> {
@@ -623,7 +629,7 @@
 }
 
 <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">create_raw_function</span>(
-    <span class="ident">func</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> [<span class="ident">VMFunctionBody</span>],
+    <span class="ident">func</span>: <span class="kw-2">*mut</span> [<span class="ident">VMFunctionBody</span>],
     <span class="ident">host_state</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Any</span><span class="op">&gt;</span>,
     <span class="ident">shared_signature_id</span>: <span class="ident">VMSharedSignatureIndex</span>,
 ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">InstanceHandle</span><span class="op">&gt;</span> {
@@ -653,6 +659,5 @@
     )
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="wasmtime" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
-    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="wasmtime" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>
