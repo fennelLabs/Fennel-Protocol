@@ -86,7 +86,7 @@ pub mod pallet {
         //We will add an extrinsics set to the Key Management module allowing for simple retrieval
         // of public keys given their location. This will necessarily include a mechanism
         // for verifying that the key retrieved is the key requested.
-        pub fn retrieve_key(origin: OriginFor<T>, location: Vec<u8>) -> DispatchResult {
+        /*pub fn retrieve_key(origin: OriginFor<T>, location: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
             let key: Result<(), DispatchError>;
 
@@ -97,6 +97,6 @@ pub mod pallet {
             }
 
             return key
-        }
+        }*/
     }
 }
