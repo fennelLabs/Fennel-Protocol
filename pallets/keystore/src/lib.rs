@@ -93,7 +93,7 @@ pub mod pallet {
             if !<IssuedKeys<T>>::contains_key(&who, &location) {
                 //Not entirely sure I understand what/how I am querying here.
                 //What is 'location', aside from a Vec<u8>?
-                key = <IssuedKeys<T>>::get(&who, &location);   
+                key = <IssuedKeys<T>>::get(&who, &location);
             }
 
             return key
