@@ -82,5 +82,21 @@ pub mod pallet {
             Self::deposit_event(Event::KeyRevoked(key_index, who));
             Ok(())
         }
+
+        //We will add an extrinsics set to the Key Management module allowing for simple retrieval
+        // of public keys given their location. This will necessarily include a mechanism
+        // for verifying that the key retrieved is the key requested.
+        pub fn retrieve_key(origin: OriginFor<T>, location: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+            let key: Result<(), DispatchError>;
+
+            if !<IssuedKeys<T>>::contains_key(&who, &location) {
+                //Not entirely sure I understand what/how I am querying here.
+                //What is 'location', aside from a Vec<u8>?
+                key = <IssuedKeys<T>>::get(&who, &location);   
+            }
+
+            return key
+        }
     }
 }
