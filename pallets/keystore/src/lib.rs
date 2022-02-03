@@ -52,7 +52,7 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
-        KeyNotFound
+        KeyNotFound,
     }
 
     #[pallet::call]
@@ -88,9 +88,16 @@ pub mod pallet {
         // of public keys given their location. This will necessarily include a mechanism
         // for verifying that the key retrieved is the key requested.
         #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
-        pub fn retrieve_key(origin: OriginFor<T>, address: T::AccountId, fingerprint: Vec<u8>) -> DispatchResult {
-             ensure!(!<IssuedKeys<T>>::contains_key(&address, &fingerprint), Error::<T>::KeyNotFound);
-             Ok(IssuedKeys<T>>::get(&address, &fingerprint))
+        pub fn retrieve_key(
+            origin: OriginFor<T>,
+            address: T::AccountId,
+            fingerprint: Vec<u8>,
+        ) -> DispatchResult {
+            ensure!(
+                !<IssuedKeys<T>>::contains_key(&address, &fingerprint),
+                Error::<T>::KeyNotFound
+            );
+            Ok(IssuedKeys<T>>::get(&address, &fingerprint))
         }
     }
 }
