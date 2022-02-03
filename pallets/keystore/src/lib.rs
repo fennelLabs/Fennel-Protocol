@@ -97,7 +97,7 @@ pub mod pallet {
                 !<IssuedKeys<T>>::contains_key(&address, &fingerprint),
                 Error::<T>::KeyNotFound
             );
-            Ok(IssuedKeys<T>>::get(&address, &fingerprint))
+            Ok(<IssuedKeys<T>>::get(&address, &fingerprint))
         }
     }
 }
