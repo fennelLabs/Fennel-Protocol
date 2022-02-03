@@ -52,6 +52,7 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        KeyNotFound
     }
 
     #[pallet::call]
@@ -86,17 +87,10 @@ pub mod pallet {
         //We will add an extrinsics set to the Key Management module allowing for simple retrieval
         // of public keys given their location. This will necessarily include a mechanism
         // for verifying that the key retrieved is the key requested.
-        /*pub fn retrieve_key(origin: OriginFor<T>, location: Vec<u8>) -> DispatchResult {
-            let who = ensure_signed(origin)?;
-            let key: Result<(), DispatchError>;
-
-            if !<IssuedKeys<T>>::contains_key(&who, &location) {
-                //Not entirely sure I understand what/how I am querying here.
-                //What is 'location', aside from a Vec<u8>?
-                key = <IssuedKeys<T>>::get(&who, &location);
-            }
-
-            return key
-        }*/
+        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        pub fn retrieve_key(origin: OriginFor<T>, address: T::AccountId, fingerprint: Vec<u8>) -> DispatchResult {
+             ensure!(!<IssuedKeys<T>>::contains_key(&address, &fingerprint), Error::<T>::KeyNotFound);
+             Ok(IssuedKeys<T>>::get(&address, &fingerprint))
+        }
     }
 }
