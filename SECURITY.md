@@ -4,7 +4,7 @@ Fennel Labs is committed to resolving security vulnerabilities in our software q
 
 ## Reporting a Vulnerability
 
-Security vulnerabilities in Fennel Labs software should be reported by email to security@fennellabs.com.
+Security vulnerabilities in Fennel Labs software should be reported by email to info@fennellabs.com.
 
 Your report should include the following:
 
