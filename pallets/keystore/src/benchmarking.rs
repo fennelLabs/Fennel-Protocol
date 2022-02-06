@@ -21,19 +21,16 @@ pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
     benchmark_account(name, 0, 0)
 }
 
-/*benchmarks! {
-    retrieve_key {
+benchmarks! {
+    revoke_key {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");
-        //let identity_index: u32 = s as u32 % 5_u32;
-        let location = from_str_to_vec("Tatooine".to_string());
-        // create identity to be used for revoking
-        //Identity::<T>::create_identity(anakin.clone().into())?;
+        let value = from_str_to_vec("I am your father.".to_string());
 
-    }: _(anakin.clone(), location)
+    }: _(anakin.clone(), value.clone())
     verify {
         assert_eq!(1, 1);
     }
-}*/
+}
 
 impl_benchmark_test_suite!(Keystore, crate::mock::new_test_ext(), crate::mock::Test);

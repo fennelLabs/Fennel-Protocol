@@ -6,13 +6,13 @@ use frame_support::weights::{constants::RocksDbWeight, Weight};
 
 /// Weight functions for pallet_fennel_identity.
 pub trait WeightInfo {
-    //fn create_identity() -> Weight;
-    //fn revoke_identity() -> Weight;
-    //fn add_or_update_identity_trait() -> Weight;
-    //fn remove_identity_trait() -> Weight;
-    //fn sign_for_identity() -> Weight;
+    fn revoke_key() -> Weight;
 }
 
 impl WeightInfo for () {
-   
+    fn revoke_key() -> Weight {
+        (47_568_000 as Weight)
+            .saturating_add(RocksDbWeight::get().reads(2 as Weight))
+            .saturating_add(RocksDbWeight::get().writes(2 as Weight))
+    } 
 }

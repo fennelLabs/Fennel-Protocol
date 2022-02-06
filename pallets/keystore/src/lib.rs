@@ -12,7 +12,7 @@ mod benchmarking;
 mod weights;
 
 pub use pallet::*;
-//use weights::*;
+use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -82,22 +82,6 @@ pub mod pallet {
 
             Self::deposit_event(Event::KeyRevoked(key_index, who));
             Ok(())
-        }
-
-        //We will add an extrinsics set to the Key Management module allowing for simple retrieval
-        // of public keys given their location. This will necessarily include a mechanism
-        // for verifying that the key retrieved is the key requested.
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
-        pub fn retrieve_key(
-            origin: OriginFor<T>,
-            address: T::AccountId,
-            fingerprint: Vec<u8>,
-        ) -> DispatchResult {
-            ensure!(
-                !<IssuedKeys<T>>::contains_key(&address, &fingerprint),
-                Error::<T>::KeyNotFound
-            );
-            Ok(<IssuedKeys<T>>::get(&address, &fingerprint))
         }
     }
 }
