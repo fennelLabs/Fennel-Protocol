@@ -27,6 +27,7 @@ pub mod pallet {
     pub enum Event<T: Config> {
         KeyIssued(Vec<u8>, T::AccountId),
         KeyRevoked(Vec<u8>, T::AccountId),
+        KeyExists(Vec<u8>, Vec<u8>, T::AccountId)
     }
 
     #[pallet::error]
@@ -49,6 +50,22 @@ pub mod pallet {
             <IssuedKeys<T>>::insert(&who, &fingerprint, location);
 
             Self::deposit_event(Event::KeyIssued(fingerprint, who));
+            Ok(())
+        }
+
+        /// Announces that 
+        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        pub fn announce_key(
+            origin: OriginFor<T>,
+            fingerprint: Vec<u8>,
+            location: Vec<u8>
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            //Is this the storage we are saving key to?
+            <IssuedKeys<T>>::insert(&who, &fingerprint, &location);
+
+            Self::deposit_event(Event::KeyExists(fingerprint, location, who));
             Ok(())
         }
 
