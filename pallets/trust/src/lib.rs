@@ -1,7 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
-use scale_info::TypeInfo;
 
 #[cfg(test)]
 mod mock;
@@ -19,6 +18,7 @@ pub use weights::*;
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
+    use scale_info::TypeInfo;
 
     use crate::weights::WeightInfo;
 
@@ -78,7 +78,8 @@ pub mod pallet {
     }
 
     #[pallet::error]
-    pub enum Error<T> {
+    #[derive(TypeInfo)]
+        pub enum Error<T> {
         NoneValue,
         StorageOverflow,
     }
