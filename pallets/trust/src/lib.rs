@@ -79,7 +79,7 @@ pub mod pallet {
 
     #[pallet::error]
     #[derive(TypeInfo)]
-        pub enum Error<T> {
+    pub enum Error<T> {
         NoneValue,
         StorageOverflow,
     }
