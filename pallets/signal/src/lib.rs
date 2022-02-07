@@ -1,6 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
+use scale_info::TypeInfo;
 
 #[frame_support::pallet]
 pub mod pallet {
