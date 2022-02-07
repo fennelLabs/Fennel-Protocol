@@ -64,3 +64,5 @@ std = [
     'frame-benchmarking/std',
 ]
 try-runtime = ['frame-support/try-runtime']
+scale-info = { version = "1.0.0", default-features = false, features = ["derive"] }
+std = [ "scale-info/std" ]
