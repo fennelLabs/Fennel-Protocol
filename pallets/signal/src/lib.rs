@@ -6,7 +6,6 @@ pub use pallet::*;
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
-    use scale_info::TypeInfo;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
@@ -30,6 +29,7 @@ pub mod pallet {
     }
 
     #[pallet::error]
+    #[derive(scale_info::TypeInfo)]
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,

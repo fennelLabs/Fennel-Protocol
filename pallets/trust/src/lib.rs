@@ -18,7 +18,6 @@ pub use weights::*;
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
-    use scale_info::TypeInfo;
 
     use crate::weights::WeightInfo;
 
@@ -78,7 +77,7 @@ pub mod pallet {
     }
 
     #[pallet::error]
-    #[derive(TypeInfo)]
+    #[derive(scale_info::TypeInfo)]
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
