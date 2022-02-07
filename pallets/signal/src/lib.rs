@@ -30,7 +30,6 @@ pub mod pallet {
     }
 
     #[pallet::error]
-    #[derive(scale_info::TypeInfo)]
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
