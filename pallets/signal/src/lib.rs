@@ -6,7 +6,7 @@ pub use pallet::*;
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
-    
+
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
