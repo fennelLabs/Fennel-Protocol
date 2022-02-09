@@ -93,6 +93,7 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        IdentityNotOwned
     }
 
     impl<T: Config> Pallet<T> {
