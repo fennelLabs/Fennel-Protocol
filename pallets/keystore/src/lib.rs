@@ -17,6 +17,7 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
+    #[pallet::unbounded]
     /// This module's main storage will consist of a StorageDoubleMap connecting addresses to the
     /// list of keys they've submitted and not revoked.
     #[pallet::getter(fn key)]

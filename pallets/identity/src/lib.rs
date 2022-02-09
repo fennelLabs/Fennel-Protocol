@@ -55,18 +55,21 @@ pub mod pallet {
         StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
 
     #[pallet::storage]
+    #[pallet::unbounded]
     #[pallet::getter(fn identity_list)]
     /// Maps accounts to the array of identities it owns.
     pub type IdentityList<T: Config> =
         StorageMap<_, Blake2_128Concat, T::AccountId, BTreeSet<u32>, ValueQuery>;
 
     #[pallet::storage]
+    #[pallet::unbounded]
     #[pallet::getter(fn identity_trait_list)]
     /// Maps identity ID numbers to their key/value attributes.
     pub type IdentityTraitList<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, Vec<u8>, Vec<u8>, ValueQuery>;
 
     #[pallet::storage]
+    #[pallet::unbounded]
     #[pallet::getter(fn get_signal_record)]
     /// Tracks all signals sent by an identity.
     pub type FennelSignal<T: Config> =

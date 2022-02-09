@@ -17,7 +17,9 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
+    #[pallet::unbounded]
     #[pallet::getter(fn get_issued_key)]
+ 
     pub type IssuedKeys<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, Vec<u8>, Vec<u8>>;
 
