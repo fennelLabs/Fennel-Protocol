@@ -1,5 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use scale_info::TypeInfo;
+
 /// Edit this file to define custom logic or remove it if it is not needed.
 /// Learn more about FRAME and the core library of Substrate FRAME pallets:
 /// <https://substrate.dev/docs/en/knowledgebase/runtime/frame>
@@ -50,12 +52,11 @@ pub mod pallet {
 
     // Errors inform users that something went wrong.
     #[pallet::error]
-    #[derive(scale_info::TypeInfo)]
-    pub enum Error<T> {
+    pub enum Error<T>  {
         /// Error names should be descriptive.
         NoneValue,
         /// Errors should have helpful documentation associated with them.
-        StorageOverflow,
+        StorageOverflow
     }
 
     // Dispatchable functions allows users to interact with the pallet and invoke state changes.
