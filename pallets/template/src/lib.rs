@@ -51,7 +51,9 @@ pub mod pallet {
     }
 
     // Errors inform users that something went wrong.
+    
     #[pallet::error]
+    #[derive(TypeInfo)]
     pub enum Error<T> {
         /// Error names should be descriptive.
         NoneValue,
