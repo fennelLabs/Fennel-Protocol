@@ -52,11 +52,11 @@ pub mod pallet {
 
     // Errors inform users that something went wrong.
     #[pallet::error]
-    pub enum Error<T>  {
+    pub enum Error<T> {
         /// Error names should be descriptive.
         NoneValue,
         /// Errors should have helpful documentation associated with them.
-        StorageOverflow
+        StorageOverflow,
     }
 
     // Dispatchable functions allows users to interact with the pallet and invoke state changes.
