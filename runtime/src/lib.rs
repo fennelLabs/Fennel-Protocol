@@ -146,6 +146,10 @@ parameter_types! {
 
 // Configure FRAME pallets to include in runtime.
 
+parameter_types! {
+	pub const MaxAuthorities: u32 = 32;
+}
+
 impl frame_system::Config for Runtime {
     /// The basic call filter to use in dispatchable.
     type BaseCallFilter = frame_support::traits::Everything;
@@ -195,6 +199,8 @@ impl frame_system::Config for Runtime {
     type SS58Prefix = SS58Prefix;
     /// The set code logic, just the default since we're not a parachain.
     type OnSetCode = ();
+    type MaxConsumers = frame_support::traits::ConstU32<16>;
+    type MaxAuthorities = MaxAuthorities;
 }
 
 impl pallet_randomness_collective_flip::Config for Runtime {}
