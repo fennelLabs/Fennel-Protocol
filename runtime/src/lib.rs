@@ -147,7 +147,7 @@ parameter_types! {
 // Configure FRAME pallets to include in runtime.
 
 parameter_types! {
-	pub const MaxAuthorities: u32 = 32;
+    pub const MaxAuthorities: u32 = 32;
 }
 
 impl frame_system::Config for Runtime {
