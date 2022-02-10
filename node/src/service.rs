@@ -85,7 +85,7 @@ pub fn new_partial(
     let client = Arc::new(client);
 
     let telemetry = telemetry.map(|(worker, telemetry)| {
-        task_manager.spawn_handle().spawn("telemetry", worker.run());
+        task_manager.spawn_handle().spawn("telemetry", None, worker.run());
         telemetry
     });
 
@@ -179,7 +179,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
     config
         .network
         .extra_sets
-        .push(sc_finality_grandpa::grandpa_peers_set_config(grandpa_protocol_name.clone()));
+        .push(sc_finality_grandpa::grandpa_peers_set_config());
     let warp_sync = Arc::new(sc_finality_grandpa::warp_proof::NetworkProvider::new(
         backend.clone(),
         grandpa_link.shared_authority_set().clone(),
