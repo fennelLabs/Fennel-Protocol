@@ -176,7 +176,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
         };
     }
 
-    config.network.extra_sets.push(sc_finality_grandpa::grandpa_peers_set_config());
+    config.network.extra_sets.push(sc_finality_grandpa::grandpa_peers_set_config(grandpa_protocol_name.clone(),));
     let warp_sync = Arc::new(sc_finality_grandpa::warp_proof::NetworkProvider::new(
         backend.clone(),
         grandpa_link.shared_authority_set().clone(),
