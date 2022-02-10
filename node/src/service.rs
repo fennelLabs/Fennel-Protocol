@@ -327,6 +327,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
         // if it fails we take down the service with it.
         task_manager.spawn_essential_handle().spawn_blocking(
             "grandpa-voter",
+            None,
             sc_finality_grandpa::run_grandpa_voter(grandpa_config)?,
         );
     }
