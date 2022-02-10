@@ -421,7 +421,7 @@ pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError>
         sc_service::build_network(sc_service::BuildNetworkParams {
             config: &config,
             client: client.clone(),
-            transaction_pool: transaction_pool.clone(),
+            transaction_pool: Arc::clone(&transaction_pool),
             spawn_handle: task_manager.spawn_handle(),
             import_queue,
             block_announce_validator_builder: None,
