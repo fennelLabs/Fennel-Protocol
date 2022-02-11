@@ -336,10 +336,10 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
     Ok(task_manager)
 }
 
-/// Builds a new service for a light client.
-/// This section seemst to have been removed in recent versions of substrate.
-/// Let's remove this for now and test later. It throws a ton of errors post-upgrade.
 /*
+Builds a new service for a light client.
+This section seemst to have been removed in recent versions of substrate.
+Let's remove this for now and test later. It throws a ton of errors post-upgrade.
 pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError> {
     let telemetry = config
         .telemetry_endpoints
