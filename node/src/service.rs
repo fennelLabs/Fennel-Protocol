@@ -337,6 +337,9 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
 }
 
 /// Builds a new service for a light client.
+/// This section seemst to have been removed in recent versions of substrate.
+/// Let's remove this for now and test later. It throws a ton of errors post-upgrade.
+/*
 pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError> {
     let telemetry = config
         .telemetry_endpoints
@@ -357,7 +360,7 @@ pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError>
     );
 
     let (client, backend, keystore_container, mut task_manager, on_demand) =
-        sc_service::new_light_parts::<Block, RuntimeApi, _>(
+        sc_service::new_full_parts::<Block, RuntimeApi, _>(
             &config,
             telemetry.as_ref().map(|(_, telemetry)| telemetry.handle()),
             executor,
@@ -472,4 +475,4 @@ pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError>
 
     network_starter.start_network();
     Ok(task_manager)
-}
+}*/
