@@ -1,16 +1,17 @@
 use sc_cli::RunCmd;
 use structopt::StructOpt;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, clap::Parser)]
 pub struct Cli {
-    #[structopt(subcommand)]
+    #[clap(subcommand)]
     pub subcommand: Option<Subcommand>,
 
-    #[structopt(flatten)]
+    #[allow(missing_docs)]
+    #[clap(flatten)]
     pub run: RunCmd,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, clap::Subcommand)]
 pub enum Subcommand {
     /// Key management cli utilities
     Key(sc_cli::KeySubcommand),

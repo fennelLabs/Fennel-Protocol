@@ -24,6 +24,7 @@ version = '3.0.0'
 [dependencies]
 jsonrpc-core = '18.0.0'
 structopt = '0.3.8'
+clap = { version = "3.0", features = ["derive"], optional = true }
 
 fennel-protocol-runtime = { path = '../runtime', version = '3.0.0-monthly-2022-02' }
 frame-benchmarking = { git = 'https://github.com/paritytech/substrate.git', tag = "monthly-2022-02" }
