@@ -139,7 +139,7 @@ pub mod pallet {
                 .ok_or(Error::<T>::StorageOverflow)?;
 
             <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
-                ensure!(ids.remove(&identity_id), Error::<T>::NoneValue);
+                ensure!(ids.remove(&identity_id), Error::<T>::IdentityNotOwned);
                 Ok(())
             })?;
 
