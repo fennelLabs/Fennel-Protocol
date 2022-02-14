@@ -1,5 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+pub use pallet::*;
+
 #[cfg(test)]
 mod mock;
 
@@ -10,8 +12,6 @@ mod tests;
 mod benchmarking;
 
 mod weights;
-
-pub use pallet::*;
 use weights::*;
 
 #[frame_support::pallet]
