@@ -1,5 +1,5 @@
 use crate::mock::*;
-use frame_support::assert_ok; 
+use frame_support::assert_ok;
 
 #[test]
 fn announce_key() {
