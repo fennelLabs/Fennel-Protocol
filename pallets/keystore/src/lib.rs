@@ -1,15 +1,28 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+
+mod weights;
+
 pub use pallet::*;
+use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
-    use frame_system::pallet_prelude::*;
+    use frame_system::{pallet_prelude::*, WeightInfo};
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type WeightInfo: WeightInfo;
     }
 
     #[pallet::pallet]
@@ -31,6 +44,7 @@ pub mod pallet {
         KeyIssued(Vec<u8>, T::AccountId),
         /// Announce when an identity has set a key as revoked.
         KeyRevoked(Vec<u8>, T::AccountId),
+        KeyExists(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
     #[pallet::error]
@@ -53,6 +67,20 @@ pub mod pallet {
             <IssuedKeys<T>>::insert(&who, &fingerprint, location);
 
             Self::deposit_event(Event::KeyIssued(fingerprint, who));
+            Ok(())
+        }
+
+        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        pub fn announce_key(
+            origin: OriginFor<T>,
+            fingerprint: Vec<u8>,
+            location: Vec<u8>,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <IssuedKeys<T>>::insert(&who, &fingerprint, &location);
+
+            Self::deposit_event(Event::KeyExists(fingerprint, location, who));
             Ok(())
         }
 
