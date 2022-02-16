@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["fennel_protocol_runtime"] = [{"text":"impl <a class=\"trait\" href=\"pallet_keystore/pallet/trait.Config.html\" title=\"trait pallet_keystore::pallet::Config\">Config</a> for <a class=\"struct\" href=\"fennel_protocol_runtime/struct.Runtime.html\" title=\"struct fennel_protocol_runtime::Runtime\">Runtime</a>","synthetic":false,"types":["fennel_protocol_runtime::Runtime"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
