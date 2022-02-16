@@ -215,6 +215,7 @@ runtime-benchmarks = [
     'pallet-balances/runtime-benchmarks',
     'pallet-template/runtime-benchmarks',
     'pallet-timestamp/runtime-benchmarks',
+    'pallet-keystore/runtime-benchmarks',
     'pallet-trust/runtime-benchmarks',
     'sp-runtime/runtime-benchmarks',
 ]
@@ -231,6 +232,7 @@ std = [
     'pallet-randomness-collective-flip/std',
     'pallet-sudo/std',
     'pallet-template/std',
+    'pallet-keystore/std',
     'pallet-trust/std',
     'pallet-timestamp/std',
     'pallet-transaction-payment-rpc-runtime-api/std',
