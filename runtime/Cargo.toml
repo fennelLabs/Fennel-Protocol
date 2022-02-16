@@ -81,7 +81,6 @@ std = [
     'pallet-grandpa/std',
     'pallet-randomness-collective-flip/std',
     'pallet-sudo/std',
-    'pallet-template/std',
     'pallet-keystore/std',
     'pallet-trust/std',
     'pallet-timestamp/std',
