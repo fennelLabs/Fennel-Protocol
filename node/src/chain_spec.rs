@@ -72,6 +72,7 @@ pub fn development_config() -> Result<ChainSpec, String> {
         None,
         // Extensions
         None,
+        None,
     ))
 }
 
@@ -119,6 +120,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
         None,
         // Extensions
         None,
+        None,
     ))
 }
 
@@ -134,7 +136,7 @@ fn testnet_genesis(
         system: SystemConfig {
             // Add Wasm runtime to storage.
             code: wasm_binary.to_vec(),
-            changes_trie_config: Default::default(),
+            //no such field changes_trie_config: Default::default(),
         },
         balances: BalancesConfig {
             // Configure endowed accounts with initial balance of 1 << 60.
@@ -148,7 +150,7 @@ fn testnet_genesis(
         },
         sudo: SudoConfig {
             // Assign network admin rights.
-            key: root_key,
+            key: Some(root_key),
         },
     }
 }

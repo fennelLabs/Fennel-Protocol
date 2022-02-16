@@ -17,6 +17,7 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
+    #[pallet::unbounded]
     /// This module's main storage will consist of a StorageDoubleMap connecting addresses to the
     /// list of keys they've submitted and not revoked.
     #[pallet::getter(fn key)]
@@ -24,7 +25,6 @@ pub mod pallet {
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, Vec<u8>, Vec<u8>>;
 
     #[pallet::event]
-    #[pallet::metadata(T::AccountId = "AccountId")]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         /// Announce when an identity has broadcast a new key as an event.

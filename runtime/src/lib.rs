@@ -44,7 +44,6 @@ pub use pallet_fennel_identity;
 pub use pallet_keystore;
 pub use pallet_signal;
 /// Import the template pallet.
-pub use pallet_template;
 pub use pallet_trust;
 
 /// An index to a block.
@@ -106,6 +105,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     impl_version: 1,
     apis: RUNTIME_API_VERSIONS,
     transaction_version: 1,
+    state_version: 1,
 };
 
 /// This determines the average expected block time that we are targeting.
@@ -145,6 +145,10 @@ parameter_types! {
 }
 
 // Configure FRAME pallets to include in runtime.
+
+parameter_types! {
+    pub const MaxAuthorities: u32 = 32;
+}
 
 impl frame_system::Config for Runtime {
     /// The basic call filter to use in dispatchable.
@@ -195,6 +199,7 @@ impl frame_system::Config for Runtime {
     type SS58Prefix = SS58Prefix;
     /// The set code logic, just the default since we're not a parachain.
     type OnSetCode = ();
+    type MaxConsumers = frame_support::traits::ConstU32<16>;
 }
 
 impl pallet_randomness_collective_flip::Config for Runtime {}
@@ -202,11 +207,13 @@ impl pallet_randomness_collective_flip::Config for Runtime {}
 impl pallet_aura::Config for Runtime {
     type AuthorityId = AuraId;
     type DisabledValidators = ();
+    type MaxAuthorities = MaxAuthorities;
 }
 
 impl pallet_grandpa::Config for Runtime {
     type Event = Event;
     type Call = Call;
+    type MaxAuthorities = MaxAuthorities;
 
     type KeyOwnerProofSystem = ();
 
@@ -256,6 +263,7 @@ impl pallet_balances::Config for Runtime {
 
 parameter_types! {
     pub const TransactionByteFee: Balance = 1;
+    pub OperationalFeeMultiplier: u8 = 5;
 }
 
 impl pallet_transaction_payment::Config for Runtime {
@@ -263,16 +271,12 @@ impl pallet_transaction_payment::Config for Runtime {
     type TransactionByteFee = TransactionByteFee;
     type WeightToFee = IdentityFee<Balance>;
     type FeeMultiplierUpdate = ();
+    type OperationalFeeMultiplier = OperationalFeeMultiplier;
 }
 
 impl pallet_sudo::Config for Runtime {
     type Event = Event;
     type Call = Call;
-}
-
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
-    type Event = Event;
 }
 
 impl pallet_keystore::Config for Runtime {
@@ -308,8 +312,6 @@ construct_runtime!(
         Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
         TransactionPayment: pallet_transaction_payment::{Pallet, Storage},
         Sudo: pallet_sudo::{Pallet, Call, Config<T>, Storage, Event<T>},
-        // Include the custom logic from the pallet-template in the runtime.
-        TemplateModule: pallet_template::{Pallet, Call, Storage, Event<T>},
         TrustModule: pallet_trust::{Pallet, Call, Storage, Event<T>},
         KeystoreModule: pallet_keystore::{Pallet, Call, Storage, Event<T>},
         SignalModule: pallet_signal::{Pallet, Call, Storage, Event<T>},
@@ -361,7 +363,7 @@ impl_runtime_apis! {
 
     impl sp_api::Metadata<Block> for Runtime {
         fn metadata() -> OpaqueMetadata {
-            Runtime::metadata().into()
+            OpaqueMetadata::new(Runtime::metadata().into())
         }
     }
 
@@ -408,7 +410,7 @@ impl_runtime_apis! {
         }
 
         fn authorities() -> Vec<AuraId> {
-            Aura::authorities()
+            Aura::authorities().to_vec()
         }
     }
 
@@ -490,7 +492,6 @@ impl_runtime_apis! {
             list_benchmark!(list, extra, frame_system, SystemBench::<Runtime>);
             list_benchmark!(list, extra, pallet_balances, Balances);
             list_benchmark!(list, extra, pallet_timestamp, Timestamp);
-            list_benchmark!(list, extra, pallet_template, TemplateModule);
             list_benchmark!(list, extra, pallet_trust, TrustModule);
             list_benchmark!(list, extra, pallet_fennel_identity, IdentityModule);
 
@@ -526,7 +527,6 @@ impl_runtime_apis! {
             add_benchmark!(params, batches, frame_system, SystemBench::<Runtime>);
             add_benchmark!(params, batches, pallet_balances, Balances);
             add_benchmark!(params, batches, pallet_timestamp, Timestamp);
-            add_benchmark!(params, batches, pallet_template, TemplateModule);
             add_benchmark!(params, batches, pallet_trust, TrustModule);
             add_benchmark!(params, batches, pallet_fennel_identity, IdentityModule);
 

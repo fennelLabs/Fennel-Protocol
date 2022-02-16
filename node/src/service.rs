@@ -1,7 +1,7 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
 use fennel_protocol_runtime::{self, opaque::Block, RuntimeApi};
-use sc_client_api::{ExecutorProvider, RemoteBackend};
+use sc_client_api::{BlockBackend, ExecutorProvider};
 use sc_consensus_aura::{ImportQueueParams, SlotProportion, StartAuraParams};
 pub use sc_executor::NativeElseWasmExecutor;
 use sc_finality_grandpa::SharedVoterState;
@@ -73,6 +73,7 @@ pub fn new_partial(
         config.wasm_method,
         config.default_heap_pages,
         config.max_runtime_instances,
+        config.runtime_cache_size,
     );
 
     let (client, backend, keystore_container, task_manager) =
@@ -84,7 +85,7 @@ pub fn new_partial(
     let client = Arc::new(client);
 
     let telemetry = telemetry.map(|(worker, telemetry)| {
-        task_manager.spawn_handle().spawn("telemetry", worker.run());
+        task_manager.spawn_handle().spawn("telemetry", None, worker.run());
         telemetry
     });
 
@@ -175,10 +176,20 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
         };
     }
 
-    config.network.extra_sets.push(sc_finality_grandpa::grandpa_peers_set_config());
+    let grandpa_protocol_name = sc_finality_grandpa::protocol_standard_name(
+        &client.block_hash(0).ok().flatten().expect("Genesis block exists; qed"),
+        &config.chain_spec,
+    );
+
+    config
+        .network
+        .extra_sets
+        .push(sc_finality_grandpa::grandpa_peers_set_config(grandpa_protocol_name.clone()));
+
     let warp_sync = Arc::new(sc_finality_grandpa::warp_proof::NetworkProvider::new(
         backend.clone(),
         grandpa_link.shared_authority_set().clone(),
+        Vec::default(),
     ));
 
     let (network, system_rpc_tx, network_starter) =
@@ -188,7 +199,6 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
             transaction_pool: transaction_pool.clone(),
             spawn_handle: task_manager.spawn_handle(),
             import_queue,
-            on_demand: None,
             block_announce_validator_builder: None,
             warp_sync: Some(warp_sync),
         })?;
@@ -228,8 +238,6 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
         task_manager: &mut task_manager,
         transaction_pool: transaction_pool.clone(),
         rpc_extensions_builder,
-        on_demand: None,
-        remote_blockchain: None,
         backend,
         system_rpc_tx,
         config,
@@ -283,7 +291,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
 
         // the AURA authoring task is considered essential, i.e. if it
         // fails we take down the service with it.
-        task_manager.spawn_essential_handle().spawn_blocking("aura", aura);
+        task_manager.spawn_essential_handle().spawn_blocking("aura", None, aura);
     }
 
     // if the node isn't actively participating in consensus then it doesn't
@@ -300,6 +308,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
         keystore,
         local_role: role,
         telemetry: telemetry.as_ref().map(|x| x.handle()),
+        protocol_name: grandpa_protocol_name,
     };
 
     if enable_grandpa {
@@ -323,6 +332,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
         // if it fails we take down the service with it.
         task_manager.spawn_essential_handle().spawn_blocking(
             "grandpa-voter",
+            None,
             sc_finality_grandpa::run_grandpa_voter(grandpa_config)?,
         );
     }
@@ -331,7 +341,10 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
     Ok(task_manager)
 }
 
-/// Builds a new service for a light client.
+/*
+Builds a new service for a light client.
+This section seemst to have been removed in recent versions of substrate.
+Let's remove this for now and test later. It throws a ton of errors post-upgrade.
 pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError> {
     let telemetry = config
         .telemetry_endpoints
@@ -348,10 +361,11 @@ pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError>
         config.wasm_method,
         config.default_heap_pages,
         config.max_runtime_instances,
+        config.runtime_cache_size,
     );
 
     let (client, backend, keystore_container, mut task_manager, on_demand) =
-        sc_service::new_light_parts::<Block, RuntimeApi, _>(
+        sc_service::new_full_parts::<Block, RuntimeApi, _>(
             &config,
             telemetry.as_ref().map(|(_, telemetry)| telemetry.handle()),
             executor,
@@ -415,10 +429,9 @@ pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError>
         sc_service::build_network(sc_service::BuildNetworkParams {
             config: &config,
             client: client.clone(),
-            transaction_pool: transaction_pool.clone(),
+            transaction_pool: Arc::clone(&transaction_pool),
             spawn_handle: task_manager.spawn_handle(),
             import_queue,
-            on_demand: Some(on_demand.clone()),
             block_announce_validator_builder: None,
             warp_sync: Some(warp_sync),
         })?;
@@ -453,10 +466,8 @@ pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError>
     }
 
     sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-        remote_blockchain: Some(backend.remote_blockchain()),
         transaction_pool,
         task_manager: &mut task_manager,
-        on_demand: Some(on_demand),
         rpc_extensions_builder: Box::new(|_, _| Ok(())),
         config,
         client,
@@ -469,4 +480,4 @@ pub fn new_light(mut config: Configuration) -> Result<TaskManager, ServiceError>
 
     network_starter.start_network();
     Ok(task_manager)
-}
+}*/
