@@ -25,7 +25,7 @@
 // --output
 // ./
 
-
+/*
 #![cfg_attr(rustfmt, rustfmt_skip)]
 #![allow(unused_parens)]
 #![allow(unused_imports)]
@@ -43,4 +43,36 @@ impl<T: frame_system::Config> pallet_keystore::WeightInfo for WeightInfo<T> {
 			.saturating_add((1_000 as Weight).saturating_mul(s as Weight))
 			.saturating_add(T::DbWeight::get().writes(1 as Weight))
 	}
+}*/
+
+
+#![cfg_attr(rustfmt, rustfmt_skip)]
+#![allow(unused_parens)]
+#![allow(unused_imports)]
+
+use frame_support::weights::{constants::RocksDbWeight, Weight};
+
+pub trait WeightInfo {
+    fn issue_key() -> Weight;
+    fn announce_key() -> Weight;
+    fn revoke_key() -> Weight;
 }
+
+impl WeightInfo for () {
+    fn issue_key() -> Weight {
+        (10_000 as Weight)
+            .saturating_add(RocksDbWeight::get().reads(2 as Weight))
+            .saturating_add(RocksDbWeight::get().writes(2 as Weight))
+    }
+    fn announce_key() -> Weight {
+        (10_000 as Weight)
+            .saturating_add(RocksDbWeight::get().reads(2 as Weight))
+            .saturating_add(RocksDbWeight::get().writes(2 as Weight))
+    }
+    fn revoke_key() -> Weight {
+        (26_623_000 as Weight)
+            .saturating_add(RocksDbWeight::get().reads(2 as Weight))
+            .saturating_add(RocksDbWeight::get().writes(2 as Weight))
+    }
+}
+

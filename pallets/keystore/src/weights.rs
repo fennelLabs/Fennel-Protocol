@@ -1,10 +1,10 @@
+
 #![cfg_attr(rustfmt, rustfmt_skip)]
 #![allow(unused_parens)]
 #![allow(unused_imports)]
 
 use frame_support::weights::{constants::RocksDbWeight, Weight};
 
-/// Weight functions for pallet_signal.
 pub trait WeightInfo {
     fn issue_key() -> Weight;
     fn announce_key() -> Weight;
@@ -28,4 +28,3 @@ impl WeightInfo for () {
             .saturating_add(RocksDbWeight::get().writes(2 as Weight))
     }
 }
-

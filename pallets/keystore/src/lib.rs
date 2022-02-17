@@ -44,6 +44,7 @@ pub mod pallet {
         KeyIssued(Vec<u8>, T::AccountId),
         /// Announce when an identity has set a key as revoked.
         KeyRevoked(Vec<u8>, T::AccountId),
+        /// Announce that a key exists.
         KeyExists(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
@@ -86,7 +87,7 @@ pub mod pallet {
 
         /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
         /// and informing the network.
-        #[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
+        #[pallet::weight(26_623_000 + T::DbWeight::get().reads_writes(1,1))]
         pub fn revoke_key(origin: OriginFor<T>, key_index: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
