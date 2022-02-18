@@ -4,7 +4,7 @@ use super::*;
 use crate::Pallet as Identity;
 use codec::alloc::string::{String, ToString};
 use frame_benchmarking::{
-    account as benchmark_account, benchmarks, impl_benchmark_test_suite, whitelisted_caller,
+    account as benchmark_account, benchmarks, impl_benchmark_test_suite,
 };
 use frame_support::inherent::Vec;
 use frame_system::RawOrigin;

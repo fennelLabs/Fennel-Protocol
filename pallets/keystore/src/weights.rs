@@ -29,20 +29,38 @@
 #![allow(unused_parens)]
 #![allow(unused_imports)]
 
-use frame_support::{traits::Get, weights::Weight};
-use sp_std::marker::PhantomData;
+use frame_support::{traits::Get, weights::{Weight, constants::RocksDbWeight}, dispatch::WeighData};
+use core::marker::PhantomData;
+
+pub trait WeightInfo {
+    fn announce_key() -> Weight;
+    fn revoke_key() -> Weight;
+}
 
 /// Weight functions for `pallet_keystore`.
-pub struct WeightInfo<T>(PhantomData<T>);
-impl<T: frame_system::Config> pallet_keystore::WeightInfo for WeightInfo<T> {
+pub struct SubstrateWeights<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
-	fn announce_key(_s: u32, ) -> Weight {
-		(18_922_000 as Weight)
+	fn announce_key() -> Weight {
+		(19_171_000 as Weight)
 			.saturating_add(T::DbWeight::get().writes(1 as Weight))
 	}
 	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
-	fn issue_key(_s: u32, ) -> Weight {
-		(18_999_000 as Weight)
+	fn revoke_key() -> Weight {
+		(22_594_000 as Weight)
 			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+	}
+}
+
+impl WeightInfo for () {
+	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
+	fn announce_key() -> Weight {
+		(19_171_000 as Weight)
+			.saturating_add(RocksDbWeight::get().writes(1 as Weight))
+	}
+	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
+	fn revoke_key() -> Weight {
+		(22_594_000 as Weight)
+			.saturating_add(RocksDbWeight::get().writes(1 as Weight))
 	}
 }

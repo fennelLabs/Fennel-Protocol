@@ -12,12 +12,14 @@ mod benchmarking;
 mod weights;
 
 pub use pallet::*;
-use weights::*;
+pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
-    use frame_system::{pallet_prelude::*, WeightInfo};
+    use frame_system::{pallet_prelude::*};
+
+    use crate::weights::WeightInfo;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
@@ -56,22 +58,7 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        /// After a new key is created, call this extrinsic to announce it to the network.
-        #[pallet::weight(18_999_000 + T::DbWeight::get().writes(1))]
-        pub fn issue_key(
-            origin: OriginFor<T>,
-            fingerprint: Vec<u8>,
-            location: Vec<u8>,
-        ) -> DispatchResult {
-            let who = ensure_signed(origin)?;
-
-            <IssuedKeys<T>>::insert(&who, &fingerprint, location);
-
-            Self::deposit_event(Event::KeyIssued(fingerprint, who));
-            Ok(())
-        }
-
-        #[pallet::weight(18_922_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(T::WeightInfo::announce_key())]
         pub fn announce_key(
             origin: OriginFor<T>,
             fingerprint: Vec<u8>,
@@ -87,7 +74,7 @@ pub mod pallet {
 
         /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
         /// and informing the network.
-        #[pallet::weight(26_623_000 + T::DbWeight::get().reads_writes(1,1))]
+        #[pallet::weight(T::WeightInfo::revoke_key())]
         pub fn revoke_key(origin: OriginFor<T>, key_index: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
