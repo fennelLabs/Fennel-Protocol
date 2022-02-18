@@ -3,9 +3,7 @@ use super::*;
 #[allow(unused)]
 use crate::Pallet as Keystore;
 use codec::alloc::string::{String, ToString};
-use frame_benchmarking::{
-    account as benchmark_account, benchmarks, impl_benchmark_test_suite,
-};
+use frame_benchmarking::{account as benchmark_account, benchmarks, impl_benchmark_test_suite};
 use frame_support::inherent::Vec;
 use frame_system::RawOrigin;
 
