@@ -57,7 +57,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// After a new key is created, call this extrinsic to announce it to the network.
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(18_999_000 + T::DbWeight::get().writes(1))]
         pub fn issue_key(
             origin: OriginFor<T>,
             fingerprint: Vec<u8>,
@@ -71,7 +71,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+        #[pallet::weight(18_922_000 + T::DbWeight::get().writes(1))]
         pub fn announce_key(
             origin: OriginFor<T>,
             fingerprint: Vec<u8>,
