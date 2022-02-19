@@ -1,15 +1,30 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+
+mod weights;
+
 pub use pallet::*;
+pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
 
+    use crate::weights::WeightInfo;
+
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type WeightInfo: WeightInfo;
     }
 
     #[pallet::pallet]
@@ -31,6 +46,8 @@ pub mod pallet {
         KeyIssued(Vec<u8>, T::AccountId),
         /// Announce when an identity has set a key as revoked.
         KeyRevoked(Vec<u8>, T::AccountId),
+        /// Announce that a key exists.
+        KeyExists(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
     #[pallet::error]
@@ -41,24 +58,23 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        /// After a new key is created, call this extrinsic to announce it to the network.
-        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
-        pub fn issue_key(
+        #[pallet::weight(T::WeightInfo::announce_key())]
+        pub fn announce_key(
             origin: OriginFor<T>,
             fingerprint: Vec<u8>,
             location: Vec<u8>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <IssuedKeys<T>>::insert(&who, &fingerprint, location);
+            <IssuedKeys<T>>::insert(&who, &fingerprint, &location);
 
-            Self::deposit_event(Event::KeyIssued(fingerprint, who));
+            Self::deposit_event(Event::KeyExists(fingerprint, location, who));
             Ok(())
         }
 
         /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
         /// and informing the network.
-        #[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
+        #[pallet::weight(T::WeightInfo::revoke_key())]
         pub fn revoke_key(origin: OriginFor<T>, key_index: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 

@@ -281,6 +281,7 @@ impl pallet_sudo::Config for Runtime {
 
 impl pallet_keystore::Config for Runtime {
     type Event = Event;
+    type WeightInfo = ();
 }
 
 impl pallet_trust::Config for Runtime {
@@ -493,6 +494,7 @@ impl_runtime_apis! {
             list_benchmark!(list, extra, pallet_balances, Balances);
             list_benchmark!(list, extra, pallet_timestamp, Timestamp);
             list_benchmark!(list, extra, pallet_trust, TrustModule);
+            list_benchmark!(list, extra, pallet_keystore, KeystoreModule);
             list_benchmark!(list, extra, pallet_fennel_identity, IdentityModule);
 
             let storage_info = AllPalletsWithSystem::storage_info();
@@ -528,6 +530,7 @@ impl_runtime_apis! {
             add_benchmark!(params, batches, pallet_balances, Balances);
             add_benchmark!(params, batches, pallet_timestamp, Timestamp);
             add_benchmark!(params, batches, pallet_trust, TrustModule);
+            add_benchmark!(params, batches, pallet_keystore, KeystoreModule);
             add_benchmark!(params, batches, pallet_fennel_identity, IdentityModule);
 
             if batches.is_empty() { return Err("Benchmark not found for this pallet.".into()) }

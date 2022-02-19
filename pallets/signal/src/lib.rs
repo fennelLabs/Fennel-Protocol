@@ -54,7 +54,7 @@ pub mod pallet {
         }
 
         /// Announces that `origin`'s key `fingerprint` has been revoked
-        #[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
+        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         pub fn revoke_key(origin: OriginFor<T>, fingerprint: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
