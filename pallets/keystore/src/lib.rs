@@ -41,7 +41,8 @@ pub mod pallet {
 
     #[pallet::storage]
     #[pallet::getter(fn encryption_key)]
-    pub type IssuedEncryptionKeys<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, [u8; 32]>;
+    pub type IssuedEncryptionKeys<T: Config> =
+        StorageMap<_, Blake2_128Concat, T::AccountId, [u8; 32]>;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
