@@ -34,6 +34,13 @@ benchmarks! {
         let key_index = from_str_to_vec("somekey".to_string());
 
     }: _(origin.clone(), key_index.clone())
+
+    issue_encryption_key {
+        let s in 0 .. 100;
+        let origin = get_origin::<T>("Anakin");
+        let key = [0; 32];
+
+    }: _(origin.clone(), key.clone())
 }
 
 impl_benchmark_test_suite!(Keystore, crate::mock::new_test_ext(), crate::mock::Test);
