@@ -1,4 +1,5 @@
 # Fennel Protocol
+Fennel Protocol is a decentralized communication distribution focusing on providing secure and resilient communications to chain-parallel organizations and applications.
 
 ## Getting Started
 
