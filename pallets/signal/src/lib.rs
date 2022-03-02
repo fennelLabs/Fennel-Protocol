@@ -17,12 +17,13 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
+    #[pallet::unbounded]
     #[pallet::getter(fn get_issued_key)]
+
     pub type IssuedKeys<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, Vec<u8>, Vec<u8>>;
 
     #[pallet::event]
-    #[pallet::metadata(T::AccountId = "AccountId")]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         KeyIssued(Vec<u8>, T::AccountId),
@@ -53,7 +54,7 @@ pub mod pallet {
         }
 
         /// Announces that `origin`'s key `fingerprint` has been revoked
-        #[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
+        #[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
         pub fn revoke_key(origin: OriginFor<T>, fingerprint: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 

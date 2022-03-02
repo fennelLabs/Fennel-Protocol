@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["fennel_protocol_runtime"] = [{"text":"impl <a class=\"trait\" href=\"sp_runtime/traits/trait.GetNodeBlockType.html\" title=\"trait sp_runtime::traits::GetNodeBlockType\">GetNodeBlockType</a> for <a class=\"struct\" href=\"fennel_protocol_runtime/struct.Runtime.html\" title=\"struct fennel_protocol_runtime::Runtime\">Runtime</a>","synthetic":false,"types":["fennel_protocol_runtime::Runtime"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
