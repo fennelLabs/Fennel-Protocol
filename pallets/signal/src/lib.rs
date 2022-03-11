@@ -56,7 +56,11 @@ pub mod pallet {
         }
 
         #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
-        pub fn send_service_signal(origin: OriginFor<T>, service_identifier: Vec<u8>, url: Vec<u8>) -> DispatchResult {
+        pub fn send_service_signal(
+            origin: OriginFor<T>,
+            service_identifier: Vec<u8>,
+            url: Vec<u8>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::ServiceSignalSent(service_identifier, url, who));
             Ok(())

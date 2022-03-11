@@ -11,6 +11,10 @@ fn test_send_signal() {
 #[test]
 fn test_send_service_signal() {
     new_test_ext().execute_with(|| {
-        assert_ok!(SignalModule::send_service_signal(Origin::signed(1), "TEST".as_bytes().to_vec(), "TEST".as_bytes().to_vec()));
+        assert_ok!(SignalModule::send_service_signal(
+            Origin::signed(1),
+            "TEST".as_bytes().to_vec(),
+            "TEST".as_bytes().to_vec()
+        ));
     });
 }
