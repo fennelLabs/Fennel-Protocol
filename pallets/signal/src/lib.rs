@@ -35,6 +35,7 @@ pub mod pallet {
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         SignalSent(Vec<u8>, T::AccountId),
+        ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
     #[pallet::error]
@@ -51,6 +52,13 @@ pub mod pallet {
         pub fn send_signal(origin: OriginFor<T>, signal: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::SignalSent(signal, who));
+            Ok(())
+        }
+
+        #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
+        pub fn send_service_signal(origin: OriginFor<T>, service_identifier: Vec<u8>, url: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+            Self::deposit_event(Event::ServiceSignalSent(service_identifier, url, who));
             Ok(())
         }
     }
