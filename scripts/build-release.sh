@@ -2,7 +2,7 @@
 
 rustup update nightly
 rustup update stable
-rustup default nightly
+rustup override set nightly
 rustup target add wasm32-unknown-unknown --toolchain nightly
 
 cargo build
