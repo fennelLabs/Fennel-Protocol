@@ -10,6 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get upgrade -y
 
 RUN rustup default nightly && \
+    rustup update nightly && \
     rustup target add wasm32-unknown-unknown --toolchain nightly
 
 COPY . /app/Fennel-Protocol
