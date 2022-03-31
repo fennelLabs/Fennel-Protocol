@@ -11,3 +11,5 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 RUN rustup default nightly && \
     rustup target add wasm32-unknown-unknown --toolchain nightly
+
+COPY . /app/Fennel-Protocol
