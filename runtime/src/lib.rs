@@ -281,7 +281,7 @@ impl pallet_sudo::Config for Runtime {
 
 impl pallet_keystore::Config for Runtime {
     type Event = Event;
-    type WeightInfo = ();
+    type WeightInfo = pallet_keystore::weights::SubstrateWeights<Runtime>;
 }
 
 impl pallet_trust::Config for Runtime {
@@ -291,12 +291,12 @@ impl pallet_trust::Config for Runtime {
 
 impl pallet_signal::Config for Runtime {
     type Event = Event;
-    type WeightInfo = ();
+    type WeightInfo = pallet_signal::weights::SubstrateWeights<Runtime>;
 }
 
 impl pallet_fennel_identity::Config for Runtime {
     type Event = Event;
-    type WeightInfo = ();
+    type WeightInfo = pallet_fennel_identity::weights::SubstrateWeights<Runtime>;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
