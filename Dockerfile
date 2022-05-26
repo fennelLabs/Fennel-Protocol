@@ -13,4 +13,5 @@ RUN rustup default nightly && \
     rustup update nightly && \
     rustup target add wasm32-unknown-unknown --toolchain nightly
 
-COPY . /app/Fennel-Protocol
+COPY . /app
+WORKDIR /app
