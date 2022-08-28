@@ -93,6 +93,7 @@ pub mod pallet {
     }
 
     #[pallet::error]
+    #[derive(PartialEq, Eq)]
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
