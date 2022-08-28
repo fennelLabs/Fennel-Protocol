@@ -1,11 +1,11 @@
 [package]
-name = "parachain-template-node"
+name = "fennel-node"
 version = "0.1.0"
-authors = ["Anonymous"]
-description = "A new Cumulus FRAME-based Substrate Node, ready for hacking together a parachain."
+authors = ["Fennel Labs <info@fennellabs.com"]
+description = "The fennel labs blockchain node"
 license = "Unlicense"
 homepage = "https://substrate.io"
-repository = "https://github.com/paritytech/cumulus/"
+repository = "https://github.com/FennelLabs/Fennel-Protocol"
 edition = "2021"
 build = "build.rs"
 
@@ -19,7 +19,7 @@ hex-literal = "0.3.4"
 jsonrpsee = { version = "0.15.1", features = ["server"] }
 
 # Local
-parachain-template-runtime = { path = "../runtime" }
+fennel-runtime = { path = "../runtime" }
 
 # Substrate
 frame-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "master" }
@@ -85,7 +85,7 @@ substrate-build-script-utils = { git = "https://github.com/paritytech/substrate"
 [features]
 default = []
 runtime-benchmarks = [
-	"parachain-template-runtime/runtime-benchmarks",
+	"fennel-runtime/runtime-benchmarks",
 	"polkadot-cli/runtime-benchmarks",
 ]
-try-runtime = ["parachain-template-runtime/try-runtime"]
+try-runtime = ["fennel-runtime/try-runtime"]
