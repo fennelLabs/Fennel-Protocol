@@ -19,7 +19,7 @@ hex-literal = "0.3.4"
 jsonrpsee = { version = "0.15.1", features = ["server"] }
 
 # Local
-fennel-runtime = { path = "../runtime" }
+fennel-runtime = { path = "../runtime/fennel", version = "0.1.0" }
 
 # Substrate
 frame-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
@@ -88,4 +88,4 @@ runtime-benchmarks = [
 	"fennel-runtime/runtime-benchmarks",
 	"polkadot-cli/runtime-benchmarks",
 ]
-try-runtime = ["fennel-runtime/try-runtime"]
+# try-runtime = ["fennel-runtime/try-runtime"]
