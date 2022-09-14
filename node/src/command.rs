@@ -74,7 +74,7 @@ impl SubstrateCli for Cli {
 
 impl SubstrateCli for RelayChainCli {
     fn impl_name() -> String {
-        "FEnnel Node".into()
+        "Fennel Node".into()
     }
 
     fn impl_version() -> String {
