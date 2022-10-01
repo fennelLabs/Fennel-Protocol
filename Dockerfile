@@ -15,3 +15,5 @@ RUN rustup default nightly && \
 
 COPY . /app
 WORKDIR /app
+
+RUN cargo build
