@@ -30,4 +30,11 @@ COPY . .
 COPY --from=cacher /app/target target
 RUN cargo build --release
 
-CMD ["cargo", "run", "--release", "--", "--chain=dev", "--ws-external", "--rpc-external", "--rpc-cors=all", "--rpc-methods=unsafe", "--ws-port=9944", "--rpc-port=9933", "--tmp"]
+CMD cargo run --release -- \
+    --dev \
+    --tmp \
+    --unsafe-ws-external \
+    --rpc-external \
+    --prometheus-external \
+    --rpc-methods unsafe \
+    --rpc-cors all
