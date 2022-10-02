@@ -6,6 +6,6 @@ services:
       - Fennel-Protocol:/app
     ports:
       - "9944:9944"
-    entrypoint: sh docker-entry.sh
+    entrypoint: cargo run --release -- --dev --tmp
 volumes:
   Fennel-Protocol:
