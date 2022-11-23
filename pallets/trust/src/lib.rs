@@ -52,7 +52,7 @@ pub mod pallet {
         StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
     #[pallet::storage]
     #[pallet::getter(fn get_non_trust_issuance)]
-    /// A Map of lists of all addresses that each address has issued trust for
+    /// A Map of lists of all addresses that each address has revoked trust for
     pub type TrustRevocation<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, T::AccountId, u32>;
     #[pallet::storage]
