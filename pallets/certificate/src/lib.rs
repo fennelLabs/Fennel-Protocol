@@ -48,18 +48,20 @@ pub mod pallet {
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         CertificateSent(T::AccountId, T::AccountId),
+        CertificateRevoked(T::AccountId, T::AccountId)
     }
 
     #[pallet::error]
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        CertificateNotOwned
     }
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// Creates an on-chain event with a Certificate payload defined as part of the transaction
-        /// and committing the details to storage.
+        /// and commits the details to storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_certificate())]
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -70,6 +72,22 @@ pub mod pallet {
             })?;
 
             Self::deposit_event(Event::CertificateSent(recipient, who));
+
+            Ok(())
+        }
+
+        #[pallet::weight(T::WeightInfo::revoke_certificate())]
+        /// Revokes the identity with ID number identity_id, as long as the identity is owned by
+        /// origin.
+        pub fn revoke_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <CertificateList<T>>::try_mutate(&who, |ids| -> DispatchResult {
+                ensure!(ids.remove(&recipient), Error::<T>::CertificateNotOwned);
+                Ok(())
+            })?;
+
+            Self::deposit_event(Event::CertificateRevoked(recipient, who));
 
             Ok(())
         }

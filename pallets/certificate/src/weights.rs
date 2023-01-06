@@ -35,6 +35,7 @@ use core::marker::PhantomData;
 
 pub trait WeightInfo {
     fn send_certificate() -> Weight;
+    fn revoke_certificate() -> Weight;
 }
 
 /// Weight functions for pallet_trust.
@@ -47,6 +48,13 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 			.saturating_add(T::DbWeight::get().writes(1 as Weight))
 	}
+
+    fn revoke_certificate() -> Weight {
+        (12_000_000 as Weight)
+            // Standard Error: 6_000
+            .saturating_add(T::DbWeight::get().reads(1 as Weight))
+            .saturating_add(T::DbWeight::get().writes(1 as Weight))
+    }
 }
 
 impl WeightInfo for () {
@@ -57,4 +65,11 @@ impl WeightInfo for () {
 			.saturating_add(RocksDbWeight::get().reads(1 as Weight))
 			.saturating_add(RocksDbWeight::get().writes(1 as Weight))
 	}
+
+    fn revoke_certificate() -> Weight {
+        (12_000_000 as Weight)
+            // Standard Error: 6_000
+            .saturating_add(RocksDbWeight::get().reads(1 as Weight))
+            .saturating_add(RocksDbWeight::get().writes(1 as Weight))
+    }
 }
