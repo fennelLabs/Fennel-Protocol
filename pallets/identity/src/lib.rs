@@ -123,7 +123,7 @@ pub mod pallet {
             })?;
 
             <IdentityNumber<T>>::put(new_id);
-            Self::deposit_event(Event::IdentityCreated(new_id, who));
+            Self::deposit_event(Event::IdentityCreated(current_id, who));
 
             Ok(())
         }
