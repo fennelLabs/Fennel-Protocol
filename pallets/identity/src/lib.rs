@@ -72,7 +72,7 @@ pub mod pallet {
     #[pallet::unbounded]
     #[pallet::getter(fn get_signal_record)]
     /// Tracks all signals sent by an identity.
-    pub type FennelSignal<T: Config> =
+    pub type SignatureSignal<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, u32, Vec<u8>>;
 
     #[pallet::event]
@@ -209,7 +209,7 @@ pub mod pallet {
             );
             let signal_id: u32 = <SignalCount<T>>::get();
             let new_id: u32 = signal_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
-            <FennelSignal<T>>::insert(&identity_id, &signal_id, &content);
+            <SignatureSignal<T>>::insert(&identity_id, &signal_id, &content);
             <SignalCount<T>>::put(new_id);
             Self::deposit_event(Event::SignedSignal(identity_id, who, content));
 
