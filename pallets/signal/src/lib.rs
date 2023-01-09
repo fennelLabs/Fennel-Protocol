@@ -31,10 +31,18 @@ pub mod pallet {
     #[pallet::generate_store(pub(super) trait Store)]
     pub struct Pallet<T>(_);
 
+    #[pallet::storage]
+    #[pallet::unbounded]
+    #[pallet::getter(fn rating_signal_list)]
+    /// Maps identity numbers to a signal transaction hash and a rating number.
+    pub type RatingSignalList<T: Config> =
+        StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, Vec<u8>, u8, ValueQuery>;
+
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         SignalSent(Vec<u8>, T::AccountId),
+        RatingSignalSent(Vec<u8>, u8, T::AccountId),
         ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
@@ -46,6 +54,17 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
+        /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating number.
+        #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
+        pub fn send_rating_signal(origin: OriginFor<T>, target: Vec<u8>, rating: u8) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
+            Self::deposit_event(Event::RatingSignalSent(target, rating, who));
+            
+            Ok(())
+        }
+
         /// Creates an on-chain event with a signal payload defined as part of the transaction
         /// without relying on storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
