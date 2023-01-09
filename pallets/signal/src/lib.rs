@@ -43,6 +43,7 @@ pub mod pallet {
     pub enum Event<T: Config> {
         SignalSent(Vec<u8>, T::AccountId),
         RatingSignalSent(Vec<u8>, u8, T::AccountId),
+        RatingSignalUpdate(Vec<u8>, u8, T::AccountId),
         ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
@@ -62,6 +63,17 @@ pub mod pallet {
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             Self::deposit_event(Event::RatingSignalSent(target, rating, who));
             
+            Ok(())
+        }
+
+        /// Updates an existing rating signal.
+        #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
+        pub fn update_rating_signal(origin: OriginFor<T>, target: Vec<u8>, new_rating: u8) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
+            Self::deposit_event(Event::RatingSignalUpdate(target, new_rating, who));
+
             Ok(())
         }
 

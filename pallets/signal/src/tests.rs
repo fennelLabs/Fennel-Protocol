@@ -9,6 +9,13 @@ fn test_send_rating_signal() {
 }
 
 #[test]
+fn test_update_rating_signal() {
+    new_test_ext().execute_with(|| {
+        assert_ok!(SignalModule::update_rating_signal(Origin::signed(1), "TEST".as_bytes().to_vec(), 0));
+    });
+}
+
+#[test]
 fn test_send_signal() {
     new_test_ext().execute_with(|| {
         assert_ok!(SignalModule::send_signal(Origin::signed(1), "TEST".as_bytes().to_vec()));
