@@ -38,6 +38,7 @@ pub trait WeightInfo {
     fn send_signal() -> Weight;
     fn send_service_signal() -> Weight;
     fn update_rating_signal() -> Weight;
+    fn revoke_rating_signal() -> Weight;
 }
 
 /// Weight functions for pallet_trust.
@@ -48,6 +49,10 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
     }
 
     fn update_rating_signal() -> Weight {
+        (7_000_000 as Weight)
+    }
+
+    fn revoke_rating_signal() -> Weight {
         (7_000_000 as Weight)
     }
 
@@ -68,6 +73,10 @@ impl WeightInfo for () {
     }
 
     fn update_rating_signal() -> Weight {
+        (7_000_000 as Weight)
+    }
+
+    fn revoke_rating_signal() -> Weight {
         (7_000_000 as Weight)
     }
 

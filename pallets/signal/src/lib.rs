@@ -43,7 +43,8 @@ pub mod pallet {
     pub enum Event<T: Config> {
         SignalSent(Vec<u8>, T::AccountId),
         RatingSignalSent(Vec<u8>, u8, T::AccountId),
-        RatingSignalUpdate(Vec<u8>, u8, T::AccountId),
+        RatingSignalUpdated(Vec<u8>, u8, T::AccountId),
+        RatingSignalRevoked(Vec<u8>, T::AccountId),
         ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
@@ -72,8 +73,19 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
-            Self::deposit_event(Event::RatingSignalUpdate(target, new_rating, who));
+            Self::deposit_event(Event::RatingSignalUpdated(target, new_rating, who));
 
+            Ok(())
+        }
+
+        /// Puts out a signal cancelling a previous rating.
+        #[pallet::weight(<T as Config>::WeightInfo::revoke_rating_signal())]
+        pub fn revoke_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <RatingSignalList<T>>::remove(who.clone(), target.clone());
+            Self::deposit_event(Event::RatingSignalRevoked(target, who));
+            
             Ok(())
         }
 
