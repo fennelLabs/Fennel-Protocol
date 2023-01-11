@@ -40,11 +40,11 @@ use pallet_transaction_payment::CurrencyAdapter;
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
+pub use pallet_certificate;
 pub use pallet_fennel_identity;
 pub use pallet_keystore;
 pub use pallet_signal;
 pub use pallet_trust;
-pub use pallet_certificate;
 
 /// An index to a block.
 pub type BlockNumber = u32;

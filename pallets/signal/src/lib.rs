@@ -35,8 +35,15 @@ pub mod pallet {
     #[pallet::unbounded]
     #[pallet::getter(fn rating_signal_list)]
     /// Maps identity numbers to a signal transaction hash and a rating number.
-    pub type RatingSignalList<T: Config> =
-        StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, Vec<u8>, u8, ValueQuery>;
+    pub type RatingSignalList<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat,
+        T::AccountId,
+        Blake2_128Concat,
+        Vec<u8>,
+        u8,
+        ValueQuery,
+    >;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -58,18 +65,26 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating number.
         #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
-        pub fn send_rating_signal(origin: OriginFor<T>, target: Vec<u8>, rating: u8) -> DispatchResult {
+        pub fn send_rating_signal(
+            origin: OriginFor<T>,
+            target: Vec<u8>,
+            rating: u8,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             Self::deposit_event(Event::RatingSignalSent(target, rating, who));
-            
+
             Ok(())
         }
 
         /// Updates an existing rating signal.
         #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
-        pub fn update_rating_signal(origin: OriginFor<T>, target: Vec<u8>, new_rating: u8) -> DispatchResult {
+        pub fn update_rating_signal(
+            origin: OriginFor<T>,
+            target: Vec<u8>,
+            new_rating: u8,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
@@ -85,7 +100,7 @@ pub mod pallet {
 
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
             Self::deposit_event(Event::RatingSignalRevoked(target, who));
-            
+
             Ok(())
         }
 

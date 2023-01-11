@@ -4,7 +4,9 @@ use super::*;
 
 #[allow(unused)]
 use crate::Pallet as Signal;
-use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller, account as benchmark_account};
+use frame_benchmarking::{
+    account as benchmark_account, benchmarks, impl_benchmark_test_suite, whitelisted_caller,
+};
 use frame_system::RawOrigin;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
