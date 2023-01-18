@@ -124,9 +124,9 @@ pub fn local_testnet_config() -> ChainSpec {
 
     ChainSpec::from_genesis(
         // Name
-        "Local Testnet",
+        "Fennel Local",
         // ID
-        "local_testnet",
+        "fennel-local",
         ChainType::Local,
         move || {
             testnet_genesis(
