@@ -1,3 +1,2 @@
-cargo build
-cargo doc
-cargo test
+#!/bin/bash
+cargo run --release -- --dev --tmp
