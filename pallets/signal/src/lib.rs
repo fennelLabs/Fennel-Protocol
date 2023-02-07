@@ -45,9 +45,24 @@ pub mod pallet {
         ValueQuery,
     >;
 
+    #[pallet::storage]
+    #[pallet::unbounded]
+    #[pallet::getter(fn signal_paramter_list)]
+    /// Maps identity numbers to a signal transaction hash and a rating number.
+    pub type SignalParameterList<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat,
+        T::AccountId,
+        Blake2_128Concat,
+        Vec<u8>,
+        u8,
+        ValueQuery,
+    >;
+
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
+        SignalParameterSet(Vec<u8>, u8, T::AccountId),
         SignalSent(Vec<u8>, T::AccountId),
         RatingSignalSent(Vec<u8>, u8, T::AccountId),
         RatingSignalUpdated(Vec<u8>, u8, T::AccountId),
@@ -63,6 +78,21 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
+        /// Defines coefficients that participants should use to weight rating functions.
+        #[pallet::weight(<T as Config>::WeightInfo::set_signal_parameter())]
+        pub fn set_signal_parameter(
+            origin: OriginFor<T>,
+            name: Vec<u8>,
+            value: u8,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <SignalParameterList<T>>::insert(who.clone(), name.clone(), value);
+            Self::deposit_event(Event::SignalParameterSet(name, value, who));
+
+            Ok(())
+        }
+
         /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating number.
         #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
         pub fn send_rating_signal(

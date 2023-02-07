@@ -34,6 +34,7 @@ use frame_support::{traits::Get, weights::{Weight, constants::RocksDbWeight}};
 use core::marker::PhantomData;
 
 pub trait WeightInfo {
+    fn set_signal_parameter() -> Weight;
     fn send_rating_signal() -> Weight;
     fn send_signal() -> Weight;
     fn send_service_signal() -> Weight;
@@ -44,6 +45,10 @@ pub trait WeightInfo {
 /// Weight functions for pallet_trust.
 pub struct SubstrateWeights<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
+    fn set_signal_parameter() -> Weight {
+        (7_000_000 as Weight)
+    }
+
     fn send_rating_signal() -> Weight {
         (7_000_000 as Weight)
     }
@@ -68,6 +73,10 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 }
 
 impl WeightInfo for () {
+    fn set_signal_parameter() -> Weight {
+        (7_000_000 as Weight)
+    }
+
     fn send_rating_signal() -> Weight {
         (7_000_000 as Weight)
     }
