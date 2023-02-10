@@ -1,5 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/rust:0-1
-
+FROM rust:1.64 as base
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update -y && \
     ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
@@ -13,5 +12,29 @@ RUN rustup default nightly && \
     rustup update nightly && \
     rustup target add wasm32-unknown-unknown --toolchain nightly
 
-COPY . /app
+FROM base as planner
+WORKDIR app
+RUN cargo install cargo-chef
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
+
+FROM base as cacher
+WORKDIR app
+RUN cargo install cargo-chef
+COPY --from=planner /app/recipe.json recipe.json
+RUN cargo chef cook --release --recipe-path recipe.json
+
+FROM base as builder
 WORKDIR /app
+COPY . .
+COPY --from=cacher /app/target target
+RUN cargo build --release
+
+CMD cargo run --release -- \
+    --dev \
+    --tmp \
+    --unsafe-ws-external \
+    --rpc-external \
+    --prometheus-external \
+    --rpc-methods unsafe \
+    --rpc-cors all
