@@ -1,7 +1,11 @@
 with import <nixpkgs> {};
 let
-  pkgs = import <nixpkgs> { overlays = [ (import <rust-overlay>) ]; };
-  myrust = (pkgs.rust-bin.nightly."2023-01-31".default.override {
+  rustOverlay = 
+    import (builtins.fetchTarball {
+      url = "https://github.com/oxalica/rust-overlay/archive/master.tar.gz";
+      });
+  pkgs = import <nixpkgs> { overlays = [ rustOverlay ]; };
+  myrust = (pkgs.rust-bin.nightly."2023-02-10".default.override {
     extensions = [ "rust-src" "rust-analysis" "rust-std" "clippy-preview" "rustfmt-preview" ];
     targets = [ "wasm32-unknown-unknown" ];
   });

@@ -42,25 +42,21 @@ pub struct SubstrateWeights<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
 	fn announce_key() -> Weight {
-		(19_171_000 as Weight)
-			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+		Weight::from_ref_time(0)
 	}
 	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
 	fn revoke_key() -> Weight {
-		(22_594_000 as Weight)
-			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+		Weight::from_ref_time(0)
 	}
 }
 
 impl WeightInfo for () {
 	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
 	fn announce_key() -> Weight {
-		(19_171_000 as Weight)
-			.saturating_add(RocksDbWeight::get().writes(1 as Weight))
+		Weight::from_ref_time(0)
 	}
 	// Storage: KeystoreModule IssuedKeys (r:0 w:1)
 	fn revoke_key() -> Weight {
-		(22_594_000 as Weight)
-			.saturating_add(RocksDbWeight::get().writes(1 as Weight))
+		Weight::from_ref_time(0)
 	}
 }

@@ -44,11 +44,11 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn send_signal() -> Weight {
-		(7_000_000 as Weight)
+		Weight::from_ref_time(0)
 	}
 
     fn send_service_signal() -> Weight {
-		(7_000_000 as Weight)
+		Weight::from_ref_time(0)
     }
 }
 
@@ -56,10 +56,10 @@ impl WeightInfo for () {
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn send_signal() -> Weight {
-		(7_000_000 as Weight)
+		Weight::from_ref_time(0)
 	}
 
     fn send_service_signal() -> Weight {
-		(7_000_000 as Weight)
+		Weight::from_ref_time(0)
     }
 }
