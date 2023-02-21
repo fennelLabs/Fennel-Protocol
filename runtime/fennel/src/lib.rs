@@ -509,10 +509,10 @@ construct_runtime!(
         DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event<T>} = 33,
 
         // Fennel
-        TrustModule: pallet_trust::{Pallet, Call, Storage, Event<T>} = 34,
-        KeystoreModule: pallet_keystore::{Pallet, Call, Storage, Event<T>} = 35,
-        SignalModule: pallet_signal::{Pallet, Call, Storage, Event<T>} = 36,
-        IdentityModule: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>} = 37,
+        Trust: pallet_trust::{Pallet, Call, Storage, Event<T>} = 34,
+        Keystore: pallet_keystore::{Pallet, Call, Storage, Event<T>} = 35,
+        Signal: pallet_signal::{Pallet, Call, Storage, Event<T>} = 36,
+        Identity: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>} = 37,
 
     }
 );
@@ -524,12 +524,17 @@ extern crate frame_benchmarking;
 #[cfg(feature = "runtime-benchmarks")]
 mod benches {
     define_benchmarks!(
+        [frame_benchmarking, BaselineBench::<Runtime>]
         [frame_system, SystemBench::<Runtime>]
         [pallet_balances, Balances]
         [pallet_session, SessionBench::<Runtime>]
         [pallet_timestamp, Timestamp]
         [pallet_collator_selection, CollatorSelection]
         [cumulus_pallet_xcmp_queue, XcmpQueue]
+        [pallet_trust, Trust]
+        [pallet_keystore, Keystore]
+        [pallet_signal, Signal]
+        [pallet_fennel_identity, Identity]
     );
 }
 
@@ -676,10 +681,11 @@ impl_runtime_apis! {
             Vec<frame_benchmarking::BenchmarkList>,
             Vec<frame_support::traits::StorageInfo>,
         ) {
-            use frame_benchmarking::{Benchmarking, BenchmarkList};
+            use frame_benchmarking::{baseline, Benchmarking, BenchmarkList};
             use frame_support::traits::StorageInfoTrait;
             use frame_system_benchmarking::Pallet as SystemBench;
             use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
+            use baseline::Pallet as BaselineBench;
 
             let mut list = Vec::<BenchmarkList>::new();
             list_benchmarks!(list, extra);
@@ -691,7 +697,9 @@ impl_runtime_apis! {
         fn dispatch_benchmark(
             config: frame_benchmarking::BenchmarkConfig
         ) -> Result<Vec<frame_benchmarking::BenchmarkBatch>, sp_runtime::RuntimeString> {
-            use frame_benchmarking::{Benchmarking, BenchmarkBatch, TrackedStorageKey};
+            use frame_benchmarking::{baseline, Benchmarking, BenchmarkBatch, TrackedStorageKey};
+            use baseline::Pallet as BaselineBench;
+            impl baseline::Config for Runtime {}
 
             use frame_system_benchmarking::Pallet as SystemBench;
             impl frame_system_benchmarking::Config for Runtime {}
