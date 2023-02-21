@@ -127,6 +127,14 @@ std = [
 	"xcm-builder/std",
 	"xcm-executor/std",
 	"xcm/std",
+    "cumulus-pallet-session-benchmarking/std",
+    "frame-benchmarking/std",
+    "frame-system-benchmarking/std",
+    "frame-try-runtime/std",
+    "pallet-fennel-identity/std",
+    "pallet-keystore/std",
+    "pallet-signal/std",
+    "pallet-trust/std"
 ]
 
 runtime-benchmarks = [
@@ -143,9 +151,40 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"cumulus-pallet-session-benchmarking/runtime-benchmarks",
 	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+    "cumulus-pallet-parachain-system/runtime-benchmarks",
+    "pallet-fennel-identity/runtime-benchmarks",
+    "pallet-keystore/runtime-benchmarks",
+    "pallet-signal/runtime-benchmarks",
+    "pallet-trust/runtime-benchmarks",
+    "polkadot-parachain/runtime-benchmarks",
+    "polkadot-runtime-common/runtime-benchmarks",
+    "xcm-executor/runtime-benchmarks",
 ]
 
 try-runtime = [
 	"frame-executive/try-runtime",
 	"frame-try-runtime",
+    "cumulus-pallet-aura-ext/try-runtime",
+    "cumulus-pallet-dmp-queue/try-runtime",
+    "cumulus-pallet-parachain-system/try-runtime",
+    "cumulus-pallet-xcm/try-runtime",
+    "cumulus-pallet-xcmp-queue/try-runtime",
+    "frame-support/try-runtime",
+    "frame-system/try-runtime",
+    "pallet-aura/try-runtime",
+    "pallet-authorship/try-runtime",
+    "pallet-balances/try-runtime",
+    "pallet-collator-selection/try-runtime",
+    "pallet-fennel-identity/try-runtime",
+    "pallet-keystore/try-runtime",
+    "pallet-session/try-runtime",
+    "pallet-signal/try-runtime",
+    "pallet-sudo/try-runtime",
+    "pallet-timestamp/try-runtime",
+    "pallet-transaction-payment/try-runtime",
+    "pallet-trust/try-runtime",
+    "pallet-xcm/try-runtime",
+    "parachain-info/try-runtime",
+    "polkadot-runtime-common/try-runtime",
+    "sp-runtime/try-runtime"
 ]

@@ -23,7 +23,7 @@ pub mod constants {
 
     parameter_types! {
         /// Importing a block with 0 Extrinsics.
-        pub const BlockExecutionWeight: Weight = 5_000_000;
+        pub const BlockExecutionWeight: Weight = Weight::from_ref_time(5_000_000_u64);
     }
 
     #[cfg(test)]

@@ -1,6 +1,6 @@
 use super::{
-    AccountId, Balances, RuntimeCall, RuntimeEvent, RuntimeOrigin, ParachainInfo, ParachainSystem, PolkadotXcm, Runtime,
-    WeightToFee, XcmpQueue,
+    AccountId, Balances, ParachainInfo, ParachainSystem, PolkadotXcm, Runtime, RuntimeCall,
+    RuntimeEvent, RuntimeOrigin, WeightToFee, XcmpQueue,
 };
 use core::marker::PhantomData;
 use frame_support::{
@@ -77,7 +77,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 
 parameter_types! {
     // One XCM operation is 1_000_000_000 weight - almost certainly a conservative estimate.
-    pub UnitWeightCost: Weight = 1_000_000_000;
+    pub UnitWeightCost: u64= 1_000_000_000;
     pub const MaxInstructions: u32 = 100;
 }
 
@@ -104,8 +104,8 @@ where
     fn should_execute<RuntimeCall>(
         origin: &MultiLocation,
         message: &mut Xcm<RuntimeCall>,
-        max_weight: Weight,
-        weight_credit: &mut Weight,
+        max_weight: u64,
+        weight_credit: &mut u64,
     ) -> Result<(), ()> {
         Deny::should_execute(origin, message, max_weight, weight_credit)?;
         Allow::should_execute(origin, message, max_weight, weight_credit)
@@ -118,8 +118,8 @@ impl ShouldExecute for DenyReserveTransferToRelayChain {
     fn should_execute<RuntimeCall>(
         origin: &MultiLocation,
         message: &mut Xcm<RuntimeCall>,
-        _max_weight: Weight,
-        _weight_credit: &mut Weight,
+        _max_weight: u64,
+        _weight_credit: &mut u64,
     ) -> Result<(), ()> {
         if message.0.iter().any(|inst| {
             matches!(

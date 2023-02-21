@@ -23,7 +23,7 @@ pub mod constants {
 
     parameter_types! {
         /// Executing a NO-OP `System::remarks` Extrinsic.
-        pub const ExtrinsicBaseWeight: Weight = 125_000;
+        pub const ExtrinsicBaseWeight: Weight = Weight::from_ref_time(125_000_u64);
     }
 
     #[cfg(test)]
