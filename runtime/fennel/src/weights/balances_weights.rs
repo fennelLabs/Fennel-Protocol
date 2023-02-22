@@ -44,36 +44,36 @@ pub struct SubstrateWeight<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	// Storage: System Account (r:1 w:1)
 	fn transfer() -> Weight {
-		// Minimum execution time: 41_000 nanoseconds.
-		Weight::from_ref_time(42_000_000)
+		// Minimum execution time: 42_000 nanoseconds.
+		Weight::from_ref_time(43_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
 	fn transfer_keep_alive() -> Weight {
-		// Minimum execution time: 30_000 nanoseconds.
-		Weight::from_ref_time(31_000_000)
+		// Minimum execution time: 31_000 nanoseconds.
+		Weight::from_ref_time(32_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
 	fn set_balance_creating() -> Weight {
 		// Minimum execution time: 21_000 nanoseconds.
-		Weight::from_ref_time(22_000_000)
+		Weight::from_ref_time(21_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
 	fn set_balance_killing() -> Weight {
-		// Minimum execution time: 23_000 nanoseconds.
+		// Minimum execution time: 24_000 nanoseconds.
 		Weight::from_ref_time(24_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:2 w:2)
 	fn force_transfer() -> Weight {
-		// Minimum execution time: 42_000 nanoseconds.
-		Weight::from_ref_time(43_000_000)
+		// Minimum execution time: 41_000 nanoseconds.
+		Weight::from_ref_time(42_000_000)
 			.saturating_add(T::DbWeight::get().reads(2))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
@@ -87,7 +87,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	// Storage: System Account (r:1 w:1)
 	fn force_unreserve() -> Weight {
 		// Minimum execution time: 19_000 nanoseconds.
-		Weight::from_ref_time(20_000_000)
+		Weight::from_ref_time(19_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
@@ -97,36 +97,36 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 impl WeightInfo for () {
 	// Storage: System Account (r:1 w:1)
 	fn transfer() -> Weight {
-		// Minimum execution time: 41_000 nanoseconds.
-		Weight::from_ref_time(42_000_000)
+		// Minimum execution time: 42_000 nanoseconds.
+		Weight::from_ref_time(43_000_000)
 			.saturating_add(RocksDbWeight::get().reads(1))
 			.saturating_add(RocksDbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
 	fn transfer_keep_alive() -> Weight {
-		// Minimum execution time: 30_000 nanoseconds.
-		Weight::from_ref_time(31_000_000)
+		// Minimum execution time: 31_000 nanoseconds.
+		Weight::from_ref_time(32_000_000)
 			.saturating_add(RocksDbWeight::get().reads(1))
 			.saturating_add(RocksDbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
 	fn set_balance_creating() -> Weight {
 		// Minimum execution time: 21_000 nanoseconds.
-		Weight::from_ref_time(22_000_000)
+		Weight::from_ref_time(21_000_000)
 			.saturating_add(RocksDbWeight::get().reads(1))
 			.saturating_add(RocksDbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
 	fn set_balance_killing() -> Weight {
-		// Minimum execution time: 23_000 nanoseconds.
+		// Minimum execution time: 24_000 nanoseconds.
 		Weight::from_ref_time(24_000_000)
 			.saturating_add(RocksDbWeight::get().reads(1))
 			.saturating_add(RocksDbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:2 w:2)
 	fn force_transfer() -> Weight {
-		// Minimum execution time: 42_000 nanoseconds.
-		Weight::from_ref_time(43_000_000)
+		// Minimum execution time: 41_000 nanoseconds.
+		Weight::from_ref_time(42_000_000)
 			.saturating_add(RocksDbWeight::get().reads(2))
 			.saturating_add(RocksDbWeight::get().writes(2))
 	}
@@ -140,7 +140,7 @@ impl WeightInfo for () {
 	// Storage: System Account (r:1 w:1)
 	fn force_unreserve() -> Weight {
 		// Minimum execution time: 19_000 nanoseconds.
-		Weight::from_ref_time(20_000_000)
+		Weight::from_ref_time(19_000_000)
 			.saturating_add(RocksDbWeight::get().reads(1))
 			.saturating_add(RocksDbWeight::get().writes(1))
 	}
