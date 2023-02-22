@@ -22,8 +22,19 @@
 # - Pallet benchmarking to update the pallet weights
 # - Machine benchmarking
 
-# THIS FILE WAS TAKEN FROM THE ASTAR PROJECT <3
+# taken from astar project <3 
 # https://github.com/AstarNetwork/Astar/blob/master/scripts/run_benchmarks.sh
+
+# FLAGS:
+# -b: skip build
+# -c: chain to benchmark ONE OF: "fennel-local"
+# -f: fail on error
+# -o: output path
+# -p: target pallet
+# -v: echo all executed commands
+
+skip_build=false
+target_pallets="all"
 
 while getopts 'bc:fo:p:v' flag; do
   case "${flag}" in
@@ -77,8 +88,9 @@ then
   CARGO_PROFILE_RELEASE_LTO=true RUSTFLAGS="-C codegen-units=1" cargo build --release --verbose --features=runtime-benchmarks
 fi
 
+PROJECT_ROOT_DIR=$(dirname $(cargo locate-project --workspace | jq --raw-output '.root'))
 # The executable to use.
-FENNEL_COLLATOR=./target/release/fennel-node
+FENNEL_COLLATOR=$PROJECT_ROOT_DIR/target/release/fennel-node
 
 # Manually exclude some pallets.
 EXCLUDED_PALLETS=(
@@ -126,7 +138,7 @@ for PALLET in "${PALLETS[@]}"; do
     --wasm-execution=compiled \
     --heap-pages=4096 \
     --output="$WEIGHT_FILE" \
-    --template=./scripts/templates/weight-template.hbs 2>&1
+    --template=$PROJECT_ROOT_DIR/scripts/templates/weight-template.hbs 2>&1
   )
   if [ $? -ne 0 ]; then
     echo "$OUTPUT" >> "$ERR_FILE"
