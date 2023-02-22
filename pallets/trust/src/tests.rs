@@ -2,6 +2,17 @@ use crate::mock::*;
 use frame_support::assert_ok;
 
 #[test]
+fn test_set_trust_parameter() {
+    new_test_ext().execute_with(|| {
+        assert_ok!(TrustModule::set_trust_parameter(
+            Origin::signed(1),
+            "TEST".as_bytes().to_vec(),
+            0
+        ));
+    });
+}
+
+#[test]
 fn issue_trust() {
     new_test_ext().execute_with(|| {
         assert_ok!(TrustModule::issue_trust(Origin::signed(1), 1));

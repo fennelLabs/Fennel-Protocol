@@ -34,6 +34,7 @@ use frame_support::{traits::Get, weights::{Weight, constants::RocksDbWeight}};
 use core::marker::PhantomData;
 
 pub trait WeightInfo {
+    fn set_trust_parameter() -> Weight;
     fn issue_trust() -> Weight;
     fn revoke_trust() -> Weight;
     fn remove_trust() -> Weight;
@@ -45,6 +46,10 @@ pub trait WeightInfo {
 /// Weight functions for pallet_trust.
 pub struct SubstrateWeights<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
+    fn set_trust_parameter() -> Weight {
+        (7_000_000 as Weight)
+    }
+
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn issue_trust() -> Weight {
@@ -84,6 +89,10 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 }
 
 impl WeightInfo for () {
+    fn set_trust_parameter() -> Weight {
+        (7_000_000 as Weight)
+    }
+
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn issue_trust() -> Weight {
