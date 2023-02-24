@@ -68,7 +68,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::unbounded]
     #[pallet::getter(fn trust_paramter_list)]
-    /// Maps identity numbers to a trust transaction hash and a rating number.
+    /// An account and a parameter string to an integer value.
     pub type TrustParameterList<T: Config> = StorageDoubleMap<
         _,
         Blake2_128Concat,
