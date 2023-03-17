@@ -40,10 +40,10 @@ use pallet_transaction_payment::CurrencyAdapter;
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
+pub use pallet_certificate;
 pub use pallet_fennel_identity;
 pub use pallet_keystore;
 pub use pallet_signal;
-/// Import the template pallet.
 pub use pallet_trust;
 
 /// An index to a block.
@@ -299,6 +299,11 @@ impl pallet_fennel_identity::Config for Runtime {
     type WeightInfo = pallet_fennel_identity::weights::SubstrateWeights<Runtime>;
 }
 
+impl pallet_certificate::Config for Runtime {
+    type Event = Event;
+    type WeightInfo = pallet_certificate::weights::SubstrateWeights<Runtime>;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
     pub enum Runtime where
@@ -317,7 +322,8 @@ construct_runtime!(
         TrustModule: pallet_trust::{Pallet, Call, Storage, Event<T>},
         KeystoreModule: pallet_keystore::{Pallet, Call, Storage, Event<T>},
         SignalModule: pallet_signal::{Pallet, Call, Storage, Event<T>},
-        IdentityModule: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>}
+        IdentityModule: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>},
+        CertificateModule: pallet_certificate::{Pallet, Call, Storage, Event<T>}
     }
 );
 
@@ -498,6 +504,7 @@ impl_runtime_apis! {
             list_benchmark!(list, extra, pallet_keystore, KeystoreModule);
             list_benchmark!(list, extra, pallet_fennel_identity, IdentityModule);
             list_benchmark!(list, extra, pallet_signal, SignalModule);
+            list_benchmark!(list, extra, pallet_certificate, CertificateModule);
 
             let storage_info = AllPalletsWithSystem::storage_info();
 
@@ -535,6 +542,7 @@ impl_runtime_apis! {
             add_benchmark!(params, batches, pallet_keystore, KeystoreModule);
             add_benchmark!(params, batches, pallet_fennel_identity, IdentityModule);
             add_benchmark!(params, batches, pallet_signal, SignalModule);
+            add_benchmark!(params, batches, pallet_certificate, CertificateModule);
 
             if batches.is_empty() { return Err("Benchmark not found for this pallet.".into()) }
             Ok(batches)

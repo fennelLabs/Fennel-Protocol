@@ -20,6 +20,7 @@ pallet-trust = { default-features = false, path = '../pallets/trust', version = 
 pallet-keystore = { default-features = false, path = '../pallets/keystore', version = '2.0.0' }
 pallet-signal = { default-features = false, path = '../pallets/signal', version = '2.0.0' }
 pallet-fennel-identity = { default-features = false, path = '../pallets/identity', version = '3.0.0-monthly-2022-02' }
+pallet-certificate = { default-features = false, path = '../pallets/certificate', version = '2.0.0' }
 
 # FRAME
 frame-benchmarking = { default-features = false,  git = 'https://github.com/paritytech/substrate.git', optional = true, tag = "monthly-2022-02" }
@@ -69,6 +70,7 @@ runtime-benchmarks = [
     'pallet-keystore/runtime-benchmarks',
     'pallet-trust/runtime-benchmarks',
     'pallet-signal/runtime-benchmarks',
+    'pallet-certificate/runtime-benchmarks',
     'sp-runtime/runtime-benchmarks',
 ]
 std = [
@@ -85,6 +87,7 @@ std = [
     'pallet-sudo/std',
     'pallet-keystore/std',
     'pallet-trust/std',
+    'pallet-certificate/std',
     'pallet-timestamp/std',
     'pallet-signal/std',
     'pallet-transaction-payment-rpc-runtime-api/std',

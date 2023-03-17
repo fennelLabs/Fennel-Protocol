@@ -11,3 +11,5 @@ echo "signal"
 ./target/release/node-fennel-protocol benchmark --chain dev --execution wasm --wasm-execution compiled --pallet pallet_signal --extrinsic '*' --steps 20 --repeat 100 --raw --output ./
 echo "keystore"
 ./target/release/node-fennel-protocol benchmark --chain dev --execution wasm --wasm-execution compiled --pallet pallet_keystore --extrinsic '*' --steps 20 --repeat 100 --raw --output ./
+echo "certificate"
+./target/release/node-fennel-protocol benchmark --chain dev --execution wasm --wasm-execution compiled --pallet pallet_certificate --extrinsic '*' --steps 20 --repeat 100 --raw --output ./

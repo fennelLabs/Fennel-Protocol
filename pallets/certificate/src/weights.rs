@@ -34,59 +34,42 @@ use frame_support::{traits::Get, weights::{Weight, constants::RocksDbWeight}};
 use core::marker::PhantomData;
 
 pub trait WeightInfo {
-    fn send_rating_signal() -> Weight;
-    fn send_signal() -> Weight;
-    fn send_service_signal() -> Weight;
-    fn update_rating_signal() -> Weight;
-    fn revoke_rating_signal() -> Weight;
+    fn send_certificate() -> Weight;
+    fn revoke_certificate() -> Weight;
 }
 
 /// Weight functions for pallet_trust.
 pub struct SubstrateWeights<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
-    fn send_rating_signal() -> Weight {
-        (7_000_000 as Weight)
-    }
-
-    fn update_rating_signal() -> Weight {
-        (7_000_000 as Weight)
-    }
-
-    fn revoke_rating_signal() -> Weight {
-        (7_000_000 as Weight)
-    }
-
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
-	fn send_signal() -> Weight {
-		(7_000_000 as Weight)
+	fn send_certificate() -> Weight {
+		(11_000_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(1 as Weight))
 	}
 
-    fn send_service_signal() -> Weight {
-		(7_000_000 as Weight)
+    fn revoke_certificate() -> Weight {
+        (12_000_000 as Weight)
+            // Standard Error: 6_000
+            .saturating_add(T::DbWeight::get().reads(1 as Weight))
+            .saturating_add(T::DbWeight::get().writes(1 as Weight))
     }
 }
 
 impl WeightInfo for () {
-    fn send_rating_signal() -> Weight {
-        (7_000_000 as Weight)
-    }
-
-    fn update_rating_signal() -> Weight {
-        (7_000_000 as Weight)
-    }
-
-    fn revoke_rating_signal() -> Weight {
-        (7_000_000 as Weight)
-    }
-
 	// Storage: TrustModule TrustIssuance (r:1 w:1)
 	// Storage: TrustModule CurrentIssued (r:1 w:1)
-	fn send_signal() -> Weight {
-		(7_000_000 as Weight)
+	fn send_certificate() -> Weight {
+		(11_000_000 as Weight)
+			.saturating_add(RocksDbWeight::get().reads(1 as Weight))
+			.saturating_add(RocksDbWeight::get().writes(1 as Weight))
 	}
 
-    fn send_service_signal() -> Weight {
-		(7_000_000 as Weight)
+    fn revoke_certificate() -> Weight {
+        (12_000_000 as Weight)
+            // Standard Error: 6_000
+            .saturating_add(RocksDbWeight::get().reads(1 as Weight))
+            .saturating_add(RocksDbWeight::get().writes(1 as Weight))
     }
 }
