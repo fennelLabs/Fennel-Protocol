@@ -63,7 +63,8 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating number.
+        /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating
+        /// number.
         #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
