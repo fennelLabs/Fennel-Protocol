@@ -79,6 +79,20 @@ pub mod pallet {
             Ok(())
         }
 
+        #[pallet::weight(<T as Config>::WeightInfo::send_whiteflag_rating_signal())]
+        pub fn send_whiteflag_rating_signal(
+            origin: OriginFor<T>,
+            target: Vec<u8>,
+            rating: u8,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
+            Self::deposit_event(Event::RatingSignalSent(target, rating, who));
+
+            Ok(())
+        }
+
         /// Updates an existing rating signal.
         #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
         pub fn update_rating_signal(

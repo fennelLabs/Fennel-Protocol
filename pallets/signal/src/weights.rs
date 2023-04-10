@@ -35,6 +35,7 @@ use core::marker::PhantomData;
 
 pub trait WeightInfo {
     fn send_rating_signal() -> Weight;
+    fn send_whiteflag_rating_signal() -> Weight;
     fn send_signal() -> Weight;
     fn send_service_signal() -> Weight;
     fn update_rating_signal() -> Weight;
@@ -45,6 +46,10 @@ pub trait WeightInfo {
 pub struct SubstrateWeights<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
     fn send_rating_signal() -> Weight {
+        (7_000_000 as Weight)
+    }
+
+    fn send_whiteflag_rating_signal() -> Weight {
         (7_000_000 as Weight)
     }
 
@@ -69,6 +74,10 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 
 impl WeightInfo for () {
     fn send_rating_signal() -> Weight {
+        (7_000_000 as Weight)
+    }
+
+    fn send_whiteflag_rating_signal() -> Weight {
         (7_000_000 as Weight)
     }
 

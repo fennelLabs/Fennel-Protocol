@@ -24,6 +24,11 @@ benchmarks! {
         let caller: T::AccountId = whitelisted_caller();
     }: _(RawOrigin::Signed(caller), target, 0)
 
+    send_whiteflag_rating_signal {
+        let target = "TEST".as_bytes().to_vec();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target, 0)
+
     update_rating_signal {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
