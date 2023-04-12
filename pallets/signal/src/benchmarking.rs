@@ -50,6 +50,12 @@ benchmarks! {
         let caller: T::AccountId = whitelisted_caller();
     }: _(RawOrigin::Signed(caller), target)
 
+    revoke_whiteflag_rating_signal {
+        let target = "TEST".as_bytes().to_vec();
+        let caller = get_origin::<T>("Anakin");
+        Signal::<T>::send_whiteflag_rating_signal(caller.clone().into(), target.clone(), 0)?;
+    }: _(caller, target)
+
     send_service_signal {
         let service = "TEST".as_bytes().to_vec();
         let url = "TEST".as_bytes().to_vec();

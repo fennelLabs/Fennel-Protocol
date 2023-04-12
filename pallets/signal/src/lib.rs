@@ -54,6 +54,7 @@ pub mod pallet {
         RatingSignalUpdated(Vec<u8>, u8, T::AccountId),
         WhiteflagRatingSignalUpdated(Vec<u8>, u8, T::AccountId),
         RatingSignalRevoked(Vec<u8>, T::AccountId),
+        WhiteflagRatingSignalRevoked(Vec<u8>, T::AccountId),
         ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
     }
 
@@ -131,6 +132,16 @@ pub mod pallet {
 
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
             Self::deposit_event(Event::RatingSignalRevoked(target, who));
+
+            Ok(())
+        }
+
+        #[pallet::weight(<T as Config>::WeightInfo::revoke_whiteflag_rating_signal())]
+        pub fn revoke_whiteflag_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <RatingSignalList<T>>::remove(who.clone(), target.clone());
+            Self::deposit_event(Event::WhiteflagRatingSignalRevoked(target, who));
 
             Ok(())
         }
