@@ -1,3 +1,6 @@
+# SBP-M1 review: outdated README
+
+# SBP-M1 review: authors, description, homepage, license, repository, version not set properly...
 [package]
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 description = 'FRAME pallet template for defining custom runtime logic.'
@@ -13,6 +16,7 @@ version = '3.0.0-monthly-2022-02'
 [package.metadata.docs.rs]
 targets = ['x86_64-unknown-linux-gnu']
 
+# SBP-M1 review: use newer Substrate version, like v0.9.40
 [dependencies]
 scale-info = { version = "1.0.0", default-features = false, features = ["derive"] }
 codec = { default-features = false, features = ['derive', 'max-encoded-len'], package = 'parity-scale-codec', version = '2.3.1' }

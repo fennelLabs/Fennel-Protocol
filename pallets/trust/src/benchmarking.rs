@@ -7,6 +7,8 @@ use crate::Pallet as Trust;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller};
 use frame_system::RawOrigin;
 
+// SBP-M1 review: benchmarking does not cover multiple execution paths, e.g. `issue_trust`
+// SBP-M1 review: how about adding some checks to benchmarks?
 benchmarks! {
     issue_trust {
         let target: T::AccountId = whitelisted_caller();

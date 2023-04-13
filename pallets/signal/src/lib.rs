@@ -68,6 +68,7 @@ pub mod pallet {
         #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
+            // SBP-M1 review: use bounded vectors
             target: Vec<u8>,
             rating: u8,
         ) -> DispatchResult {
@@ -83,6 +84,7 @@ pub mod pallet {
         #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
         pub fn update_rating_signal(
             origin: OriginFor<T>,
+            // SBP-M1 review: use bounded vectors
             target: Vec<u8>,
             new_rating: u8,
         ) -> DispatchResult {
@@ -96,6 +98,7 @@ pub mod pallet {
 
         /// Puts out a signal cancelling a previous rating.
         #[pallet::weight(<T as Config>::WeightInfo::revoke_rating_signal())]
+        // SBP-M1 review: use bounded vector
         pub fn revoke_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -108,8 +111,10 @@ pub mod pallet {
         /// Creates an on-chain event with a signal payload defined as part of the transaction
         /// without relying on storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
+        // SBP-M1 review: use bounded vector
         pub fn send_signal(origin: OriginFor<T>, signal: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
+            // SBP-M1 review: why do you need extrinsic that does not apply any state changes?
             Self::deposit_event(Event::SignalSent(signal, who));
             Ok(())
         }
@@ -117,10 +122,12 @@ pub mod pallet {
         #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
         pub fn send_service_signal(
             origin: OriginFor<T>,
+            // SBP-M1 review: use bounded vectors
             service_identifier: Vec<u8>,
             url: Vec<u8>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
+            // SBP-M1 review: why do you need extrinsic that does not apply any state changes?
             Self::deposit_event(Event::ServiceSignalSent(service_identifier, url, who));
             Ok(())
         }

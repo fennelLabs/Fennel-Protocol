@@ -74,10 +74,12 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Creates an on-chain event with a Certificate payload defined as part of the transaction
         /// and commits the details to storage.
+        // SBP-M1 review: how mentioned details are sent and stored?
         #[pallet::weight(<T as Config>::WeightInfo::send_certificate())]
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: why do you always store 0 (magic value)?
             <CertificateList<T>>::insert(&who, recipient.clone(), 0);
 
             Self::deposit_event(Event::CertificateSent(recipient, who));
@@ -91,6 +93,8 @@ pub mod pallet {
         pub fn revoke_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: how about informing that the identity is not owned by origin 
+            // To tell the user that this action will not affect the state.
             <CertificateList<T>>::remove(&who, recipient.clone());
 
             Self::deposit_event(Event::CertificateRevoked(recipient, who));

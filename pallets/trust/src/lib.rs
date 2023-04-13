@@ -82,6 +82,10 @@ pub mod pallet {
         StorageOverflow,
     }
 
+    // SBP-M1 review: how about making these extrinsic more generic?
+    // Each action is either adding to storage or removing from storage
+    // The only thing that differs is storage
+    // Extrinsic look almost the same
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// Fully give `origin`'s trust to account `address`
@@ -89,6 +93,8 @@ pub mod pallet {
         pub fn issue_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: how about making extrinsic failing while it is already set?
+            // In that case system will not notice any action...
             if !<TrustIssuance<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentIssued<T>>::get();
                 let new_total: u32 = total.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
@@ -105,6 +111,8 @@ pub mod pallet {
         pub fn remove_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: how about making extrinsic failing while it is not set?
+            // In that case system will not notice any action...
             if <TrustIssuance<T>>::contains_key(&who, &address) {
                 let key = <CurrentIssued<T>>::get();
                 let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
@@ -121,6 +129,8 @@ pub mod pallet {
         pub fn request_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: how about making extrinsic failing while it is already set?
+            // In that case system will not notice any action...
             if !<TrustRequestList<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentRequests<T>>::get();
                 let new_total: u32 = total.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
@@ -137,6 +147,8 @@ pub mod pallet {
         pub fn cancel_trust_request(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: how about making extrinsic failing while it is not set?
+            // In that case system will not notice any action...
             if <TrustRequestList<T>>::contains_key(&who, &address) {
                 let key = <CurrentRequests<T>>::get();
                 let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
@@ -153,6 +165,8 @@ pub mod pallet {
         pub fn revoke_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: how about making extrinsic failing while it is already set?
+            // In that case system will not notice any action...
             if !<TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
                 let new_key: u32 = key.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
@@ -169,6 +183,8 @@ pub mod pallet {
         pub fn remove_revoked_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: how about making extrinsic failing while it is not set?
+            // In that case system will not notice any action...
             if <TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
                 let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;

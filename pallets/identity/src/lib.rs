@@ -36,6 +36,7 @@ pub mod pallet {
         0
     }
 
+    // SBP-M1 review: why do you need active/revoked identities or signals statistics?
     #[pallet::storage]
     #[pallet::getter(fn identity_number)]
     /// Tracks the number of identities currently active on the network.
@@ -114,6 +115,9 @@ pub mod pallet {
         /// Create a new identity owned by origin.
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
+
+            // SBP-M1 review: use `try_mutate`
+            // https://paritytech.github.io/substrate/master/frame_support/storage/trait.StorageValue.html#tymethod.try_mutate
             let current_id: u32 = <IdentityNumber<T>>::get();
             let new_id: u32 = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
 
@@ -134,6 +138,8 @@ pub mod pallet {
         pub fn revoke_identity(origin: OriginFor<T>, identity_id: u32) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // SBP-M1 review: use `try_mutate`
+            // https://paritytech.github.io/substrate/master/frame_support/storage/trait.StorageValue.html#tymethod.try_mutate
             let new_total = <RevokedIdentityNumber<T>>::get()
                 .checked_add(1)
                 .ok_or(Error::<T>::StorageOverflow)?;
@@ -154,6 +160,7 @@ pub mod pallet {
         pub fn add_or_update_identity_trait(
             origin: OriginFor<T>,
             identity_id: u32,
+            // SBP-M1 review: use bounded vectors
             key: Vec<u8>,
             value: Vec<u8>,
         ) -> DispatchResult {
@@ -179,6 +186,7 @@ pub mod pallet {
         pub fn remove_identity_trait(
             origin: OriginFor<T>,
             identity_id: u32,
+            // SBP-M1 review: use bounded vectors
             key: Vec<u8>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -199,6 +207,7 @@ pub mod pallet {
         pub fn sign_for_identity(
             origin: OriginFor<T>,
             identity_id: u32,
+            // SBP-M1 review: use bounded vectors
             content: Vec<u8>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -207,6 +216,9 @@ pub mod pallet {
                 Self::is_identity_owned_by_sender(&who, &identity_id),
                 Error::<T>::IdentityNotOwned
             );
+            
+            // SBP-M1 review: use `try_mutate`
+            // https://paritytech.github.io/substrate/master/frame_support/storage/trait.StorageValue.html#tymethod.try_mutate
             let signal_id: u32 = <SignalCount<T>>::get();
             let new_id: u32 = signal_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
             <SignatureSignal<T>>::insert(&identity_id, &signal_id, &content);

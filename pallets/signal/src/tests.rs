@@ -1,6 +1,8 @@
 use crate::mock::*;
 use frame_support::assert_ok;
 
+// SBP-M1 review: how about checks for events?
+
 #[test]
 fn test_send_rating_signal() {
     new_test_ext().execute_with(|| {

@@ -1,3 +1,4 @@
+# SBP-M1 review: package attributes not set properly
 [package]
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = '2018'
@@ -14,6 +15,8 @@ targets = ['x86_64-unknown-linux-gnu']
 [build-dependencies] 
 substrate-wasm-builder = { git = 'https://github.com/paritytech/substrate.git', tag = "monthly-2022-02" }
 
+
+# SBP-M1 review: use newer Substrate version, like v0.9.40
 [dependencies]
 # Fennel Pallets
 pallet-trust = { default-features = false, path = '../pallets/trust', version = '2.0.0' }

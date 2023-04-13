@@ -66,6 +66,7 @@ pub mod pallet {
         #[pallet::weight(T::WeightInfo::announce_key())]
         pub fn announce_key(
             origin: OriginFor<T>,
+            // SBP-M1 review: use bounded vectors
             fingerprint: Vec<u8>,
             location: Vec<u8>,
         ) -> DispatchResult {
@@ -80,6 +81,7 @@ pub mod pallet {
         /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
         /// and informing the network.
         #[pallet::weight(T::WeightInfo::revoke_key())]
+        // SBP-M1 review: use bounded vectors
         pub fn revoke_key(origin: OriginFor<T>, key_index: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -89,8 +91,12 @@ pub mod pallet {
             Ok(())
         }
 
+        // SBP-M1 review: misleading doc about the extrinsic
+        // Copy pasted from previous extrinsic...
         /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
         /// and informing the network.
+        // SBP-M1 review: wrong weight
+        // Copy pasted from previous extrinsic...
         #[pallet::weight(T::WeightInfo::revoke_key())]
         pub fn issue_encryption_key(origin: OriginFor<T>, key: [u8; 32]) -> DispatchResult {
             let who = ensure_signed(origin)?;

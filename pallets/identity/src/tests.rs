@@ -1,6 +1,8 @@
 use crate::{mock::*, Error};
 use frame_support::{assert_noop, assert_ok};
 
+// SBP-M1 review: missing checks for events...
+
 #[test]
 fn issue_identity() {
     new_test_ext().execute_with(|| {

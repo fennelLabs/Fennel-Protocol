@@ -20,6 +20,7 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
     RawOrigin::Signed(get_account::<T>(name))
 }
 
+// SBP-M1 review: I am not sure if 100 elements are enough for proper benchmarking...
 benchmarks! {
     create_identity {
         let s in 0 .. 100;
@@ -43,6 +44,7 @@ benchmarks! {
         assert_eq!(RevokedIdentityNumber::<T>::get(), identity_index + 1);
     }
 
+    // SBP-M1 review: it is recommended to have checks in benchmarks
     add_or_update_identity_trait {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");

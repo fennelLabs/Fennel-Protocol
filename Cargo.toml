@@ -1,6 +1,7 @@
 [profile.release]
 panic = 'unwind'
 
+# SBP-M1 review: you can use 'pallets/*'
 [workspace]
 members = [
     'node',
