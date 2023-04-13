@@ -1,6 +1,3 @@
-// SBP-M1 review: `pallet-template` redundant stuff
-//! Benchmarking setup for pallet-template
-
 use super::*;
 
 #[allow(unused)]
