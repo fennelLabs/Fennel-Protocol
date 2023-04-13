@@ -216,7 +216,7 @@ pub mod pallet {
                 Self::is_identity_owned_by_sender(&who, &identity_id),
                 Error::<T>::IdentityNotOwned
             );
-            
+
             // SBP-M1 review: use `try_mutate`
             // https://paritytech.github.io/substrate/master/frame_support/storage/trait.StorageValue.html#tymethod.try_mutate
             let signal_id: u32 = <SignalCount<T>>::get();

@@ -93,7 +93,7 @@ pub mod pallet {
         pub fn revoke_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            // SBP-M1 review: how about informing that the identity is not owned by origin 
+            // SBP-M1 review: how about informing that the identity is not owned by origin
             // To tell the user that this action will not affect the state.
             <CertificateList<T>>::remove(&who, recipient.clone());
 

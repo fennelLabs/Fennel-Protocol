@@ -21,7 +21,7 @@ pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
 
 // SBP-M1 review: I am not sure if 100 elements are enough to benchmark pallet properly\
 
-// SBP-M1 review: It is recommended to have checks for benchmarks 
+// SBP-M1 review: It is recommended to have checks for benchmarks
 benchmarks! {
     announce_key {
         let s in 0 .. 100;

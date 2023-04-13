@@ -16,7 +16,8 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
     RawOrigin::Signed(get_account::<T>(name))
 }
 
-// SBP-M1 review: poor benchmarking that does not cover more complicated scenarios with bigger state.
+// SBP-M1 review: poor benchmarking that does not cover more complicated scenarios with bigger
+// state.
 benchmarks! {
     send_certificate {
         let target: T::AccountId = whitelisted_caller();
