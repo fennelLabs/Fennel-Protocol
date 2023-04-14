@@ -45,6 +45,20 @@ pub mod pallet {
         ValueQuery,
     >;
 
+    #[pallet::storage]
+    #[pallet::unbounded]
+    #[pallet::getter(fn whiteflag_rating_signal_list)]
+    /// Maps identity numbers to a signal transaction hash and a rating number.
+    pub type WhiteflagRatingSignalList<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat,
+        T::AccountId,
+        Blake2_128Concat,
+        Vec<u8>,
+        u8,
+        ValueQuery,
+    >;
+
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
@@ -90,7 +104,7 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
+            <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             Self::deposit_event(Event::WhiteflagRatingSignalSent(target, rating, who));
 
             Ok(())
@@ -104,7 +118,7 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
+            <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
             Self::deposit_event(Event::WhiteflagRatingSignalUpdated(target, new_rating, who));
 
             Ok(())
@@ -140,7 +154,7 @@ pub mod pallet {
         pub fn revoke_whiteflag_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <RatingSignalList<T>>::remove(who.clone(), target.clone());
+            <WhiteflagRatingSignalList<T>>::remove(who.clone(), target.clone());
             Self::deposit_event(Event::WhiteflagRatingSignalRevoked(target, who));
 
             Ok(())
