@@ -30,9 +30,9 @@ use sp_std::marker::PhantomData;
 
 /// Weight functions needed for pallet_keystore.
 pub trait WeightInfo {
-	fn announce_key(s: u32, ) -> Weight;
-	fn revoke_key(s: u32, ) -> Weight;
-	fn issue_encryption_key(s: u32, ) -> Weight;
+	fn announce_key() -> Weight;
+	fn revoke_key() -> Weight;
+	fn issue_encryption_key() -> Weight;
 }
 
 /// Weights for pallet_keystore using the Substrate node and recommended hardware.
@@ -40,21 +40,21 @@ pub struct SubstrateWeight<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	// Storage: Keystore IssuedKeys (r:0 w:1)
 	/// The range of component `s` is `[0, 100]`.
-	fn announce_key(_s: u32, ) -> Weight {
+	fn announce_key() -> Weight {
 		// Minimum execution time: 13_000 nanoseconds.
 		Weight::from_ref_time(14_044_685)
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: Keystore IssuedKeys (r:0 w:1)
 	/// The range of component `s` is `[0, 100]`.
-	fn revoke_key(_s: u32, ) -> Weight {
+	fn revoke_key() -> Weight {
 		// Minimum execution time: 13_000 nanoseconds.
 		Weight::from_ref_time(13_778_741)
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: Keystore IssuedEncryptionKeys (r:0 w:1)
 	/// The range of component `s` is `[0, 100]`.
-	fn issue_encryption_key(_s: u32, ) -> Weight {
+	fn issue_encryption_key() -> Weight {
 		// Minimum execution time: 12_000 nanoseconds.
 		Weight::from_ref_time(13_025_278)
 			.saturating_add(T::DbWeight::get().writes(1))
@@ -65,21 +65,21 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 impl WeightInfo for () {
 	// Storage: Keystore IssuedKeys (r:0 w:1)
 	/// The range of component `s` is `[0, 100]`.
-	fn announce_key(_s: u32, ) -> Weight {
+	fn announce_key() -> Weight {
 		// Minimum execution time: 13_000 nanoseconds.
 		Weight::from_ref_time(14_044_685)
 			.saturating_add(RocksDbWeight::get().writes(1))
 	}
 	// Storage: Keystore IssuedKeys (r:0 w:1)
 	/// The range of component `s` is `[0, 100]`.
-	fn revoke_key(_s: u32, ) -> Weight {
+	fn revoke_key() -> Weight {
 		// Minimum execution time: 13_000 nanoseconds.
 		Weight::from_ref_time(13_778_741)
 			.saturating_add(RocksDbWeight::get().writes(1))
 	}
 	// Storage: Keystore IssuedEncryptionKeys (r:0 w:1)
 	/// The range of component `s` is `[0, 100]`.
-	fn issue_encryption_key(_s: u32, ) -> Weight {
+	fn issue_encryption_key() -> Weight {
 		// Minimum execution time: 12_000 nanoseconds.
 		Weight::from_ref_time(13_025_278)
 			.saturating_add(RocksDbWeight::get().writes(1))

@@ -24,23 +24,24 @@ benchmarks! {
     create_identity {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");
-        let identity_index: u32 = s as u32 % 5_u32;
+        let previous_identity_num = IdentityNumber::<T>::get();
     }: _(anakin.clone())
     verify {
-        assert_eq!(IdentityNumber::<T>::get(), identity_index + 1);
+        assert_eq!(IdentityNumber::<T>::get(), previous_identity_num + 1);
     }
 
     revoke_identity {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");
-        let identity_index: u32 = s as u32 % 5_u32;
-
         // create identity to be used for revoking
+        let identity_num: u32 = IdentityNumber::<T>::get().into();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-    }: _(anakin.clone(), identity_index.into())
+
+    }: _(anakin.clone(), identity_num)
     verify {
-        assert_eq!(RevokedIdentityNumber::<T>::get(), identity_index + 1);
+        // one revoked identity
+        assert_eq!(RevokedIdentityNumber::<T>::get(), 1);
     }
 
     add_or_update_identity_trait {
@@ -48,9 +49,10 @@ benchmarks! {
         let anakin = get_origin::<T>("Anakin");
         let name = from_str_to_vec("name".to_string());
         let value = from_str_to_vec("Skywalker".to_string());
-        let identity_index: u32 = s as u32 % 5_u32;
 
         // create identity to be used for placing traits
+
+        let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
     }: _(anakin.clone(), identity_index.into(), name, value)
@@ -61,8 +63,8 @@ benchmarks! {
         let anakin = get_origin::<T>("Anakin");
         let name = from_str_to_vec("name".to_string());
         let value = from_str_to_vec("Skywalker".to_string());
-        let identity_index: u32 = s as u32 % 5_u32;
 
+        let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
         Identity::<T>::add_or_update_identity_trait(anakin.clone().into(), identity_index.into(), name.clone(), value)?;
 
@@ -73,8 +75,8 @@ benchmarks! {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");
         let value = from_str_to_vec("I am your father.".to_string());
-        let identity_index: u32 = s as u32 % 5_u32;
 
+        let identity_index = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
     }: _(anakin.clone(), identity_index.into(), value.clone())

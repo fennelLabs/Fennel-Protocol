@@ -30,8 +30,11 @@ use frame_support::{
     construct_runtime, parameter_types,
     traits::Everything,
     weights::{
-        constants::WEIGHT_REF_TIME_PER_SECOND, ConstantMultiplier, DispatchClass, Weight,
-        WeightToFeeCoefficient, WeightToFeeCoefficients, WeightToFeePolynomial,
+        constants::{
+            BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_REF_TIME_PER_SECOND,
+        },
+        ConstantMultiplier, DispatchClass, Weight, WeightToFeeCoefficient, WeightToFeeCoefficients,
+        WeightToFeePolynomial,
     },
     PalletId,
 };
@@ -53,8 +56,6 @@ pub use pallet_trust;
 
 // Polkadot imports
 use polkadot_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
-
-use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 
 // XCM Imports
 use xcm::latest::prelude::BodyId;
@@ -316,7 +317,7 @@ impl pallet_timestamp::Config for Runtime {
     type Moment = u64;
     type OnTimestampSet = ();
     type MinimumPeriod = MinimumPeriod;
-    type WeightInfo = ();
+    type WeightInfo = weights::pallet_timestamp::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -344,7 +345,7 @@ impl pallet_balances::Config for Runtime {
     type DustRemoval = ();
     type ExistentialDeposit = ExistentialDeposit;
     type AccountStore = System;
-    type WeightInfo = pallet_balances::weights::SubstrateWeight<Runtime>;
+    type WeightInfo = weights::pallet_balances::WeightInfo<Runtime>;
     type MaxReserves = MaxReserves;
     type ReserveIdentifier = [u8; 8];
 }
@@ -458,22 +459,22 @@ impl pallet_collator_selection::Config for Runtime {
 
 impl pallet_keystore::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_keystore::weights::SubstrateWeights<Runtime>;
+    type WeightInfo = pallet_keystore::weights::SubstrateWeight<Runtime>;
 }
 
 impl pallet_trust::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_trust::weights::SubstrateWeights<Runtime>;
+    type WeightInfo = pallet_trust::weights::SubstrateWeight<Runtime>;
 }
 
 impl pallet_signal::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_signal::weights::SubstrateWeights<Runtime>;
+    type WeightInfo = pallet_signal::weights::SubstrateWeight<Runtime>;
 }
 
 impl pallet_fennel_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_fennel_identity::weights::SubstrateWeights<Runtime>;
+    type WeightInfo = pallet_fennel_identity::weights::SubstrateWeight<Runtime>;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.

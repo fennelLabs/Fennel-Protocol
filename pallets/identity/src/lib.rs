@@ -151,6 +151,7 @@ pub mod pallet {
 
             Ok(())
         }
+
         /// Add a new identity trait to identity_id with key/value.
         #[pallet::weight(T::WeightInfo::add_or_update_identity_trait())]
         #[pallet::call_index(2)]

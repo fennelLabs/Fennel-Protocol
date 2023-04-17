@@ -6,7 +6,6 @@ use core::marker::PhantomData;
 use frame_support::{
     log, match_types, parameter_types,
     traits::{Everything, Nothing},
-    weights::Weight,
 };
 use pallet_xcm::XcmPassthrough;
 use polkadot_parachain::primitives::Sibling;
