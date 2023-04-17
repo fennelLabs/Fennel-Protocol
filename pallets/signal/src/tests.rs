@@ -4,7 +4,7 @@ use frame_support::assert_ok;
 #[test]
 fn test_send_signal() {
     new_test_ext().execute_with(|| {
-        assert_ok!(SignalModule::send_signal(Origin::signed(1), "TEST".as_bytes().to_vec()));
+        assert_ok!(SignalModule::send_signal(RuntimeOrigin::signed(1), "TEST".as_bytes().to_vec()));
     });
 }
 
@@ -12,7 +12,7 @@ fn test_send_signal() {
 fn test_send_service_signal() {
     new_test_ext().execute_with(|| {
         assert_ok!(SignalModule::send_service_signal(
-            Origin::signed(1),
+            RuntimeOrigin::signed(1),
             "TEST".as_bytes().to_vec(),
             "TEST".as_bytes().to_vec()
         ));
