@@ -16,7 +16,7 @@ pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
-    use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
+    use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
 
     use crate::weights::WeightInfo;
@@ -65,9 +65,24 @@ pub mod pallet {
     pub type TrustRequestList<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, T::AccountId, u32>;
 
+    #[pallet::storage]
+    #[pallet::unbounded]
+    #[pallet::getter(fn trust_paramter_list)]
+    /// An account and a parameter string to an integer value.
+    pub type TrustParameterList<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat,
+        T::AccountId,
+        Blake2_128Concat,
+        Vec<u8>,
+        u8,
+        ValueQuery,
+    >;
+
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
+        TrustParameterSet(Vec<u8>, u8, T::AccountId),
         TrustIssued(T::AccountId, T::AccountId),
         TrustRevoked(T::AccountId, T::AccountId),
         TrustRequest(T::AccountId, T::AccountId),
@@ -84,6 +99,21 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
+        /// Defines coefficients that participants should use to weight rating functions.
+        #[pallet::weight(<T as Config>::WeightInfo::set_trust_parameter())]
+        pub fn set_trust_parameter(
+            origin: OriginFor<T>,
+            name: Vec<u8>,
+            value: u8,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <TrustParameterList<T>>::insert(who.clone(), name.clone(), value);
+            Self::deposit_event(Event::TrustParameterSet(name, value, who));
+
+            Ok(())
+        }
+
         /// Fully give `origin`'s trust to account `address`
         #[pallet::weight(<T as Config>::WeightInfo::issue_trust())]
         pub fn issue_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {

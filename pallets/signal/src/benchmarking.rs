@@ -19,6 +19,11 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
 }
 
 benchmarks! {
+    set_signal_parameter {
+        let target = "TEST".as_bytes().to_vec();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target, 0)
+
     send_rating_signal {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();

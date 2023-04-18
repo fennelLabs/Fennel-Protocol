@@ -1,0 +1,42 @@
+[package]
+authors = ['Fennel Labs <info@fennellabs.com>']
+description = 'Implements a lock feature on FNL.'
+edition = '2018'
+homepage = 'https://fennellabs.com'
+license = 'Unlicense'
+name = 'pallet-lockable'
+readme = 'README.md'
+repository = 'https://github.com/fennelLabs/fennel-protocol'
+version = '3.0.0'
+
+[package.metadata.docs.rs]
+targets = ['x86_64-unknown-linux-gnu']
+
+[dependencies]
+codec = { default-features = false, features = ['derive'], package = 'parity-scale-codec', version = '2.0.0' }
+frame-system = { default-features = false, version = '3.0.0' }
+frame-support = { default-features = false, version = '3.0.0' }
+frame-benchmarking = { default-features = false, optional = true, version = '3.1.0' }
+sp-std = { default-features = false, version = '3.0.0' }
+serde = { version = "1.0.119", optional = true }
+sp-runtime = { default-features = false, version = '3.0.0' }
+
+[dev-dependencies]
+sp-core = { default-features = false, version = '3.0.0' }
+sp-io = { default-features = false, version = '3.0.0' }
+
+[features]
+default = ['std']
+std = [
+	'codec/std',
+	'frame-support/std',
+	'frame-system/std',
+	'frame-benchmarking/std',
+	'sp-std/std',
+	'serde',
+]
+runtime-benchmarks = [
+	'frame-benchmarking',
+	'frame-support/runtime-benchmarks',
+	'frame-system/runtime-benchmarks',
+]
