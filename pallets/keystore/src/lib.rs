@@ -23,7 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
-        type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
     }
 
@@ -64,6 +64,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         #[pallet::weight(T::WeightInfo::announce_key())]
+        #[pallet::call_index(0)]
         pub fn announce_key(
             origin: OriginFor<T>,
             fingerprint: Vec<u8>,
@@ -80,6 +81,7 @@ pub mod pallet {
         /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
         /// and informing the network.
         #[pallet::weight(T::WeightInfo::revoke_key())]
+        #[pallet::call_index(1)]
         pub fn revoke_key(origin: OriginFor<T>, key_index: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -92,6 +94,7 @@ pub mod pallet {
         /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
         /// and informing the network.
         #[pallet::weight(T::WeightInfo::revoke_key())]
+        #[pallet::call_index(2)]
         pub fn issue_encryption_key(origin: OriginFor<T>, key: [u8; 32]) -> DispatchResult {
             let who = ensure_signed(origin)?;
 

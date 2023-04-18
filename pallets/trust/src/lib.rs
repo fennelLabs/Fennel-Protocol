@@ -23,7 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
-        type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
     }
 
@@ -86,6 +86,7 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Fully give `origin`'s trust to account `address`
         #[pallet::weight(<T as Config>::WeightInfo::issue_trust())]
+        #[pallet::call_index(0)]
         pub fn issue_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -102,6 +103,7 @@ pub mod pallet {
 
         /// Remove issued trust from an account `address`, making their trust status 'Unknown'
         #[pallet::weight(<T as Config>::WeightInfo::remove_trust())]
+        #[pallet::call_index(1)]
         pub fn remove_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -118,6 +120,7 @@ pub mod pallet {
 
         /// Place a request for `address` to issue explicit trust to the sender.
         #[pallet::weight(<T as Config>::WeightInfo::request_trust())]
+        #[pallet::call_index(2)]
         pub fn request_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -134,6 +137,7 @@ pub mod pallet {
 
         /// Rescind or cancel a trust request placed to `address`.
         #[pallet::weight(<T as Config>::WeightInfo::cancel_trust_request())]
+        #[pallet::call_index(3)]
         pub fn cancel_trust_request(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -150,6 +154,7 @@ pub mod pallet {
 
         /// Explcitly mark an account as untrusted
         #[pallet::weight(<T as Config>::WeightInfo::revoke_trust())]
+        #[pallet::call_index(4)]
         pub fn revoke_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -166,6 +171,7 @@ pub mod pallet {
 
         /// Return an untrusted `address` to an Unknown trust state
         #[pallet::weight(<T as Config>::WeightInfo::remove_revoked_trust())]
+        #[pallet::call_index(5)]
         pub fn remove_revoked_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 

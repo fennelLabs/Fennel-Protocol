@@ -23,7 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
-        type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
     }
 
@@ -66,6 +66,7 @@ pub mod pallet {
         /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating
         /// number.
         #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
+        #[pallet::call_index(0)]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
             target: Vec<u8>,
@@ -81,6 +82,7 @@ pub mod pallet {
 
         /// Updates an existing rating signal.
         #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
+        #[pallet::call_index(1)]
         pub fn update_rating_signal(
             origin: OriginFor<T>,
             target: Vec<u8>,
@@ -96,6 +98,7 @@ pub mod pallet {
 
         /// Puts out a signal cancelling a previous rating.
         #[pallet::weight(<T as Config>::WeightInfo::revoke_rating_signal())]
+        #[pallet::call_index(2)]
         pub fn revoke_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -108,6 +111,7 @@ pub mod pallet {
         /// Creates an on-chain event with a signal payload defined as part of the transaction
         /// without relying on storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
+        #[pallet::call_index(3)]
         pub fn send_signal(origin: OriginFor<T>, signal: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::SignalSent(signal, who));
@@ -115,6 +119,7 @@ pub mod pallet {
         }
 
         #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
+        #[pallet::call_index(4)]
         pub fn send_service_signal(
             origin: OriginFor<T>,
             service_identifier: Vec<u8>,
