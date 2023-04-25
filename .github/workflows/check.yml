@@ -32,7 +32,10 @@ jobs:
         run: |
           curl https://sh.rustup.rs -sSf | sh -s -- -y
           source ~/.cargo/env
-          rustup target add wasm32-unknown-unknown --toolchain nightly
+          rustup update nightly
+          rustup update stable
+          rustup default nightly-2022-11-15
+          rustup target add wasm32-unknown-unknown --toolchain nightly-2022-11-15
       
       - name: Check Formatting
         run: >
