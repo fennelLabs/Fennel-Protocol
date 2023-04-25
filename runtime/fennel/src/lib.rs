@@ -29,11 +29,12 @@ use cumulus_primitives_core::relay_chain::v2::MAX_POV_SIZE;
 use frame_support::{
     construct_runtime, parameter_types,
     traits::Everything,
+    dispatch::DispatchClass,
     weights::{
         constants::{
             BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_REF_TIME_PER_SECOND,
         },
-        ConstantMultiplier, DispatchClass, Weight, WeightToFeeCoefficient, WeightToFeeCoefficients,
+        ConstantMultiplier, Weight, WeightToFeeCoefficient, WeightToFeeCoefficients,
         WeightToFeePolynomial,
     },
     PalletId,
