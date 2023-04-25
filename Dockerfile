@@ -1,4 +1,4 @@
-FROM rust:1.64 as base
+FROM rust:1.67 as base
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update -y && \
     ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
@@ -8,9 +8,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install clang libclang-dev libclang1 llvm llvm-dev clang-tools -y && \
     apt-get upgrade -y
 
-RUN rustup default nightly && \
-    rustup update nightly && \
-    rustup target add wasm32-unknown-unknown --toolchain nightly
+RUN rustup update nightly && \
+    rustup default nightly-2022-11-15 && \
+    rustup target add wasm32-unknown-unknown --toolchain nightly-2022-11-15
 
 FROM base as planner
 WORKDIR app
