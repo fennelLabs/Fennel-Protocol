@@ -1,4 +1,4 @@
-FROM rust:1.64 as base
+FROM rust:1.67 as base
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update -y && \
     ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
