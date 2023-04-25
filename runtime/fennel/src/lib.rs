@@ -27,9 +27,10 @@ use sp_version::RuntimeVersion;
 
 use cumulus_primitives_core::relay_chain::v2::MAX_POV_SIZE;
 use frame_support::{
-    construct_runtime, parameter_types,
-    traits::Everything,
+    construct_runtime,
     dispatch::DispatchClass,
+    parameter_types,
+    traits::Everything,
     weights::{
         constants::{
             BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_REF_TIME_PER_SECOND,
