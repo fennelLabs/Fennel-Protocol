@@ -1,5 +1,6 @@
 use crate::{mock::*, Error};
-use frame_support::{assert_noop, assert_ok};
+use frame_support::{assert_noop, assert_ok, BoundedVec};
+use sp_core::ConstU32;
 
 #[test]
 fn issue_identity() {
@@ -91,12 +92,13 @@ fn revoke_identity_from_non_owning_account() {
 fn add_or_update_identity_trait() {
     new_test_ext().execute_with(|| {
         let account_id = 300;
-        let key = "name".as_bytes().to_vec();
+        let key = BoundedVec::<u8, ConstU32<100>>::try_from("name".as_bytes().to_vec()).unwrap();
         let identity = 0;
 
         assert_ok!(IdentityModule::create_identity(RuntimeOrigin::signed(account_id)));
 
-        let luke = "Luke Skywalker".as_bytes().to_vec();
+        let luke = BoundedVec::<u8, ConstU32<100>>::try_from("Luke Skywalker".as_bytes().to_vec())
+            .unwrap();
         assert_ok!(IdentityModule::add_or_update_identity_trait(
             RuntimeOrigin::signed(account_id),
             identity,
@@ -105,7 +107,9 @@ fn add_or_update_identity_trait() {
         ));
         assert_eq!(IdentityModule::identity_trait_list(identity, key.clone()), luke.clone());
 
-        let anakin = "Anakin Skywalker".as_bytes().to_vec();
+        let anakin =
+            BoundedVec::<u8, ConstU32<100>>::try_from("Anakin Skywalker".as_bytes().to_vec())
+                .unwrap();
         assert_ok!(IdentityModule::add_or_update_identity_trait(
             RuntimeOrigin::signed(300),
             identity,
@@ -123,13 +127,14 @@ fn remove_identity_trait() {
         assert_ok!(IdentityModule::add_or_update_identity_trait(
             RuntimeOrigin::signed(300),
             0,
-            "name".as_bytes().to_vec(),
-            "Luke Skywalker".as_bytes().to_vec()
+            BoundedVec::<u8, ConstU32<100>>::try_from("name".as_bytes().to_vec()).unwrap(),
+            BoundedVec::<u8, ConstU32<100>>::try_from("Luke Skywalker".as_bytes().to_vec())
+                .unwrap()
         ));
         assert_ok!(IdentityModule::remove_identity_trait(
             RuntimeOrigin::signed(300),
             0,
-            "name".as_bytes().to_vec()
+            BoundedVec::<u8, ConstU32<100>>::try_from("name".as_bytes().to_vec()).unwrap()
         ));
     });
 }
@@ -141,7 +146,7 @@ fn issue_signed_signal() {
         assert_ok!(IdentityModule::sign_for_identity(
             RuntimeOrigin::signed(300),
             0,
-            "Test".as_bytes().to_vec()
+            BoundedVec::<u8, ConstU32<100>>::try_from("Test".as_bytes().to_vec()).unwrap()
         ));
 
         assert_eq!(IdentityModule::get_signal_count(), 1);

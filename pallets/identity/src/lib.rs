@@ -18,13 +18,14 @@ use weights::*;
 pub mod pallet {
     use super::*;
     use codec::alloc::collections::BTreeSet;
-    use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
+    use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
+        type MaxSize: Get<u32>;
     }
 
     #[pallet::pallet]
@@ -65,15 +66,28 @@ pub mod pallet {
     #[pallet::unbounded]
     #[pallet::getter(fn identity_trait_list)]
     /// Maps identity ID numbers to their key/value attributes.
-    pub type IdentityTraitList<T: Config> =
-        StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, Vec<u8>, Vec<u8>, ValueQuery>;
+    pub type IdentityTraitList<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat,
+        u32,
+        Blake2_128Concat,
+        BoundedVec<u8, T::MaxSize>,
+        BoundedVec<u8, T::MaxSize>,
+        ValueQuery,
+    >;
 
     #[pallet::storage]
     #[pallet::unbounded]
     #[pallet::getter(fn get_signal_record)]
     /// Tracks all signals sent by an identity.
-    pub type SignatureSignal<T: Config> =
-        StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, u32, Vec<u8>>;
+    pub type SignatureSignal<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat,
+        u32,
+        Blake2_128Concat,
+        u32,
+        BoundedVec<u8, T::MaxSize>,
+    >;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -89,7 +103,7 @@ pub mod pallet {
         IdentityUpdated(u32, T::AccountId),
         /// Announce that the given identity, owned by the given AccountId, has signed a signal
         /// containing the given vector.
-        SignedSignal(u32, T::AccountId, Vec<u8>),
+        SignedSignal(u32, T::AccountId, BoundedVec<u8, T::MaxSize>),
     }
 
     #[pallet::error]
@@ -164,8 +178,8 @@ pub mod pallet {
         pub fn add_or_update_identity_trait(
             origin: OriginFor<T>,
             identity_id: u32,
-            key: Vec<u8>,
-            value: Vec<u8>,
+            key: BoundedVec<u8, T::MaxSize>,
+            value: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -190,7 +204,7 @@ pub mod pallet {
         pub fn remove_identity_trait(
             origin: OriginFor<T>,
             identity_id: u32,
-            key: Vec<u8>,
+            key: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -210,7 +224,7 @@ pub mod pallet {
         pub fn sign_for_identity(
             origin: OriginFor<T>,
             identity_id: u32,
-            content: Vec<u8>,
+            content: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 

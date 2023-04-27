@@ -1,7 +1,7 @@
 use crate as pallet_fennel_identity;
 use frame_support::parameter_types;
 use frame_system as system;
-use sp_core::H256;
+use sp_core::{ConstU32, H256};
 use sp_runtime::{
     testing::Header,
     traits::{BlakeTwo256, IdentityLookup},
@@ -57,6 +57,7 @@ impl system::Config for Test {
 impl pallet_fennel_identity::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
+    type MaxSize = ConstU32<100>;
 }
 
 // Build genesis storage according to the mock runtime.

@@ -232,6 +232,7 @@ pub fn native_version() -> NativeVersion {
 
 parameter_types! {
     pub const Version: RuntimeVersion = VERSION;
+    pub const IdentityMaxSize: u32 = 1024;
 
     // This part is copied from Substrate's `bin/node/runtime/src/lib.rs`.
     //  The `RuntimeBlockLength` and `RuntimeBlockWeights` exist here because the
@@ -477,6 +478,7 @@ impl pallet_signal::Config for Runtime {
 impl pallet_fennel_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_fennel_identity::weights::SubstrateWeights<Runtime>;
+    type MaxSize = IdentityMaxSize;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
