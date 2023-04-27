@@ -117,7 +117,11 @@ pub mod pallet {
         pub fn create_identity(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
             let current_id: u32 = <IdentityNumber<T>>::get();
-            let new_id: u32 = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            <IdentityNumber<T>>::try_mutate(|current_id| -> DispatchResult {
+                *current_id = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                Ok(())
+            })?;
+            let new_id: u32 = <IdentityNumber<T>>::get();
 
             <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
                 ids.insert(current_id);
@@ -136,10 +140,12 @@ pub mod pallet {
         #[pallet::call_index(1)]
         pub fn revoke_identity(origin: OriginFor<T>, identity_id: u32) -> DispatchResult {
             let who = ensure_signed(origin)?;
+            <RevokedIdentityNumber<T>>::try_mutate(|current_id| -> DispatchResult {
+                *current_id = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                Ok(())
+            })?;
 
-            let new_total = <RevokedIdentityNumber<T>>::get()
-                .checked_add(1)
-                .ok_or(Error::<T>::StorageOverflow)?;
+            let new_total = <RevokedIdentityNumber<T>>::get();
 
             <IdentityList<T>>::try_mutate(&who, |ids| -> DispatchResult {
                 ensure!(ids.remove(&identity_id), Error::<T>::IdentityNotOwned);
@@ -213,7 +219,11 @@ pub mod pallet {
                 Error::<T>::IdentityNotOwned
             );
             let signal_id: u32 = <SignalCount<T>>::get();
-            let new_id: u32 = signal_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            <SignalCount<T>>::try_mutate(|signal_id| -> DispatchResult {
+                *signal_id = signal_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                Ok(())
+            })?;
+            let new_id: u32 = <SignalCount<T>>::get();
             <SignatureSignal<T>>::insert(&identity_id, &signal_id, &content);
             <SignalCount<T>>::put(new_id);
             Self::deposit_event(Event::SignedSignal(identity_id, who, content));
