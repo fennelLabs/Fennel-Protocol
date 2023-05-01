@@ -1,10 +1,10 @@
 [package]
 name = "fennel-runtime"
 version = "0.1.0"
-authors = ["Anonymous"]
+authors = ["Fennel Labs <https://github.com/fennelLabs>"]
 description = "Runtime for the Fennel Chain."
 license = "Unlicense"
-homepage = "https://substrate.io"
+homepage = "https://fennellabs.com"
 repository = "https://github.com/fennel/Fennel-Protocol/"
 edition = "2021"
 

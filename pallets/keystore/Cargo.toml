@@ -1,11 +1,11 @@
 [package]
-authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
-description = 'FRAME pallet template for defining custom runtime logic.'
+authors = ['Fennel Labs <https://github.com/fennelLabs>']
+description = 'FRAME pallet defining keystore and key management functionality.'
 edition = '2021'
-homepage = 'https://substrate.dev'
+homepage = 'https://fennellabs.com'
 license = 'Unlicense'
 name = 'pallet-keystore'
-repository = 'https://github.com/substrate-developer-hub/substrate-node-template/'
+repository = 'https://github.com/fennelLabs/fennel-protocol/'
 version = '0.1.0'
 
 [package.metadata.docs.rs]

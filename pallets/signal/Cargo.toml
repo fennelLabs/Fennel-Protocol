@@ -1,11 +1,11 @@
 [package]
-authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
+authors = ['Fennel Labs <https://github.com/fennelLabs>']
 description = 'FRAME pallet providing Fennel signaling logic.'
 edition = '2021'
-homepage = 'https://substrate.dev'
+homepage = 'https://fennellabs.com'
 license = 'Unlicense'
 name = 'pallet-signal'
-repository = 'https://github.com/substrate-developer-hub/substrate-node-template/'
+repository = 'https://github.com/fennelLabs/fennel-protocol/'
 version = '0.1.0'
 
 [package.metadata.docs.rs]
