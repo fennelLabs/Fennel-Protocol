@@ -51,6 +51,7 @@ use xcm_config::{XcmConfig, XcmOriginToTransactDispatchOrigin};
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 
+pub use pallet_certificate;
 pub use pallet_fennel_identity;
 pub use pallet_keystore;
 pub use pallet_signal;
@@ -481,6 +482,11 @@ impl pallet_fennel_identity::Config for Runtime {
     type MaxSize = IdentityMaxSize;
 }
 
+impl pallet_certificate::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type WeightInfo = pallet_certificate::weights::SubstrateWeights<Runtime>;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
     pub enum Runtime where
@@ -518,6 +524,7 @@ construct_runtime!(
         Keystore: pallet_keystore::{Pallet, Call, Storage, Event<T>} = 35,
         Signal: pallet_signal::{Pallet, Call, Storage, Event<T>} = 36,
         Identity: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>} = 37,
+        Certificate: pallet_certificate::{Pallet, Call, Storage, Event<T>} = 38,
 
     }
 );
@@ -537,6 +544,7 @@ mod benches {
         [pallet_keystore, Keystore]
         [pallet_signal, Signal]
         [pallet_fennel_identity, Identity]
+        [pallet_certificate, Certificate]
     );
 }
 

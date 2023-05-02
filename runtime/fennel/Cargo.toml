@@ -27,6 +27,7 @@ pallet-trust = { default-features = false, path = '../../pallets/trust', version
 pallet-keystore = { default-features = false, path = '../../pallets/keystore', version = '0.1.0' }
 pallet-signal = { default-features = false, path = '../../pallets/signal', version = '0.1.0' }
 pallet-fennel-identity = { default-features = false, path = '../../pallets/identity', version = '0.1.0' }
+pallet-certificate = { default-features = false, path = '../../pallets/certificate', version = '0.1.0' }
 
 # Substrate
 frame-benchmarking = { git = "https://github.com/paritytech/substrate", default-features = false, optional = true, branch = "polkadot-v0.9.37" }

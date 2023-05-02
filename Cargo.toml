@@ -8,5 +8,6 @@ members = [
     'pallets/trust',
     'pallets/signal',
     'pallets/identity',
+    'pallets/certificate',
     'runtime/fennel'
 ]
