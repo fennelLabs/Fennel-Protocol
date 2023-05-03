@@ -91,9 +91,8 @@ pub mod pallet {
             Ok(())
         }
 
-        /// If a key needs to be removed from circulation, this extrinsic will handle deleting it
-        /// and informing the network.
-        #[pallet::weight(T::WeightInfo::revoke_key())]
+        /// Announces an encryption key to the network.
+        #[pallet::weight(T::WeightInfo::issue_encryption_key())]
         #[pallet::call_index(2)]
         pub fn issue_encryption_key(origin: OriginFor<T>, key: [u8; 32]) -> DispatchResult {
             let who = ensure_signed(origin)?;
