@@ -2,14 +2,9 @@ use super::*;
 
 #[allow(unused)]
 use crate::Pallet as Identity;
-use codec::alloc::string::{String, ToString};
 use frame_benchmarking::{account as benchmark_account, benchmarks, impl_benchmark_test_suite};
-use frame_support::inherent::Vec;
 use frame_system::RawOrigin;
-
-pub fn from_str_to_vec(string: String) -> BoundedVec<u8, T::MaxSize> {
-    string.as_bytes().to_vec()
-}
+use frame_support::BoundedVec;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
     let account: T::AccountId = benchmark_account(name, 0, 0);
@@ -47,39 +42,39 @@ benchmarks! {
     add_or_update_identity_trait {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");
-        let name = from_str_to_vec("name".to_string());
-        let value = from_str_to_vec("Skywalker".to_string());
+        let name: BoundedVec<u8, T::MaxSize>  = "name".as_bytes().to_vec().try_into().unwrap();
+        let value: BoundedVec<u8, T::MaxSize>  = "Skywalker".as_bytes().to_vec().try_into().unwrap();
 
         // create identity to be used for placing traits
 
         let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-    }: _(anakin.clone(), identity_index.into(), name, value)
+    }: _(anakin.clone(), identity_index.into(), name.into(), value.into())
 
 
     remove_identity_trait {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");
-        let name = from_str_to_vec("name".to_string());
-        let value = from_str_to_vec("Skywalker".to_string());
+        let name: BoundedVec<u8, T::MaxSize> = "name".as_bytes().to_vec().try_into().unwrap();
+        let value: BoundedVec<u8, T::MaxSize>  = "Skywalker".as_bytes().to_vec().try_into().unwrap();
 
         let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
-        Identity::<T>::add_or_update_identity_trait(anakin.clone().into(), identity_index.into(), name.clone(), value)?;
+        Identity::<T>::add_or_update_identity_trait(anakin.clone().into(), identity_index.into(), name.clone(), value.into())?;
 
-    }: _(anakin.clone(), identity_index.into(), name)
+    }: _(anakin.clone(), identity_index.into(), name.into())
 
 
     sign_for_identity {
         let s in 0 .. 100;
         let anakin = get_origin::<T>("Anakin");
-        let value = from_str_to_vec("I am your father.".to_string());
+        let value: BoundedVec<u8, T::MaxSize>  = "I am your father.".as_bytes().to_vec().try_into().unwrap();
 
         let identity_index = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-    }: _(anakin.clone(), identity_index.into(), value.clone())
+    }: _(anakin.clone(), identity_index.into(), value.into())
     verify {
         assert_eq!(SignalCount::<T>::get(), identity_index + 1);
     }
