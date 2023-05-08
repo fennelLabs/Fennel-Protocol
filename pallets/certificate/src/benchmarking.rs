@@ -23,12 +23,29 @@ benchmarks! {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
     }: _(RawOrigin::Signed(caller), target)
+    verify {
+        assert_eq!(Certificate::<T>::certificate_count(), 1);
+    }
+
+    send_more_certificates {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
+        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
+        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
+    }: _(RawOrigin::Signed(caller), target)
+    verify {
+        assert_eq!(Certificate::<T>::certificate_count(), 3);
+    }
 
     revoke_certificate {
         let target: T::AccountId = whitelisted_caller();
         let caller = get_origin::<T>("Anakin");
         Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
     }: _(caller, target)
+    verify {
+        assert_eq!(Certificate::<T>::certificate_count(), 0);
+    }
 }
 
 impl_benchmark_test_suite!(Certificate, crate::mock::new_test_ext(), crate::mock::Test);
