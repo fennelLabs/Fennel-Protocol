@@ -80,6 +80,7 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        TrustNotFound,
     }
 
     #[pallet::call]
@@ -113,6 +114,8 @@ pub mod pallet {
                 <TrustIssuance<T>>::remove(&who, &address);
                 <CurrentIssued<T>>::put(new_key);
                 Self::deposit_event(Event::TrustIssuanceRemoved(address, who));
+            } else {
+                return Err(Error::<T>::TrustNotFound.into());
             }
 
             Ok(())

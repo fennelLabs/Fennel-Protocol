@@ -1,5 +1,5 @@
-use crate::mock::*;
-use frame_support::assert_ok;
+use crate::{mock::*, Error};
+use frame_support::{assert_noop, assert_ok};
 
 #[test]
 fn issue_trust() {
@@ -63,8 +63,16 @@ fn remove_trust_no_failure() {
 
         assert_ok!(TrustModule::remove_trust(RuntimeOrigin::signed(1), 1));
         assert_eq!(TrustModule::get_current_trust_count(), 0);
+    });
+}
 
-        assert_ok!(TrustModule::remove_trust(RuntimeOrigin::signed(1), 1));
+#[test]
+fn remove_trust_raises_error() {
+    new_test_ext().execute_with(|| {
+        assert_noop!(
+            TrustModule::remove_trust(RuntimeOrigin::signed(1), 1),
+            Error::<Test>::TrustNotFound
+        );
     });
 }
 
