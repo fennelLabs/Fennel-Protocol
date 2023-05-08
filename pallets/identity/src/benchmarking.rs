@@ -7,7 +7,7 @@ use frame_benchmarking::{account as benchmark_account, benchmarks, impl_benchmar
 use frame_support::inherent::Vec;
 use frame_system::RawOrigin;
 
-pub fn from_str_to_vec(string: String) -> Vec<u8> {
+pub fn from_str_to_vec(string: String) -> BoundedVec<u8, T::MaxSize> {
     string.as_bytes().to_vec()
 }
 
