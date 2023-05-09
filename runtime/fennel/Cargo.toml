@@ -135,7 +135,8 @@ std = [
     "pallet-fennel-identity/std",
     "pallet-keystore/std",
     "pallet-signal/std",
-    "pallet-trust/std"
+    "pallet-trust/std",
+    "pallet-certificate/std"
 ]
 
 runtime-benchmarks = [
@@ -157,6 +158,7 @@ runtime-benchmarks = [
     "pallet-keystore/runtime-benchmarks",
     "pallet-signal/runtime-benchmarks",
     "pallet-trust/runtime-benchmarks",
+    "pallet-certificate/runtime-benchmarks",
     "polkadot-parachain/runtime-benchmarks",
     "polkadot-runtime-common/runtime-benchmarks",
     "xcm-executor/runtime-benchmarks",
@@ -178,6 +180,7 @@ try-runtime = [
     "pallet-collator-selection/try-runtime",
     "pallet-fennel-identity/try-runtime",
     "pallet-keystore/try-runtime",
+    "pallet-certificate/try-runtime",
     "pallet-session/try-runtime",
     "pallet-signal/try-runtime",
     "pallet-sudo/try-runtime",

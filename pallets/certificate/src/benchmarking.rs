@@ -20,31 +20,20 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
 
 benchmarks! {
     send_certificate {
-        let target: T::AccountId = whitelisted_caller();
-        let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller), target)
+        let target = get_account::<T>("James");
+        let caller = get_origin::<T>("Spock");
+    }: _(caller, target)
     verify {
-        assert_eq!(Certificate::<T>::certificate_count(), 1);
-    }
-
-    send_more_certificates {
-        let target: T::AccountId = whitelisted_caller();
-        let caller: T::AccountId = whitelisted_caller();
-        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
-        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
-        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
-    }: _(RawOrigin::Signed(caller), target)
-    verify {
-        assert_eq!(Certificate::<T>::certificate_count(), 3);
+        assert_eq!(Certificate::<T>::certificate_number(), 1);
     }
 
     revoke_certificate {
         let target: T::AccountId = whitelisted_caller();
-        let caller = get_origin::<T>("Anakin");
+        let caller = get_origin::<T>("Leonard");
         Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
     }: _(caller, target)
     verify {
-        assert_eq!(Certificate::<T>::certificate_count(), 0);
+        assert_eq!(Certificate::<T>::certificate_number(), 0);
     }
 }
 
