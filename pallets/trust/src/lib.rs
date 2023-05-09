@@ -81,6 +81,7 @@ pub mod pallet {
         NoneValue,
         StorageOverflow,
         TrustNotFound,
+        TrustRequestNotFound,
     }
 
     #[pallet::call]
@@ -150,6 +151,8 @@ pub mod pallet {
                 <TrustRequestList<T>>::remove(&who, &address);
                 <CurrentRequests<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRequestRemoved(address, who));
+            } else {
+                return Err(Error::<T>::TrustRequestNotFound.into())
             }
 
             Ok(())

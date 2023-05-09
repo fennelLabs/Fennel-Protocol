@@ -39,8 +39,16 @@ fn cancel_request_trust() {
 
         assert_ok!(TrustModule::cancel_trust_request(RuntimeOrigin::signed(1), 1));
         assert_eq!(TrustModule::get_current_trust_requests(), 0);
+    });
+}
 
-        assert_ok!(TrustModule::cancel_trust_request(RuntimeOrigin::signed(1), 1));
+#[test]
+fn cancel_request_trust_error() {
+    new_test_ext().execute_with(|| {
+        assert_noop!(
+            TrustModule::cancel_trust_request(RuntimeOrigin::signed(1), 1),
+            Error::<Test>::TrustRequestNotFound
+        );
     });
 }
 
