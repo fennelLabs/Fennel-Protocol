@@ -31,36 +31,40 @@ impl<T: frame_system::Config> pallet_fennel_identity::WeightInfo for WeightInfo<
 	// Storage: Identity IdentityNumber (r:1 w:1)
 	// Storage: Identity IdentityList (r:1 w:1)
 	fn create_identity(_s: u32, ) -> Weight {
-		Weight::from_ref_time(30_756_633 as u64)
+		Weight::from_ref_time(25_295_445 as u64)
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(2 as u64))
 	}
 	// Storage: Identity RevokedIdentityNumber (r:1 w:1)
 	// Storage: Identity IdentityList (r:1 w:1)
 	fn revoke_identity(_s: u32, ) -> Weight {
-		Weight::from_ref_time(26_245_940 as u64)
+		Weight::from_ref_time(26_473_663 as u64)
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(2 as u64))
 	}
 	// Storage: Identity IdentityList (r:1 w:0)
 	// Storage: Identity IdentityTraitList (r:1 w:1)
 	fn add_or_update_identity_trait(_s: u32, ) -> Weight {
-		Weight::from_ref_time(22_707_722 as u64)
+		Weight::from_ref_time(25_277_029 as u64)
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	// Storage: Identity IdentityList (r:1 w:0)
 	// Storage: Identity IdentityTraitList (r:0 w:1)
-	fn remove_identity_trait(_s: u32, ) -> Weight {
-		Weight::from_ref_time(21_284_752 as u64)
+	fn remove_identity_trait(s: u32, ) -> Weight {
+		Weight::from_ref_time(23_865_940 as u64)
+			// Standard Error: 4_028
+			.saturating_add(Weight::from_ref_time(1_698 as u64).saturating_mul(s as u64))
 			.saturating_add(T::DbWeight::get().reads(1 as u64))
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	// Storage: Identity IdentityList (r:1 w:0)
 	// Storage: Identity SignalCount (r:1 w:1)
 	// Storage: Identity SignatureSignal (r:0 w:1)
-	fn sign_for_identity(_s: u32, ) -> Weight {
-		Weight::from_ref_time(25_083_366 as u64)
+	fn sign_for_identity(s: u32, ) -> Weight {
+		Weight::from_ref_time(27_899_603 as u64)
+			// Standard Error: 4_241
+			.saturating_add(Weight::from_ref_time(4_452 as u64).saturating_mul(s as u64))
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(2 as u64))
 	}

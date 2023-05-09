@@ -30,12 +30,12 @@ pub struct WeightInfo<T>(pub PhantomData<T>);
 impl<T: frame_system::Config> pallet_certificate::WeightInfo for WeightInfo<T> {
 	// Storage: Certificate CertificateList (r:0 w:1)
 	fn send_certificate(_s: u32, ) -> Weight {
-		Weight::from_ref_time(16_332_193 as u64)
+		Weight::from_ref_time(20_050_325 as u64)
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	// Storage: Certificate CertificateList (r:1 w:1)
 	fn revoke_certificate(_s: u32, ) -> Weight {
-		Weight::from_ref_time(20_275_729 as u64)
+		Weight::from_ref_time(25_041_480 as u64)
 			.saturating_add(T::DbWeight::get().reads(1 as u64))
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}

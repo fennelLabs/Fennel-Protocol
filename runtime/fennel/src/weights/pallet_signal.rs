@@ -30,23 +30,23 @@ pub struct WeightInfo<T>(pub PhantomData<T>);
 impl<T: frame_system::Config> pallet_signal::WeightInfo for WeightInfo<T> {
 	// Storage: Signal RatingSignalList (r:0 w:1)
 	fn send_rating_signal() -> Weight {
-		Weight::from_ref_time(19_000_000 as u64)
+		Weight::from_ref_time(27_000_000 as u64)
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	// Storage: Signal RatingSignalList (r:0 w:1)
 	fn update_rating_signal() -> Weight {
-		Weight::from_ref_time(17_000_000 as u64)
+		Weight::from_ref_time(22_000_000 as u64)
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	// Storage: Signal RatingSignalList (r:0 w:1)
 	fn revoke_rating_signal() -> Weight {
-		Weight::from_ref_time(22_000_000 as u64)
+		Weight::from_ref_time(19_000_000 as u64)
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	fn send_signal() -> Weight {
 		Weight::from_ref_time(16_000_000 as u64)
 	}
 	fn send_service_signal() -> Weight {
-		Weight::from_ref_time(16_000_000 as u64)
+		Weight::from_ref_time(24_000_000 as u64)
 	}
 }

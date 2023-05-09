@@ -31,8 +31,6 @@ benchmarks! {
         // create identity to be used for revoking
         let identity_num: u32 = IdentityNumber::<T>::get().into();
         Identity::<T>::create_identity(anakin.clone().into())?;
-
-
     }: _(anakin.clone(), identity_num)
     verify {
         // one revoked identity
@@ -51,6 +49,10 @@ benchmarks! {
         Identity::<T>::create_identity(anakin.clone().into())?;
 
     }: _(anakin.clone(), identity_index.into(), name.into(), value.into())
+    verify {
+        let key: T::AccountId = get_account::<T>("Anakin");
+        assert!(IdentityList::<T>::contains_key(key));
+    }
 
 
     remove_identity_trait {
@@ -64,6 +66,10 @@ benchmarks! {
         Identity::<T>::add_or_update_identity_trait(anakin.clone().into(), identity_index.into(), name.clone(), value.into())?;
 
     }: _(anakin.clone(), identity_index.into(), name.into())
+    verify {
+        let key: T::AccountId = get_account::<T>("Anakin");
+        assert!(IdentityList::<T>::contains_key(key));
+    }
 
 
     sign_for_identity {

@@ -30,17 +30,17 @@ pub struct WeightInfo<T>(pub PhantomData<T>);
 impl<T: frame_system::Config> pallet_keystore::WeightInfo for WeightInfo<T> {
 	// Storage: Keystore IssuedKeys (r:0 w:1)
 	fn announce_key(_s: u32, ) -> Weight {
-		Weight::from_ref_time(18_261_980 as u64)
+		Weight::from_ref_time(20_366_336 as u64)
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	// Storage: Keystore IssuedKeys (r:0 w:1)
 	fn revoke_key(_s: u32, ) -> Weight {
-		Weight::from_ref_time(18_035_445 as u64)
+		Weight::from_ref_time(19_321_386 as u64)
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 	// Storage: Keystore IssuedEncryptionKeys (r:0 w:1)
 	fn issue_encryption_key(_s: u32, ) -> Weight {
-		Weight::from_ref_time(17_163_762 as u64)
+		Weight::from_ref_time(18_341_980 as u64)
 			.saturating_add(T::DbWeight::get().writes(1 as u64))
 	}
 }

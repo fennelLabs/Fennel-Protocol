@@ -31,42 +31,42 @@ impl<T: frame_system::Config> pallet_trust::WeightInfo for WeightInfo<T> {
 	// Storage: Trust TrustIssuance (r:1 w:1)
 	// Storage: Trust CurrentIssued (r:1 w:1)
 	fn issue_trust() -> Weight {
-		Weight::from_ref_time(29_000_000 as u64)
-			.saturating_add(T::DbWeight::get().reads(2 as u64))
-			.saturating_add(T::DbWeight::get().writes(2 as u64))
-	}
-	// Storage: Trust TrustRevocation (r:1 w:1)
-	// Storage: Trust CurrentRevoked (r:1 w:1)
-	fn revoke_trust() -> Weight {
-		Weight::from_ref_time(21_000_000 as u64)
-			.saturating_add(T::DbWeight::get().reads(2 as u64))
-			.saturating_add(T::DbWeight::get().writes(2 as u64))
-	}
-	// Storage: Trust TrustIssuance (r:1 w:1)
-	// Storage: Trust CurrentIssued (r:1 w:1)
-	fn remove_trust() -> Weight {
 		Weight::from_ref_time(28_000_000 as u64)
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(2 as u64))
 	}
 	// Storage: Trust TrustRevocation (r:1 w:1)
 	// Storage: Trust CurrentRevoked (r:1 w:1)
+	fn revoke_trust() -> Weight {
+		Weight::from_ref_time(28_000_000 as u64)
+			.saturating_add(T::DbWeight::get().reads(2 as u64))
+			.saturating_add(T::DbWeight::get().writes(2 as u64))
+	}
+	// Storage: Trust TrustIssuance (r:1 w:1)
+	// Storage: Trust CurrentIssued (r:1 w:1)
+	fn remove_trust() -> Weight {
+		Weight::from_ref_time(27_000_000 as u64)
+			.saturating_add(T::DbWeight::get().reads(2 as u64))
+			.saturating_add(T::DbWeight::get().writes(2 as u64))
+	}
+	// Storage: Trust TrustRevocation (r:1 w:1)
+	// Storage: Trust CurrentRevoked (r:1 w:1)
 	fn remove_revoked_trust() -> Weight {
-		Weight::from_ref_time(29_000_000 as u64)
+		Weight::from_ref_time(28_000_000 as u64)
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(2 as u64))
 	}
 	// Storage: Trust TrustRequestList (r:1 w:1)
 	// Storage: Trust CurrentRequests (r:1 w:1)
 	fn request_trust() -> Weight {
-		Weight::from_ref_time(20_000_000 as u64)
+		Weight::from_ref_time(23_000_000 as u64)
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(2 as u64))
 	}
 	// Storage: Trust TrustRequestList (r:1 w:1)
 	// Storage: Trust CurrentRequests (r:1 w:1)
 	fn cancel_trust_request() -> Weight {
-		Weight::from_ref_time(23_000_000 as u64)
+		Weight::from_ref_time(28_000_000 as u64)
 			.saturating_add(T::DbWeight::get().reads(2 as u64))
 			.saturating_add(T::DbWeight::get().writes(2 as u64))
 	}
