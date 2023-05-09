@@ -80,6 +80,7 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        TrustExists,
         TrustNotFound,
         TrustRequestNotFound,
     }
@@ -98,6 +99,8 @@ pub mod pallet {
                 <TrustIssuance<T>>::insert(&who, &address, total);
                 <CurrentIssued<T>>::put(new_total);
                 Self::deposit_event(Event::TrustIssued(who, address));
+            } else {
+                return Err(Error::<T>::TrustExists.into())
             }
 
             Ok(())

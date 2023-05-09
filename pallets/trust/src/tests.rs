@@ -10,13 +10,15 @@ fn issue_trust() {
 }
 
 #[test]
-fn issue_trust_once() {
+fn issue_trust_error() {
     new_test_ext().execute_with(|| {
         assert_ok!(TrustModule::issue_trust(RuntimeOrigin::signed(1), 1));
         assert_eq!(TrustModule::get_current_trust_count(), 1);
 
-        assert_ok!(TrustModule::issue_trust(RuntimeOrigin::signed(1), 1));
-        assert_eq!(TrustModule::get_current_trust_count(), 1);
+        assert_noop!(
+            TrustModule::issue_trust(RuntimeOrigin::signed(1), 1),
+            Error::<Test>::TrustExists
+        );
     });
 }
 
