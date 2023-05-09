@@ -4,9 +4,7 @@ use super::*;
 
 #[allow(unused)]
 use crate::Pallet as Certificate;
-use frame_benchmarking::{
-    account as benchmark_account, benchmarks, impl_benchmark_test_suite,
-};
+use frame_benchmarking::{account as benchmark_account, benchmarks, impl_benchmark_test_suite};
 use frame_system::RawOrigin;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
