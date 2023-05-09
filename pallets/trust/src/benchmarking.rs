@@ -21,11 +21,13 @@ benchmarks! {
     remove_trust {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
+        Trust::<T>::issue_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
     }: _(RawOrigin::Signed(caller), target)
 
     remove_revoked_trust {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
+        Trust::<T>::revoke_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
     }: _(RawOrigin::Signed(caller), target)
 
     request_trust {
@@ -36,6 +38,7 @@ benchmarks! {
     cancel_trust_request {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
+        Trust::<T>::request_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
     }: _(RawOrigin::Signed(caller), target)
 }
 

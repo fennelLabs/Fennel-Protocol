@@ -5,12 +5,18 @@
 steps=$1
 repeat=$2
 
-
 pallets=(
     pallet_balances
     pallet_timestamp
     pallet_session
+    pallet_certificate
+    pallet_fennel_identity
+    pallet_keystore
+    pallet_signal
+    pallet_trust
 )
+
+cargo build --release --features=runtime-benchmarks --bin=fennel-node
 
 for p in ${pallets[@]}
 do

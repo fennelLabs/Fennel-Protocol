@@ -5,7 +5,7 @@ use super::*;
 #[allow(unused)]
 use crate::Pallet as Certificate;
 use frame_benchmarking::{
-    account as benchmark_account, benchmarks, impl_benchmark_test_suite, whitelisted_caller,
+    account as benchmark_account, benchmarks, impl_benchmark_test_suite,
 };
 use frame_system::RawOrigin;
 
@@ -20,20 +20,26 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
 
 benchmarks! {
     send_certificate {
+        let s in 0 .. 1000;
         let target = get_account::<T>("James");
         let caller = get_origin::<T>("Spock");
     }: _(caller, target)
     verify {
-        assert_eq!(Certificate::<T>::certificate_number(), 1);
+        let caller_account_id: T::AccountId = get_account::<T>("Spock");
+        let target_account_id: T::AccountId = get_account::<T>("James");
+        assert!(CertificateList::<T>::contains_key(caller_account_id, target_account_id));
     }
 
     revoke_certificate {
-        let target: T::AccountId = whitelisted_caller();
+        let s in 0 .. 1000;
+        let target = get_account::<T>("Montgomery");
         let caller = get_origin::<T>("Leonard");
         Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
     }: _(caller, target)
     verify {
-        assert_eq!(Certificate::<T>::certificate_number(), 0);
+        let caller_account_id: T::AccountId = get_account::<T>("Leonard");
+        let target_account_id: T::AccountId = get_account::<T>("Montgomery");
+        assert!(!CertificateList::<T>::contains_key(caller_account_id, target_account_id));
     }
 }
 
