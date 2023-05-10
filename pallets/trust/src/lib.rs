@@ -83,6 +83,7 @@ pub mod pallet {
         TrustExists,
         TrustNotFound,
         TrustRequestNotFound,
+        TrustRevocationNotFound,
     }
 
     #[pallet::call]
@@ -190,6 +191,8 @@ pub mod pallet {
                 <TrustRevocation<T>>::remove(&who, &address);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevocationRemoved(address, who));
+            } else {
+                return Err(Error::<T>::TrustRevocationNotFound.into())
             }
 
             Ok(())

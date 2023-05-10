@@ -124,7 +124,15 @@ fn remove_revoked_trust_no_failure() {
 
         assert_ok!(TrustModule::remove_revoked_trust(RuntimeOrigin::signed(1), 1));
         assert_eq!(TrustModule::get_current_non_trust_count(), 0);
+    });
+}
 
-        assert_ok!(TrustModule::remove_revoked_trust(RuntimeOrigin::signed(1), 1));
+#[test]
+fn remove_revoked_trust_raises_error() {
+    new_test_ext().execute_with(|| {
+        assert_noop!(
+            TrustModule::remove_revoked_trust(RuntimeOrigin::signed(1), 1),
+            Error::<Test>::TrustRevocationNotFound
+        );
     });
 }
