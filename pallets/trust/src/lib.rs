@@ -82,6 +82,7 @@ pub mod pallet {
         StorageOverflow,
         TrustExists,
         TrustNotFound,
+        TrustRequestExists,
         TrustRequestNotFound,
         TrustRevocationNotFound,
     }
@@ -138,6 +139,8 @@ pub mod pallet {
                 <CurrentRequests<T>>::put(new_total);
                 <TrustRequestList<T>>::insert(&who, &address, total);
                 Self::deposit_event(Event::TrustRequest(who, address));
+            } else {
+                return Err(Error::<T>::TrustRequestExists.into())
             }
 
             Ok(())

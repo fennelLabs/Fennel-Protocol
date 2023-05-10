@@ -34,6 +34,19 @@ fn request_trust() {
 }
 
 #[test]
+fn request_trust_error() {
+    new_test_ext().execute_with(|| {
+        assert_ok!(TrustModule::request_trust(RuntimeOrigin::signed(1), 1));
+        assert_eq!(TrustModule::get_current_trust_requests(), 1);
+
+        assert_noop!(
+            TrustModule::request_trust(RuntimeOrigin::signed(1), 1),
+            Error::<Test>::TrustRequestExists
+        );
+    });
+}
+
+#[test]
 fn cancel_request_trust() {
     new_test_ext().execute_with(|| {
         assert_ok!(TrustModule::request_trust(RuntimeOrigin::signed(1), 1));
