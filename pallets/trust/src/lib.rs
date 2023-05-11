@@ -178,8 +178,7 @@ pub mod pallet {
                 <TrustRevocation<T>>::insert(&who, &address, key);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevoked(address, who));
-            }
-            else {
+            } else {
                 return Err(Error::<T>::TrustRevocationExists.into())
             }
 
