@@ -108,13 +108,15 @@ fn revoke_trust() {
 }
 
 #[test]
-fn revoke_trust_once() {
+fn revoke_trust_error() {
     new_test_ext().execute_with(|| {
         assert_ok!(TrustModule::revoke_trust(RuntimeOrigin::signed(1), 1));
         assert_eq!(TrustModule::get_current_non_trust_count(), 1);
 
-        assert_ok!(TrustModule::revoke_trust(RuntimeOrigin::signed(1), 1));
-        assert_eq!(TrustModule::get_current_non_trust_count(), 1);
+        assert_noop!(
+            TrustModule::revoke_trust(RuntimeOrigin::signed(1), 1),
+            Error::<Test>::TrustRevocationExists
+        );
     });
 }
 
