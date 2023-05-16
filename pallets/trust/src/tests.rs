@@ -4,7 +4,9 @@ use frame_support::{assert_noop, assert_ok};
 #[test]
 fn issue_trust() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::issue_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustIssued(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_count(), 1);
     });
 }
@@ -12,7 +14,9 @@ fn issue_trust() {
 #[test]
 fn issue_trust_error() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::issue_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustIssued(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_count(), 1);
 
         assert_noop!(
@@ -25,10 +29,13 @@ fn issue_trust_error() {
 #[test]
 fn request_trust() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::request_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRequest(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_requests(), 1);
 
         assert_ok!(TrustModule::cancel_trust_request(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRequestRemoved(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_requests(), 0);
     });
 }
@@ -36,7 +43,9 @@ fn request_trust() {
 #[test]
 fn request_trust_error() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::request_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRequest(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_requests(), 1);
 
         assert_noop!(
@@ -49,10 +58,13 @@ fn request_trust_error() {
 #[test]
 fn cancel_request_trust() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::request_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRequest(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_requests(), 1);
 
         assert_ok!(TrustModule::cancel_trust_request(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRequestRemoved(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_requests(), 0);
     });
 }
@@ -70,10 +82,13 @@ fn cancel_request_trust_error() {
 #[test]
 fn remove_trust() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::issue_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustIssued(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_count(), 1);
 
         assert_ok!(TrustModule::remove_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustIssuanceRemoved(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_count(), 0);
     });
 }
@@ -81,10 +96,13 @@ fn remove_trust() {
 #[test]
 fn remove_trust_no_failure() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::issue_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustIssued(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_count(), 1);
 
         assert_ok!(TrustModule::remove_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustIssuanceRemoved(1, 1).into());
         assert_eq!(TrustModule::get_current_trust_count(), 0);
     });
 }
@@ -102,7 +120,9 @@ fn remove_trust_raises_error() {
 #[test]
 fn revoke_trust() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::revoke_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRevoked(1, 1).into());
         assert_eq!(TrustModule::get_current_non_trust_count(), 1);
     });
 }
@@ -110,7 +130,9 @@ fn revoke_trust() {
 #[test]
 fn revoke_trust_error() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::revoke_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRevoked(1, 1).into());
         assert_eq!(TrustModule::get_current_non_trust_count(), 1);
 
         assert_noop!(
@@ -123,10 +145,13 @@ fn revoke_trust_error() {
 #[test]
 fn remove_revoked_trust() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::revoke_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRevoked(1, 1).into());
         assert_eq!(TrustModule::get_current_non_trust_count(), 1);
 
         assert_ok!(TrustModule::remove_revoked_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRevocationRemoved(1, 1).into());
         assert_eq!(TrustModule::get_current_non_trust_count(), 0);
     });
 }
@@ -134,10 +159,13 @@ fn remove_revoked_trust() {
 #[test]
 fn remove_revoked_trust_no_failure() {
     new_test_ext().execute_with(|| {
+        System::set_block_number(1);
         assert_ok!(TrustModule::revoke_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRevoked(1, 1).into());
         assert_eq!(TrustModule::get_current_non_trust_count(), 1);
 
         assert_ok!(TrustModule::remove_revoked_trust(RuntimeOrigin::signed(1), 1));
+        System::assert_last_event(crate::Event::TrustRevocationRemoved(1, 1).into());
         assert_eq!(TrustModule::get_current_non_trust_count(), 0);
     });
 }
