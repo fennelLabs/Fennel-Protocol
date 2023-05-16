@@ -30,7 +30,7 @@ jobs:
         env:
           IMAGE_NAME: fennel-protocol #create env called IMAGE_NAME consisted of actual name of Docker Image after we build
           PROJECT_ID: whiteflag-0
-        run: docker build -t $IMAGE_NAME:latest ./Dockerfile-Actions #build the docker image
+        run: docker build -t $IMAGE_NAME:latest . #build the docker image
 
       - name: Login to Artifact Registry
         uses: docker/login-action@v1
