@@ -1,6 +1,8 @@
 services:
   dev:
-    build: .
+    build:
+      context: .
+      dockerfile: ./Dockerfile-local
     working_dir: /app
     volumes:
       - Fennel-Protocol:/app

@@ -46,7 +46,7 @@ benchmarks! {
         let origin = get_origin::<T>("Anakin");
         let key = [0; 32];
     }: _(origin.clone(), key.clone())
-    verify { 
+    verify {
         let origin_address = get_account::<T>("Anakin");
         assert_eq!(IssuedEncryptionKeys::<T>::get(&origin_address), Some(key));
     }
