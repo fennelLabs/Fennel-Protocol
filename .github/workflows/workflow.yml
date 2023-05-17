@@ -6,8 +6,7 @@ jobs:
   docker-release:
     name: Tagged Docker release to Google Artifact Registry
     runs-on: ubuntu-latest
-    #if: github.event_name == 'push' # && startsWith(github.ref, 'refs/tags')  # <-- Notice that I'm filtering here to only run when a tagged commit is pushed
-
+    
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -16,21 +15,22 @@ jobs:
       - id: checkout
         name: Checkout
         uses: actions/checkout@v2
-
-      - id: auth
-        name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v0
-        with:
-          token_format: access_token
-          workload_identity_provider: projects/266537174077/locations/global/workloadIdentityPools/whiteflag-pool/providers/whiteflag-provider
-          service_account: docker-devops@whiteflag-0.iam.gserviceaccount.com
-          access_token_lifetime: 300s
      
       - name: Build Docker Image
         env:
           IMAGE_NAME: fennel-protocol #create env called IMAGE_NAME consisted of actual name of Docker Image after we build
           PROJECT_ID: whiteflag-0
         run: docker build -t $IMAGE_NAME:latest . #build the docker image
+
+      - id: auth
+        name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: access_token
+          workload_identity_provider: projects/266537174077/locations/global/workloadIdentityPools/whiteflag-pool/providers/whiteflag-provider
+          service_account: docker-devops@whiteflag-0.iam.gserviceaccount.com
+          access_token_lifetime: 3599s
+          retries: 3
 
       - name: Login to Artifact Registry
         uses: docker/login-action@v1
