@@ -43,10 +43,14 @@ jobs:
         id: get-tag
         run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
 
-      - id: docker-push-tagged
-        name: Tag Docker image and push to Google Artifact Registry
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: |
-             us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/fennel-protocol:latest
+      #- id: docker-push-tagged
+      #  name: Tag Docker image and push to Google Artifact Registry
+      #  uses: docker/build-push-action@v4
+      #  with:
+      #    push: true
+      #    tags: |
+      #       us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/fennel-protocol:latest
+
+      - name: 'Docker push'
+        run: |-
+          docker push "us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/fennel-protocol:latest"
