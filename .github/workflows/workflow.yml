@@ -20,7 +20,7 @@ jobs:
         env:
           IMAGE_NAME: fennel-protocol #create env called IMAGE_NAME consisted of actual name of Docker Image after we build
           PROJECT_ID: whiteflag-0
-        run: docker build -t $IMAGE_NAME:latest . #build the docker image
+        run: docker build -t us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/$IMAGE_NAME:latest . #build the docker image
 
       - id: auth
         name: Authenticate with Google Cloud
@@ -54,5 +54,5 @@ jobs:
 
       - name: 'Docker push'
         run: |-
-          docker push "fennel-protocol:latest"
+          docker push us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/fennel-protocol:latest
          
