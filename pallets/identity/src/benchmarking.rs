@@ -17,7 +17,7 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
 
 benchmarks! {
     create_identity {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let anakin = get_origin::<T>("Anakin");
         let previous_identity_num = IdentityNumber::<T>::get();
     }: _(anakin.clone())
@@ -26,7 +26,7 @@ benchmarks! {
     }
 
     revoke_identity {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let anakin = get_origin::<T>("Anakin");
         // create identity to be used for revoking
         let identity_num: u32 = IdentityNumber::<T>::get().into();
@@ -38,7 +38,7 @@ benchmarks! {
     }
 
     add_or_update_identity_trait {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let anakin = get_origin::<T>("Anakin");
         let name: BoundedVec<u8, T::MaxSize>  = "name".as_bytes().to_vec().try_into().unwrap();
         let value: BoundedVec<u8, T::MaxSize>  = "Skywalker".as_bytes().to_vec().try_into().unwrap();
@@ -56,7 +56,7 @@ benchmarks! {
 
 
     remove_identity_trait {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let anakin = get_origin::<T>("Anakin");
         let name: BoundedVec<u8, T::MaxSize> = "name".as_bytes().to_vec().try_into().unwrap();
         let value: BoundedVec<u8, T::MaxSize>  = "Skywalker".as_bytes().to_vec().try_into().unwrap();
@@ -73,7 +73,7 @@ benchmarks! {
 
 
     sign_for_identity {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let anakin = get_origin::<T>("Anakin");
         let value: BoundedVec<u8, T::MaxSize>  = "I am your father.".as_bytes().to_vec().try_into().unwrap();
 
