@@ -14,13 +14,14 @@ resource "google_storage_bucket_object" "startup" {
   content_type = "text/plain"
 }
 
+#1 Polkadot boot node, one secondary validator, then two Fennel collators
 
-resource "google_compute_address" "fennel-protocol-ip" {
-  name = "fennel-protocol-ip"
+resource "google_compute_address" "fennel-protocol-boot-ip" {
+  name = "fennel-protocol-boot-ip"
 }
 
-resource "google_compute_instance" "fennel-protocol" {
-  name         = "fennel-protocol-instance"
+resource "google_compute_instance" "fennel-protocol-boot" {
+  name         = "fennel-protocol-boot-instance"
   machine_type = "e2-small"
   zone         = "us-east1-b"
 
@@ -38,12 +39,12 @@ resource "google_compute_instance" "fennel-protocol" {
     network    = "whiteflag-sandbox-vpc"
     subnetwork = "public-subnet"
      access_config {
-      nat_ip = google_compute_address.fennel-protocol-ip.address
+      nat_ip = google_compute_address.fennel-protocol-boot-ip.address
     }
   }
 
  metadata = {
-    startup-script-url = "gs://whiteflag-0-admin/fennel-protocol-terraform-start.sh"
+    startup-script-url = "gs://whiteflag-0-admin/fennel-protocol-boot-terraform-start.sh"
     gce-container-declaration = module.gce-container.metadata_value
     google-logging-enabled    = "true"
     google-monitoring-enabled = "true"
