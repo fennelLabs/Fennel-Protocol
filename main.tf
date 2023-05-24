@@ -55,6 +55,12 @@ resource "google_compute_instance" "fennel-protocol-boot" {
   }
 }
 
+resource "google_storage_bucket_object" "fennel-protocol-boot-ip-address" {
+  name   = "fennel-protocol-boot-ip.sh"
+  bucket = "whiteflag-0-admin"
+  content = google_compute_address.fennel-protocol-boot-ip.address
+}
+
 ### END BOOT NODE ###
 
 ### BEGIN VALIDATOR NODE ###
@@ -103,6 +109,12 @@ resource "google_compute_instance" "fennel-protocol-validator" {
   service_account {
     scopes = ["cloud-platform"]
   }
+}
+
+resource "google_storage_bucket_object" "fennel-protocol-validator-ip-address" {
+  name   = "fennel-protocol-validator-ip.sh"
+  bucket = "whiteflag-0-admin"
+  content = google_compute_address.fennel-protocol-validator-ip.address
 }
 
 ### END VALIDATOR NODE ###
@@ -155,6 +167,12 @@ resource "google_compute_instance" "fennel-protocol-collator-1" {
   }
 }
 
+resource "google_storage_bucket_object" "fennel-protocol-collator-1-ip-address" {
+  name   = "fennel-protocol-collator-1-ip.sh"
+  bucket = "whiteflag-0-admin"
+  content = google_compute_address.fennel-protocol-collator-1-ip.address
+}
+
 ### END COLLATOR 1 NODE ###
 
 ### BEGIN COLLATOR 2 NODE ###
@@ -203,4 +221,10 @@ resource "google_compute_instance" "fennel-protocol-collator-2" {
   service_account {
     scopes = ["cloud-platform"]
   }
+}
+
+resource "google_storage_bucket_object" "fennel-protocol-collator-2-ip-address" {
+  name   = "fennel-protocol-collator-2-ip.sh"
+  bucket = "whiteflag-0-admin"
+  content = google_compute_address.fennel-protocol-collator-2-ip.address
 }
