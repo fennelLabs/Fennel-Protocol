@@ -7,10 +7,10 @@ module "gce-container" {
   }
 }
 
-resource "google_storage_bucket_object" "startup" {
-  name   = "fennel-protocol-terraform-start.sh"
+resource "google_storage_bucket_object" "fennel-protocol-boot-startup" {
+  name   = "fennel-protocol-boot-terraform-start.sh"
   bucket = "whiteflag-0-admin"
-  source = "fennel-protocol-terraform-start.sh"
+  source = "fennel-protocol-boot-terraform-start.sh"
   content_type = "text/plain"
 }
 
