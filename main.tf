@@ -7,14 +7,14 @@ module "gce-container" {
   }
 }
 
+### BEGIN BOOT NODE ###
+
 resource "google_storage_bucket_object" "fennel-protocol-boot-startup" {
   name   = "fennel-protocol-boot-terraform-start.sh"
   bucket = "whiteflag-0-admin"
   source = "fennel-protocol-boot-terraform-start.sh"
   content_type = "text/plain"
 }
-
-#1 Polkadot boot node, one secondary validator, then two Fennel collators
 
 resource "google_compute_address" "fennel-protocol-boot-ip" {
   name = "fennel-protocol-boot-ip"
@@ -54,3 +54,8 @@ resource "google_compute_instance" "fennel-protocol-boot" {
     scopes = ["cloud-platform"]
   }
 }
+
+### END BOOT NODE ###
+
+### BEGIN VALIDATOR NODE ###
+#1 Polkadot boot node, one secondary validator, then two Fennel collators
