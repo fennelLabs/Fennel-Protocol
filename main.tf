@@ -59,3 +59,49 @@ resource "google_compute_instance" "fennel-protocol-boot" {
 
 ### BEGIN VALIDATOR NODE ###
 #1 Polkadot boot node, one secondary validator, then two Fennel collators
+
+resource "google_storage_bucket_object" "fennel-protocol-validator-startup" {
+  name   = "fennel-protocol-validator-terraform-start.sh"
+  bucket = "whiteflag-0-admin"
+  source = "fennel-protocol-validator-terraform-start.sh"
+  content_type = "text/plain"
+}
+
+resource "google_compute_address" "fennel-protocol-validator-ip" {
+  name = "fennel-protocol-validator-ip"
+}
+
+resource "google_compute_instance" "fennel-protocol-validator" {
+  name         = "fennel-protocol-validator-instance"
+  machine_type = "e2-small"
+  zone         = "us-east1-b"
+
+  can_ip_forward = true
+  tags = ["public-server"]
+  
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+      size = "50"
+    }
+  }
+
+  network_interface {
+    network    = "whiteflag-sandbox-vpc"
+    subnetwork = "public-subnet"
+     access_config {
+      nat_ip = google_compute_address.fennel-protocol-validator-ip.address
+    }
+  }
+
+ metadata = {
+    startup-script-url = "gs://whiteflag-0-admin/fennel-protocol-validator-terraform-start.sh"
+    gce-container-declaration = module.gce-container.metadata_value
+    google-logging-enabled    = "true"
+    google-monitoring-enabled = "true"
+  }
+ 
+  service_account {
+    scopes = ["cloud-platform"]
+  }
+}
