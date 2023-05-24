@@ -18,7 +18,7 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
 
 benchmarks! {
     send_certificate {
-        let s in 0 .. 1000;
+        let s in 0 .. 100000;
         let target = get_account::<T>("James");
         let caller = get_origin::<T>("Spock");
     }: _(caller, target)
@@ -29,7 +29,7 @@ benchmarks! {
     }
 
     revoke_certificate {
-        let s in 0 .. 1000;
+        let s in 0 .. 100000;
         let target = get_account::<T>("Montgomery");
         let caller = get_origin::<T>("Leonard");
         Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;

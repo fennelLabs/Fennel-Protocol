@@ -21,7 +21,7 @@ pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
 
 benchmarks! {
     announce_key {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let origin = get_origin::<T>("Anakin");
         let location = from_str_to_vec("location".to_string());
         let fingerprint = from_str_to_vec("fingerprint".to_string());
@@ -32,7 +32,7 @@ benchmarks! {
     }
 
     revoke_key {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let origin = get_origin::<T>("Anakin");
         let key_index = from_str_to_vec("somekey".to_string());
     }: _(origin.clone(), key_index.clone())
@@ -42,7 +42,7 @@ benchmarks! {
     }
 
     issue_encryption_key {
-        let s in 0 .. 100;
+        let s in 0 .. 100000;
         let origin = get_origin::<T>("Anakin");
         let key = [0; 32];
     }: _(origin.clone(), key.clone())
