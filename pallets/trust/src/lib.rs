@@ -23,7 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
-        type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
     }
 
@@ -95,27 +95,19 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        TrustExists,
+        TrustNotFound,
+        TrustRequestExists,
+        TrustRequestNotFound,
+        TrustRevocationExists,
+        TrustRevocationNotFound,
     }
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        /// Defines coefficients that participants should use to weight rating functions.
-        #[pallet::weight(<T as Config>::WeightInfo::set_trust_parameter())]
-        pub fn set_trust_parameter(
-            origin: OriginFor<T>,
-            name: Vec<u8>,
-            value: u8,
-        ) -> DispatchResult {
-            let who = ensure_signed(origin)?;
-
-            <TrustParameterList<T>>::insert(who.clone(), name.clone(), value);
-            Self::deposit_event(Event::TrustParameterSet(name, value, who));
-
-            Ok(())
-        }
-
         /// Fully give `origin`'s trust to account `address`
         #[pallet::weight(<T as Config>::WeightInfo::issue_trust())]
+        #[pallet::call_index(0)]
         pub fn issue_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -125,6 +117,8 @@ pub mod pallet {
                 <TrustIssuance<T>>::insert(&who, &address, total);
                 <CurrentIssued<T>>::put(new_total);
                 Self::deposit_event(Event::TrustIssued(who, address));
+            } else {
+                return Err(Error::<T>::TrustExists.into())
             }
 
             Ok(())
@@ -132,6 +126,7 @@ pub mod pallet {
 
         /// Remove issued trust from an account `address`, making their trust status 'Unknown'
         #[pallet::weight(<T as Config>::WeightInfo::remove_trust())]
+        #[pallet::call_index(1)]
         pub fn remove_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -141,6 +136,8 @@ pub mod pallet {
                 <TrustIssuance<T>>::remove(&who, &address);
                 <CurrentIssued<T>>::put(new_key);
                 Self::deposit_event(Event::TrustIssuanceRemoved(address, who));
+            } else {
+                return Err(Error::<T>::TrustNotFound.into())
             }
 
             Ok(())
@@ -148,6 +145,7 @@ pub mod pallet {
 
         /// Place a request for `address` to issue explicit trust to the sender.
         #[pallet::weight(<T as Config>::WeightInfo::request_trust())]
+        #[pallet::call_index(2)]
         pub fn request_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -157,6 +155,8 @@ pub mod pallet {
                 <CurrentRequests<T>>::put(new_total);
                 <TrustRequestList<T>>::insert(&who, &address, total);
                 Self::deposit_event(Event::TrustRequest(who, address));
+            } else {
+                return Err(Error::<T>::TrustRequestExists.into())
             }
 
             Ok(())
@@ -164,6 +164,7 @@ pub mod pallet {
 
         /// Rescind or cancel a trust request placed to `address`.
         #[pallet::weight(<T as Config>::WeightInfo::cancel_trust_request())]
+        #[pallet::call_index(3)]
         pub fn cancel_trust_request(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -173,6 +174,8 @@ pub mod pallet {
                 <TrustRequestList<T>>::remove(&who, &address);
                 <CurrentRequests<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRequestRemoved(address, who));
+            } else {
+                return Err(Error::<T>::TrustRequestNotFound.into())
             }
 
             Ok(())
@@ -180,6 +183,7 @@ pub mod pallet {
 
         /// Explcitly mark an account as untrusted
         #[pallet::weight(<T as Config>::WeightInfo::revoke_trust())]
+        #[pallet::call_index(4)]
         pub fn revoke_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -189,6 +193,8 @@ pub mod pallet {
                 <TrustRevocation<T>>::insert(&who, &address, key);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevoked(address, who));
+            } else {
+                return Err(Error::<T>::TrustRevocationExists.into())
             }
 
             Ok(())
@@ -196,6 +202,7 @@ pub mod pallet {
 
         /// Return an untrusted `address` to an Unknown trust state
         #[pallet::weight(<T as Config>::WeightInfo::remove_revoked_trust())]
+        #[pallet::call_index(5)]
         pub fn remove_revoked_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -205,7 +212,25 @@ pub mod pallet {
                 <TrustRevocation<T>>::remove(&who, &address);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevocationRemoved(address, who));
+            } else {
+                return Err(Error::<T>::TrustRevocationNotFound.into())
             }
+
+            Ok(())
+        }
+
+        /// Defines coefficients that participants should use to weight rating functions.
+        #[pallet::weight(<T as Config>::WeightInfo::set_trust_parameter())]
+        #[pallet::call_index(6)]
+        pub fn set_trust_parameter(
+            origin: OriginFor<T>,
+            name: Vec<u8>,
+            value: u8,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            <TrustParameterList<T>>::insert(who.clone(), name.clone(), value);
+            Self::deposit_event(Event::TrustParameterSet(name, value, who));
 
             Ok(())
         }

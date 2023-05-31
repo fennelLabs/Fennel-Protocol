@@ -27,7 +27,11 @@ benchmarks! {
     send_rating_signal {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller), target, 0)
+    }: _(RawOrigin::Signed(caller.clone()), target.clone(), 0)
+    verify {
+        assert!(RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
+        assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
+    }
 
     send_whiteflag_rating_signal {
         let target = "TEST".as_bytes().to_vec();
@@ -37,7 +41,10 @@ benchmarks! {
     update_rating_signal {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller), target, 0)
+    }: _(RawOrigin::Signed(caller.clone()), target.clone(), 1)
+    verify {
+        assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
+    }
 
     update_whiteflag_rating_signal {
         let target = "TEST".as_bytes().to_vec();
@@ -48,7 +55,11 @@ benchmarks! {
         let target = "TEST".as_bytes().to_vec();
         let caller = get_origin::<T>("Anakin");
         Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 0)?;
-    }: _(caller, target)
+    }: _(caller, target.clone())
+    verify {
+        let caller: T::AccountId = get_account::<T>("Anakin");
+        assert!(!RatingSignalList::<T>::contains_key(caller, target.clone()));
+    }
 
     send_signal {
         let target = "TEST".as_bytes().to_vec();

@@ -23,7 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
-        type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
     }
 
@@ -70,11 +70,24 @@ pub mod pallet {
         CertificateNotOwned,
     }
 
+    impl<T: Config> Pallet<T> {
+        fn is_certificate_owned_by_sender(
+            account_id: &T::AccountId,
+            recipient_id: &T::AccountId,
+        ) -> bool {
+            match <CertificateList<T>>::try_get(account_id, recipient_id) {
+                Result::Ok(_) => true,
+                Result::Err(_) => false,
+            }
+        }
+    }
+
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// Creates an on-chain event with a Certificate payload defined as part of the transaction
         /// and commits the details to storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_certificate())]
+        #[pallet::call_index(0)]
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -86,10 +99,16 @@ pub mod pallet {
         }
 
         #[pallet::weight(T::WeightInfo::revoke_certificate())]
+        #[pallet::call_index(1)]
         /// Revokes the identity with ID number identity_id, as long as the identity is owned by
         /// origin.
         pub fn revoke_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
+
+            ensure!(
+                Self::is_certificate_owned_by_sender(&who, &recipient),
+                Error::<T>::CertificateNotOwned
+            );
 
             <CertificateList<T>>::remove(&who, recipient.clone());
 

@@ -14,7 +14,7 @@ on:
 jobs:
   check:
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -26,23 +26,23 @@ jobs:
           submodules: recursive
 
       - name: Set-Up
-        run: sudo apt install -y cmake pkg-config libssl-dev git build-essential clang libclang-dev curl
+        run: sudo apt install -y cmake pkg-config libssl-dev git build-essential clang libclang-dev curl protobuf-compiler
 
       - name: Install Rustup
         run: |
           curl https://sh.rustup.rs -sSf | sh -s -- -y
           source ~/.cargo/env
-          rustup default nightly
           rustup update nightly
           rustup update stable
-          rustup target add wasm32-unknown-unknown --toolchain nightly
+          rustup default nightly-2022-11-15
+          rustup target add wasm32-unknown-unknown --toolchain nightly-2022-11-15
       
       - name: Check Formatting
         run: >
           cargo fmt --check
 
       - name: Enable caching
-        uses: Swatinem/rust-cache@v1.3.0
+        uses: Swatinem/rust-cache@v2
 
       - name: Test Build
         run: >

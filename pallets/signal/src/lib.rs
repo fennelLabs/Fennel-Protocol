@@ -23,7 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
-        type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+        type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
     }
 
@@ -59,6 +59,8 @@ pub mod pallet {
         ValueQuery,
     >;
 
+    #[pallet::storage]
+    #[pallet::unbounded]
     #[pallet::getter(fn signal_paramter_list)]
     /// Maps identity numbers to a signal transaction hash and a rating number.
     pub type SignalParameterList<T: Config> = StorageDoubleMap<
@@ -95,6 +97,7 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Defines coefficients that participants should use to weight rating functions.
         #[pallet::weight(<T as Config>::WeightInfo::set_signal_parameter())]
+        #[pallet::call_index(0)]
         pub fn set_signal_parameter(
             origin: OriginFor<T>,
             name: Vec<u8>,
@@ -111,6 +114,7 @@ pub mod pallet {
         /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating
         /// number.
         #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
+        #[pallet::call_index(1)]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
             target: Vec<u8>,
@@ -125,6 +129,7 @@ pub mod pallet {
         }
 
         #[pallet::weight(<T as Config>::WeightInfo::send_whiteflag_rating_signal())]
+        #[pallet::call_index(2)]
         pub fn send_whiteflag_rating_signal(
             origin: OriginFor<T>,
             target: Vec<u8>,
@@ -139,6 +144,7 @@ pub mod pallet {
         }
 
         #[pallet::weight(<T as Config>::WeightInfo::update_whiteflag_rating_signal())]
+        #[pallet::call_index(3)]
         pub fn update_whiteflag_rating_signal(
             origin: OriginFor<T>,
             target: Vec<u8>,
@@ -154,6 +160,7 @@ pub mod pallet {
 
         /// Updates an existing rating signal.
         #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
+        #[pallet::call_index(4)]
         pub fn update_rating_signal(
             origin: OriginFor<T>,
             target: Vec<u8>,
@@ -169,6 +176,7 @@ pub mod pallet {
 
         /// Puts out a signal cancelling a previous rating.
         #[pallet::weight(<T as Config>::WeightInfo::revoke_rating_signal())]
+        #[pallet::call_index(5)]
         pub fn revoke_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -179,6 +187,7 @@ pub mod pallet {
         }
 
         #[pallet::weight(<T as Config>::WeightInfo::revoke_whiteflag_rating_signal())]
+        #[pallet::call_index(6)]
         pub fn revoke_whiteflag_rating_signal(
             origin: OriginFor<T>,
             target: Vec<u8>,
@@ -194,6 +203,7 @@ pub mod pallet {
         /// Creates an on-chain event with a signal payload defined as part of the transaction
         /// without relying on storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
+        #[pallet::call_index(7)]
         pub fn send_signal(origin: OriginFor<T>, signal: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::SignalSent(signal, who));
@@ -201,6 +211,7 @@ pub mod pallet {
         }
 
         #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
+        #[pallet::call_index(8)]
         pub fn send_service_signal(
             origin: OriginFor<T>,
             service_identifier: Vec<u8>,

@@ -1,7 +1,7 @@
 use crate as pallet_fennel_identity;
 use frame_support::parameter_types;
 use frame_system as system;
-use sp_core::H256;
+use sp_core::{ConstU32, H256};
 use sp_runtime::{
     testing::Header,
     traits::{BlakeTwo256, IdentityLookup},
@@ -32,8 +32,8 @@ impl system::Config for Test {
     type BlockWeights = ();
     type BlockLength = ();
     type DbWeight = ();
-    type Origin = Origin;
-    type Call = Call;
+    type RuntimeOrigin = RuntimeOrigin;
+    type RuntimeCall = RuntimeCall;
     type Index = u64;
     type BlockNumber = u64;
     type Hash = H256;
@@ -41,7 +41,7 @@ impl system::Config for Test {
     type AccountId = u64;
     type Lookup = IdentityLookup<Self::AccountId>;
     type Header = Header;
-    type Event = Event;
+    type RuntimeEvent = RuntimeEvent;
     type BlockHashCount = BlockHashCount;
     type Version = ();
     type PalletInfo = PalletInfo;
@@ -55,8 +55,9 @@ impl system::Config for Test {
 }
 
 impl pallet_fennel_identity::Config for Test {
-    type Event = Event;
+    type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
+    type MaxSize = ConstU32<100>;
 }
 
 // Build genesis storage according to the mock runtime.
