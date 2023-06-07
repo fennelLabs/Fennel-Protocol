@@ -463,17 +463,17 @@ impl pallet_collator_selection::Config for Runtime {
 
 impl pallet_keystore::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_keystore::weights::SubstrateWeight<Runtime>;
+    type WeightInfo = pallet_keystore::weights::SubstrateWeights<Runtime>;
 }
 
 impl pallet_trust::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_trust::weights::SubstrateWeight<Runtime>;
+    type WeightInfo = pallet_trust::weights::SubstrateWeights<Runtime>;
 }
 
 impl pallet_signal::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_signal::weights::SubstrateWeight<Runtime>;
+    type WeightInfo = pallet_signal::weights::SubstrateWeights<Runtime>;
 }
 
 impl pallet_fennel_identity::Config for Runtime {

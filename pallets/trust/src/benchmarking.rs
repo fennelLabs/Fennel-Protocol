@@ -8,6 +8,11 @@ use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_call
 use frame_system::RawOrigin;
 
 benchmarks! {
+    set_trust_parameter {
+        let target = "TEST".as_bytes().to_vec();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target, 0)
+
     issue_trust {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();

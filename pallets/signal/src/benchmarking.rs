@@ -19,6 +19,11 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
 }
 
 benchmarks! {
+    set_signal_parameter {
+        let target = "TEST".as_bytes().to_vec();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target, 0)
+
     send_rating_signal {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
@@ -28,6 +33,11 @@ benchmarks! {
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
     }
 
+    send_whiteflag_rating_signal {
+        let target = "TEST".as_bytes().to_vec();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target, 0)
+
     update_rating_signal {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
@@ -35,6 +45,11 @@ benchmarks! {
     verify {
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
     }
+
+    update_whiteflag_rating_signal {
+        let target = "TEST".as_bytes().to_vec();
+        let caller: T::AccountId = whitelisted_caller();
+    }: _(RawOrigin::Signed(caller), target, 0)
 
     revoke_rating_signal {
         let target = "TEST".as_bytes().to_vec();
@@ -50,6 +65,12 @@ benchmarks! {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
     }: _(RawOrigin::Signed(caller), target)
+
+    revoke_whiteflag_rating_signal {
+        let target = "TEST".as_bytes().to_vec();
+        let caller = get_origin::<T>("Anakin");
+        Signal::<T>::send_whiteflag_rating_signal(caller.clone().into(), target.clone(), 0)?;
+    }: _(caller, target)
 
     send_service_signal {
         let service = "TEST".as_bytes().to_vec();

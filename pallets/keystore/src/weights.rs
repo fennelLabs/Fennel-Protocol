@@ -36,8 +36,8 @@ pub trait WeightInfo {
 }
 
 /// Weights for pallet_keystore using the Substrate node and recommended hardware.
-pub struct SubstrateWeight<T>(PhantomData<T>);
-impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
+pub struct SubstrateWeights<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
 	// Storage: Keystore IssuedKeys (r:0 w:1)
 	/// The range of component `s` is `[0, 100]`.
 	fn announce_key() -> Weight {

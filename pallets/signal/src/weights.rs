@@ -37,34 +37,50 @@ use sp_std::marker::PhantomData;
 
 /// Weight functions needed for pallet_signal.
 pub trait WeightInfo {
+    fn set_signal_parameter() -> Weight;
 	fn send_rating_signal() -> Weight;
 	fn update_rating_signal() -> Weight;
 	fn revoke_rating_signal() -> Weight;
+    fn send_whiteflag_rating_signal() -> Weight;
 	fn send_signal() -> Weight;
+    fn update_whiteflag_rating_signal() -> Weight;
 	fn send_service_signal() -> Weight;
+    fn revoke_whiteflag_rating_signal() -> Weight;
 }
 
-/// Weights for pallet_signal using the Substrate node and recommended hardware.
-pub struct SubstrateWeight<T>(PhantomData<T>);
-impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
-	// Storage: Signal RatingSignalList (r:0 w:1)
-	fn send_rating_signal() -> Weight {
-		// Minimum execution time: 13_000 nanoseconds.
-		Weight::from_ref_time(14_000_000)
-			.saturating_add(T::DbWeight::get().writes(1))
-	}
-	// Storage: Signal RatingSignalList (r:0 w:1)
-	fn update_rating_signal() -> Weight {
-		// Minimum execution time: 13_000 nanoseconds.
-		Weight::from_ref_time(14_000_000)
-			.saturating_add(T::DbWeight::get().writes(1))
-	}
-	// Storage: Signal RatingSignalList (r:0 w:1)
-	fn revoke_rating_signal() -> Weight {
-		// Minimum execution time: 13_000 nanoseconds.
-		Weight::from_ref_time(14_000_000)
-			.saturating_add(T::DbWeight::get().writes(1))
-	}
+/// Weight functions for pallet_trust.
+pub struct SubstrateWeights<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
+    fn set_signal_parameter() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn send_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn send_whiteflag_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn update_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn update_whiteflag_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn revoke_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn revoke_whiteflag_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+	// Storage: TrustModule TrustIssuance (r:1 w:1)
+	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn send_signal() -> Weight {
 		// Minimum execution time: 12_000 nanoseconds.
 		Weight::from_ref_time(12_000_000)
@@ -77,24 +93,36 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 
 // For backwards compatibility and tests
 impl WeightInfo for () {
-	// Storage: Signal RatingSignalList (r:0 w:1)
-	fn send_rating_signal() -> Weight {
-		// Minimum execution time: 13_000 nanoseconds.
-		Weight::from_ref_time(14_000_000)
-			.saturating_add(RocksDbWeight::get().writes(1))
-	}
-	// Storage: Signal RatingSignalList (r:0 w:1)
-	fn update_rating_signal() -> Weight {
-		// Minimum execution time: 13_000 nanoseconds.
-		Weight::from_ref_time(14_000_000)
-			.saturating_add(RocksDbWeight::get().writes(1))
-	}
-	// Storage: Signal RatingSignalList (r:0 w:1)
-	fn revoke_rating_signal() -> Weight {
-		// Minimum execution time: 13_000 nanoseconds.
-		Weight::from_ref_time(14_000_000)
-			.saturating_add(RocksDbWeight::get().writes(1))
-	}
+    fn set_signal_parameter() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn send_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn send_whiteflag_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn update_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn update_whiteflag_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn revoke_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+    fn revoke_whiteflag_rating_signal() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+	// Storage: TrustModule TrustIssuance (r:1 w:1)
+	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn send_signal() -> Weight {
 		// Minimum execution time: 12_000 nanoseconds.
 		Weight::from_ref_time(12_000_000)

@@ -36,13 +36,18 @@ pub trait WeightInfo {
 	fn remove_revoked_trust() -> Weight;
 	fn request_trust() -> Weight;
 	fn cancel_trust_request() -> Weight;
+    fn set_trust_parameter() -> Weight;
 }
 
 /// Weights for pallet_trust using the Substrate node and recommended hardware.
-pub struct SubstrateWeight<T>(PhantomData<T>);
-impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
-	// Storage: Trust TrustIssuance (r:1 w:1)
-	// Storage: Trust CurrentIssued (r:1 w:1)
+pub struct SubstrateWeights<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeights<T> {
+    fn set_trust_parameter() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+	// Storage: TrustModule TrustIssuance (r:1 w:1)
+	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn issue_trust() -> Weight {
 		// Minimum execution time: 17_000 nanoseconds.
 		Weight::from_ref_time(18_000_000)
@@ -87,8 +92,12 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 
 // For backwards compatibility and tests
 impl WeightInfo for () {
-	// Storage: Trust TrustIssuance (r:1 w:1)
-	// Storage: Trust CurrentIssued (r:1 w:1)
+    fn set_trust_parameter() -> Weight {
+        Weight::from_ref_time(7_000_000)
+    }
+
+	// Storage: TrustModule TrustIssuance (r:1 w:1)
+	// Storage: TrustModule CurrentIssued (r:1 w:1)
 	fn issue_trust() -> Weight {
 		// Minimum execution time: 17_000 nanoseconds.
 		Weight::from_ref_time(18_000_000)
