@@ -54,6 +54,7 @@ pub use sp_runtime::BuildStorage;
 pub use pallet_certificate;
 pub use pallet_fennel_identity;
 pub use pallet_keystore;
+pub use pallet_lockable;
 pub use pallet_signal;
 pub use pallet_trust;
 
@@ -474,6 +475,7 @@ impl pallet_trust::Config for Runtime {
 impl pallet_signal::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_signal::weights::SubstrateWeights<Runtime>;
+    type Currency = Balances;
 }
 
 impl pallet_fennel_identity::Config for Runtime {
@@ -485,6 +487,12 @@ impl pallet_fennel_identity::Config for Runtime {
 impl pallet_certificate::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_certificate::weights::SubstrateWeights<Runtime>;
+}
+
+impl pallet_lockable::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type WeightInfo = pallet_lockable::weights::SubstrateWeights<Runtime>;
+    type Currency = Balances;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -525,6 +533,7 @@ construct_runtime!(
         Signal: pallet_signal::{Pallet, Call, Storage, Event<T>} = 36,
         Identity: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>} = 37,
         Certificate: pallet_certificate::{Pallet, Call, Storage, Event<T>} = 38,
+        LockableCurrency: pallet_lockable::{Pallet, Call, Storage, Event<T>} = 39,
 
     }
 );
@@ -545,6 +554,7 @@ mod benches {
         [pallet_signal, Signal]
         [pallet_fennel_identity, Identity]
         [pallet_certificate, Certificate]
+        [pallet_lockable, LockableCurrency]
     );
 }
 

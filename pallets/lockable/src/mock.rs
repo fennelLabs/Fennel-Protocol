@@ -1,4 +1,4 @@
-use crate as pallet_signal;
+use crate as pallet_lockable;
 use frame_support::parameter_types;
 use frame_system as system;
 use sp_core::H256;
@@ -20,7 +20,7 @@ frame_support::construct_runtime!(
         UncheckedExtrinsic = UncheckedExtrinsic,
     {
         System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
-        SignalModule: pallet_signal::{Pallet, Call, Storage, Event<T>},
+        LockableModule: pallet_lockable::{Pallet, Call, Storage, Event<T>},
         Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
     }
 );
@@ -28,6 +28,18 @@ frame_support::construct_runtime!(
 parameter_types! {
     pub const BlockHashCount: u64 = 250;
     pub const SS58Prefix: u8 = 42;
+}
+
+impl pallet_balances::Config for Test {
+    type MaxReserves = ();
+    type ReserveIdentifier = [u8; 4];
+    type MaxLocks = ();
+    type Balance = Balance;
+    type RuntimeEvent = RuntimeEvent;
+    type DustRemoval = ();
+    type ExistentialDeposit = ExistentialDeposit;
+    type AccountStore = System;
+    type WeightInfo = ();
 }
 
 impl system::Config for Test {
@@ -61,22 +73,10 @@ parameter_types! {
     pub const ExistentialDeposit: u128 = 1;
 }
 
-impl pallet_balances::Config for Test {
-    type MaxReserves = ();
-    type ReserveIdentifier = [u8; 8];
-    type MaxLocks = ();
-    type Balance = Balance;
+impl pallet_lockable::Config for Test {
     type RuntimeEvent = RuntimeEvent;
-    type DustRemoval = ();
-    type ExistentialDeposit = ExistentialDeposit;
-    type AccountStore = System;
-    type WeightInfo = ();
-}
-
-impl pallet_signal::Config for Test {
-    type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = ();
     type Currency = Balances;
+    type WeightInfo = ();
 }
 
 // Build genesis storage according to the mock runtime.
