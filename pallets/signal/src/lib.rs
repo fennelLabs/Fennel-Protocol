@@ -16,15 +16,26 @@ pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
-    use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
+    use frame_support::{
+        dispatch::DispatchResult,
+        inherent::Vec,
+        pallet_prelude::*,
+        traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons},
+    };
     use frame_system::pallet_prelude::*;
 
     use crate::weights::WeightInfo;
+
+    const LOCK_ID: LockIdentifier = *b"fnlsignl";
+
+    type BalanceOf<T> =
+        <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
+        type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
     }
 
     #[pallet::pallet]
@@ -85,6 +96,9 @@ pub mod pallet {
         RatingSignalRevoked(Vec<u8>, T::AccountId),
         WhiteflagRatingSignalRevoked(Vec<u8>, T::AccountId),
         ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
+        SignalLock(<T as frame_system::Config>::AccountId, BalanceOf<T>),
+        SignalLockExtended(<T as frame_system::Config>::AccountId, BalanceOf<T>),
+        SignalUnlock(<T as frame_system::Config>::AccountId),
     }
 
     #[pallet::error]
@@ -123,6 +137,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
+            T::Currency::set_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
+            Self::deposit_event(Event::SignalLock(who.clone(), 10u32.into()));
             Self::deposit_event(Event::RatingSignalSent(target, rating, who));
 
             Ok(())
@@ -138,6 +154,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
+            T::Currency::set_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
+            Self::deposit_event(Event::SignalLock(who.clone(), 10u32.into()));
             Self::deposit_event(Event::WhiteflagRatingSignalSent(target, rating, who));
 
             Ok(())
@@ -153,6 +171,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
+            T::Currency::extend_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
+            Self::deposit_event(Event::SignalLockExtended(who.clone(), 10u32.into()));
             Self::deposit_event(Event::WhiteflagRatingSignalUpdated(target, new_rating, who));
 
             Ok(())
@@ -169,6 +189,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
+            T::Currency::extend_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
+            Self::deposit_event(Event::SignalLockExtended(who.clone(), 10u32.into()));
             Self::deposit_event(Event::RatingSignalUpdated(target, new_rating, who));
 
             Ok(())
@@ -181,6 +203,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
+            T::Currency::remove_lock(LOCK_ID, &who);
+            Self::deposit_event(Event::SignalUnlock(who.clone()));
             Self::deposit_event(Event::RatingSignalRevoked(target, who));
 
             Ok(())
@@ -195,6 +219,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             <WhiteflagRatingSignalList<T>>::remove(who.clone(), target.clone());
+            T::Currency::remove_lock(LOCK_ID, &who);
+            Self::deposit_event(Event::SignalUnlock(who.clone()));
             Self::deposit_event(Event::WhiteflagRatingSignalRevoked(target, who));
 
             Ok(())

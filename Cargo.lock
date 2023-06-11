@@ -2515,6 +2515,7 @@ dependencies = [
  "pallet-collator-selection",
  "pallet-fennel-identity",
  "pallet-keystore",
+ "pallet-lockable",
  "pallet-session",
  "pallet-signal",
  "pallet-sudo",
@@ -5729,6 +5730,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-lockable"
+version = "0.1.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+]
+
+[[package]]
 name = "pallet-membership"
 version = "4.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?branch=polkadot-v0.9.37#f38bd6671d460293c93062cc1e4fe9e9e490cb29"
@@ -6026,6 +6042,7 @@ dependencies = [
  "frame-benchmarking",
  "frame-support",
  "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
  "scale-info",
  "sp-core",
