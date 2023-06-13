@@ -119,6 +119,62 @@ resource "google_storage_bucket_object" "fennel-protocol-validator-ip-address" {
 
 ### END VALIDATOR NODE ###
 
+### BEGIN VALIDATOR 2 NODE ###
+
+resource "google_storage_bucket_object" "fennel-protocol-validator-2-startup" {
+  name   = "fennel-protocol-validator-2-terraform-start.sh"
+  bucket = "whiteflag-0-admin"
+  source = "fennel-protocol-validator-2-terraform-start.sh"
+  content_type = "text/plain"
+}
+
+resource "google_compute_address" "fennel-protocol-validator-2-ip" {
+  name = "fennel-protocol-validator-2-ip"
+}
+
+resource "google_compute_instance" "fennel-protocol-validator" {
+  name         = "fennel-protocol-validator-2-instance"
+  machine_type = "e2-small"
+  zone         = "us-east1-b"
+
+  can_ip_forward = true
+  tags = ["public-server"]
+  
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+      size = "50"
+    }
+  }
+
+  network_interface {
+    network    = "whiteflag-sandbox-vpc"
+    subnetwork = "public-subnet"
+     access_config {
+      nat_ip = google_compute_address.fennel-protocol-validator-2-ip.address
+    }
+  }
+
+ metadata = {
+    startup-script-url = "gs://whiteflag-0-admin/fennel-protocol-validator-2-terraform-start.sh"
+    gce-container-declaration = module.gce-container.metadata_value
+    google-logging-enabled    = "true"
+    google-monitoring-enabled = "true"
+  }
+ 
+  service_account {
+    scopes = ["cloud-platform"]
+  }
+}
+
+resource "google_storage_bucket_object" "fennel-protocol-validator-2-ip-address" {
+  name   = "fennel-protocol-validator-2-ip.sh"
+  bucket = "whiteflag-0-admin"
+  content = google_compute_address.fennel-protocol-validator-2-ip.address
+}
+
+### END VALIDATOR 2 NODE ###
+
 ### BEGIN COLLATOR 1 NODE ###
 
 resource "google_storage_bucket_object" "fennel-protocol-collator-1-startup" {
@@ -174,3 +230,59 @@ resource "google_storage_bucket_object" "fennel-protocol-collator-1-ip-address" 
 }
 
 ### END COLLATOR 1 NODE ###
+
+### BEGIN COLLATOR 2 NODE ###
+
+resource "google_storage_bucket_object" "fennel-protocol-collator-2-startup" {
+  name   = "fennel-protocol-collator-2-terraform-start.sh"
+  bucket = "whiteflag-0-admin"
+  source = "fennel-protocol-collator-2-terraform-start.sh"
+  content_type = "text/plain"
+}
+
+resource "google_compute_address" "fennel-protocol-collator-2-ip" {
+  name = "fennel-protocol-collator-2-ip"
+}
+
+resource "google_compute_instance" "fennel-protocol-collator-2" {
+  name         = "fennel-protocol-collator-2-instance"
+  machine_type = "e2-small"
+  zone         = "us-east1-b"
+
+  can_ip_forward = true
+  tags = ["public-server"]
+  
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+      size = "50"
+    }
+  }
+
+  network_interface {
+    network    = "whiteflag-sandbox-vpc"
+    subnetwork = "public-subnet"
+     access_config {
+      nat_ip = google_compute_address.fennel-protocol-collator-2-ip.address
+    }
+  }
+
+ metadata = {
+    startup-script-url = "gs://whiteflag-0-admin/fennel-protocol-collator-2-terraform-start.sh"
+    gce-container-declaration = module.gce-container.metadata_value
+    google-logging-enabled    = "true"
+    google-monitoring-enabled = "true"
+  }
+ 
+  service_account {
+    scopes = ["cloud-platform"]
+  }
+}
+
+resource "google_storage_bucket_object" "fennel-protocol-collator-2-ip-address" {
+  name   = "fennel-protocol-collator-2-ip.sh"
+  bucket = "whiteflag-0-admin"
+  content = google_compute_address.fennel-protocol-collator-2-ip.address
+}
+
+### END COLLATOR 2 NODE ###
