@@ -132,7 +132,7 @@ resource "google_compute_address" "fennel-protocol-validator-2-ip" {
   name = "fennel-protocol-validator-2-ip"
 }
 
-resource "google_compute_instance" "fennel-protocol-validator" {
+resource "google_compute_instance" "fennel-protocol-validator-2" {
   name         = "fennel-protocol-validator-2-instance"
   machine_type = "e2-small"
   zone         = "us-east1-b"
