@@ -15,12 +15,3 @@ RUN rustup update nightly && \
 WORKDIR /app
 COPY . .
 RUN cargo build --release
-
-CMD /app/target/release/fennel-node \
-    --dev \
-    --tmp \
-    --unsafe-ws-external \
-    --rpc-external \
-    --prometheus-external \
-    --rpc-methods unsafe \
-    --rpc-cors all
