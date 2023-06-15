@@ -289,19 +289,19 @@ resource "google_storage_bucket_object" "fennel-protocol-collator-2-ip-address" 
 
 ### BEGIN COLLATOR R NODE ###
 
-resource "google_storage_bucket_object" "fennel-protocol-collator-R-startup" {
-  name   = "fennel-protocol-collator-R-terraform-start.sh"
+resource "google_storage_bucket_object" "fennel-protocol-collator-rococo-startup" {
+  name   = "fennel-protocol-collator-rococo-terraform-start.sh"
   bucket = "whiteflag-0-admin"
-  source = "fennel-protocol-collator-R-terraform-start.sh"
+  source = "fennel-protocol-collator-rococo-terraform-start.sh"
   content_type = "text/plain"
 }
 
-resource "google_compute_address" "fennel-protocol-collator-R-ip" {
-  name = "fennel-protocol-collator-R-ip"
+resource "google_compute_address" "fennel-protocol-collator-rococo-ip" {
+  name = "fennel-protocol-collator-rococo-ip"
 }
 
-resource "google_compute_instance" "fennel-protocol-collator-R" {
-  name         = "fennel-protocol-collator-R-instance"
+resource "google_compute_instance" "fennel-protocol-collator-rococo" {
+  name         = "fennel-protocol-collator-rococo-instance"
   machine_type = "e2-standard-2"
   zone         = "us-east1-b"
 
@@ -319,12 +319,12 @@ resource "google_compute_instance" "fennel-protocol-collator-R" {
     network    = "whiteflag-sandbox-vpc"
     subnetwork = "public-subnet"
      access_config {
-      nat_ip = google_compute_address.fennel-protocol-collator-R-ip.address
+      nat_ip = google_compute_address.fennel-protocol-collator-rococo-ip.address
     }
   }
 
  metadata = {
-    startup-script-url = "gs://whiteflag-0-admin/fennel-protocol-collator-R-terraform-start.sh"
+    startup-script-url = "gs://whiteflag-0-admin/fennel-protocol-collator-rococo-terraform-start.sh"
     gce-container-declaration = module.gce-container.metadata_value
     google-logging-enabled    = "true"
     google-monitoring-enabled = "true"
@@ -335,10 +335,10 @@ resource "google_compute_instance" "fennel-protocol-collator-R" {
   }
 }
 
-resource "google_storage_bucket_object" "fennel-protocol-collator-R-ip-address" {
-  name   = "fennel-protocol-collator-R-ip.sh"
+resource "google_storage_bucket_object" "fennel-protocol-collator-rococo-ip-address" {
+  name   = "fennel-protocol-collator-rococo-ip.sh"
   bucket = "whiteflag-0-admin"
-  content = google_compute_address.fennel-protocol-collator-R-ip.address
+  content = google_compute_address.fennel-protocol-collator-rococo-ip.address
 }
 
 ### END COLLATOR 2 NODE ###

@@ -4,7 +4,7 @@ sudo apt-get install -y docker.io nginx snapd
 sudo snap install core && sudo snap refresh core
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
-gsutil cat gs://whiteflag-0-admin/fennel-nginx-conf-collator-R.sh > /etc/nginx/sites-enabled/default
+gsutil cat gs://whiteflag-0-admin/fennel-nginx-conf-collator-rococo.sh > /etc/nginx/sites-enabled/default
 sudo systemctl enable nginx
 sudo systemctl start nginx
 sudo certbot --nginx --non-interactive --agree-tos --email info@fennellabs.com --domains rococo.fennellabs.com
