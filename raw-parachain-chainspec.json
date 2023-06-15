@@ -10,7 +10,7 @@
     "tokenDecimals": 12,
     "tokenSymbol": "FNL"
   },
-  "relay_chain": "fennel-relay",
+  "relay_chain": "rococo_local_testnet",
   "para_id": 2000,
   "codeSubstitutes": {},
   "genesis": {
