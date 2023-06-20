@@ -105,6 +105,7 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        InsufficientBalance,
     }
 
     #[pallet::call]
@@ -136,6 +137,9 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            if T::Currency::free_balance(&who) <= 10u32.into() {
+                return Err(Error::<T>::InsufficientBalance.into())
+            }
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             T::Currency::set_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLock(who.clone(), 10u32.into()));
@@ -153,6 +157,9 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            if T::Currency::free_balance(&who) <= 10u32.into() {
+                return Err(Error::<T>::InsufficientBalance.into())
+            }
             <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             T::Currency::set_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLock(who.clone(), 10u32.into()));
@@ -170,6 +177,9 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            if T::Currency::free_balance(&who) <= 10u32.into() {
+                return Err(Error::<T>::InsufficientBalance.into())
+            }
             <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
             T::Currency::extend_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLockExtended(who.clone(), 10u32.into()));
@@ -188,6 +198,9 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            if T::Currency::free_balance(&who) <= 10u32.into() {
+                return Err(Error::<T>::InsufficientBalance.into())
+            }
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
             T::Currency::extend_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLockExtended(who.clone(), 10u32.into()));

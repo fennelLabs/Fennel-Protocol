@@ -27,7 +27,6 @@ pallet-keystore = { default-features = false, path = '../../pallets/keystore', v
 pallet-signal = { default-features = false, path = '../../pallets/signal', version = '0.1.0' }
 pallet-fennel-identity = { default-features = false, path = '../../pallets/identity', version = '0.1.0' }
 pallet-certificate = { default-features = false, path = '../../pallets/certificate', version = '0.1.0' }
-pallet-lockable = { default-features = false, path = '../../pallets/lockable', version = '0.1.0' }
 
 # Substrate
 frame-benchmarking = { git = "https://github.com/paritytech/substrate", default-features = false, optional = true, branch = "polkadot-v0.9.43" }
@@ -131,7 +130,6 @@ std = [
     "pallet-signal/std",
     "pallet-trust/std",
     "pallet-certificate/std",
-    "pallet-lockable/std",
 ]
 
 runtime-benchmarks = [
@@ -154,7 +152,6 @@ runtime-benchmarks = [
     "pallet-signal/runtime-benchmarks",
     "pallet-trust/runtime-benchmarks",
     "pallet-certificate/runtime-benchmarks",
-    "pallet-lockable/runtime-benchmarks",
     "polkadot-parachain/runtime-benchmarks",
     "polkadot-runtime-common/runtime-benchmarks",
     "xcm-executor/runtime-benchmarks",
@@ -186,7 +183,6 @@ try-runtime = [
     "pallet-fennel-identity/try-runtime",
     "pallet-keystore/try-runtime",
     "pallet-certificate/try-runtime",
-    "pallet-lockable/try-runtime",
     "pallet-session/try-runtime",
     "pallet-signal/try-runtime",
     "pallet-sudo/try-runtime",
