@@ -216,5 +216,6 @@ fn testnet_genesis(
         polkadot_xcm: fennel_runtime::PolkadotXcmConfig {
             safe_xcm_version: Some(SAFE_XCM_VERSION),
         },
+        transaction_payment: Default::default(),
     }
 }
