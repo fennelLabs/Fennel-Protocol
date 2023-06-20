@@ -40,6 +40,10 @@ impl pallet_balances::Config for Test {
     type ExistentialDeposit = ExistentialDeposit;
     type AccountStore = System;
     type WeightInfo = ();
+    type HoldIdentifier = [u8; 8];
+    type FreezeIdentifier = [u8; 8];
+    type MaxFreezes = ();
+    type MaxHolds = ();
 }
 
 impl system::Config for Test {
