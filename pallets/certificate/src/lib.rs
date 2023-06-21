@@ -14,12 +14,14 @@ mod benchmarking;
 pub mod weights;
 pub use weights::*;
 
+const CERTIFICATE_EXISTS: bool = true;
+
 #[frame_support::pallet]
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
 
-    use crate::weights::WeightInfo;
+    use crate::{weights::WeightInfo, CERTIFICATE_EXISTS};
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
@@ -36,12 +38,6 @@ pub mod pallet {
     }
 
     #[pallet::storage]
-    #[pallet::getter(fn certificate_number)]
-    /// Tracks the number of identities currently active on the network.
-    pub type CertificateNumber<T: Config> =
-        StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
-
-    #[pallet::storage]
     #[pallet::unbounded]
     #[pallet::getter(fn certificate_list)]
     /// Maps accounts to the array of identities it owns.
@@ -51,7 +47,7 @@ pub mod pallet {
         T::AccountId,
         Blake2_128Concat,
         T::AccountId,
-        u32,
+        bool,
         ValueQuery,
     >;
 
@@ -90,7 +86,9 @@ pub mod pallet {
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <CertificateList<T>>::insert(&who, recipient.clone(), 0);
+            // Insert a placeholder value into storage - if the pair (who, recipient) exists, we
+            // know there's a certificate present for the pair, regardless of value.
+            <CertificateList<T>>::insert(&who, recipient.clone(), CERTIFICATE_EXISTS);
 
             Self::deposit_event(Event::CertificateSent(recipient, who));
 
