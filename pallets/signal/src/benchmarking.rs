@@ -1,12 +1,10 @@
 //! Benchmarking setup for pallet-template
+#![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-
-#[allow(unused)]
 use crate::Pallet as Signal;
-use frame_benchmarking::{
-    account as benchmark_account, benchmarks, impl_benchmark_test_suite, whitelisted_caller,
-};
+
+use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_system::RawOrigin;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
@@ -18,44 +16,74 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
     RawOrigin::Signed(get_account::<T>(name))
 }
 
-benchmarks! {
-    send_rating_signal {
+#[benchmarks]
+mod benchmarks {
+    use super::*;
+
+    #[benchmark]
+    fn send_rating_signal() -> Result<(), BenchmarkError> {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller.clone()), target.clone(), 0)
-    verify {
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
+
         assert!(RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
+
+        Ok(())
     }
 
-    update_rating_signal {
+    #[benchmark]
+    fn update_rating_signal() -> Result<(), BenchmarkError> {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller.clone()), target.clone(), 1)
-    verify {
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone(), 1);
+
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
+
+        Ok(())
     }
 
-    revoke_rating_signal {
+    #[benchmark]
+    fn revoke_rating_signal() -> Result<(), BenchmarkError> {
         let target = "TEST".as_bytes().to_vec();
         let caller = get_origin::<T>("Anakin");
         Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 0)?;
-    }: _(caller, target.clone())
-    verify {
+
+        #[extrinsic_call]
+        _(caller, target.clone());
+
         let caller: T::AccountId = get_account::<T>("Anakin");
         assert!(!RatingSignalList::<T>::contains_key(caller, target.clone()));
+
+        Ok(())
     }
 
-    send_signal {
+    #[benchmark]
+    fn send_signal() -> Result<(), BenchmarkError> {
         let target = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller), target)
 
-    send_service_signal {
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller), target);
+
+        Ok(())
+    }
+
+    #[benchmark]
+    fn send_service_signal() -> Result<(), BenchmarkError> {
         let service = "TEST".as_bytes().to_vec();
         let url = "TEST".as_bytes().to_vec();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller), service, url)
-}
 
-impl_benchmark_test_suite!(Signal, crate::mock::new_test_ext(), crate::mock::Test);
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller), service, url);
+
+        Ok(())
+    }
+
+    impl_benchmark_test_suite!(Signal, crate::mock::new_test_ext(), crate::mock::Test);
+}

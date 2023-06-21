@@ -1,69 +1,134 @@
 //! Benchmarking setup for pallet-template
+#![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-
-#[allow(unused)]
 use crate::Pallet as Trust;
-use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller};
+
+use frame_benchmarking::v2::*;
 use frame_system::RawOrigin;
 
-benchmarks! {
-    issue_trust {
+#[benchmarks]
+mod benchmarks {
+    use super::*;
+
+    #[benchmark]
+    fn issue_trust() -> Result<(), BenchmarkError> {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller.clone()), target.clone())
-    verify {
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone());
+
         assert_eq!(CurrentIssued::<T>::get(), 1);
         assert!(TrustIssuance::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
     }
 
-    revoke_trust {
+    #[benchmark(extra)]
+    fn issue_trust_already_exists() -> Result<(), BenchmarkError> {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller.clone()), target.clone())
-    verify {
-        assert_eq!(CurrentRevoked::<T>::get(), 1);
-        assert!(TrustRevocation::<T>::contains_key(caller.clone(), target.clone()));
+
+        Trust::<T>::issue_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
+
+        #[extrinsic_call]
+        issue_trust(RawOrigin::Signed(caller.clone()), target.clone());
+
+        assert_eq!(CurrentIssued::<T>::get(), 1);
+        assert!(TrustIssuance::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
     }
 
-    remove_trust {
+    #[benchmark]
+    fn revoke_trust() -> Result<(), BenchmarkError> {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone());
+
+        assert_eq!(CurrentRevoked::<T>::get(), 1);
+        assert!(TrustRevocation::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
+    }
+
+    #[benchmark(extra)]
+    fn revoke_trust_already_exists() -> Result<(), BenchmarkError> {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+
+        Trust::<T>::revoke_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
+
+        #[extrinsic_call]
+        revoke_trust(RawOrigin::Signed(caller.clone()), target.clone());
+
+        assert_eq!(CurrentRevoked::<T>::get(), 1);
+        assert!(TrustRevocation::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
+    }
+
+    #[benchmark]
+    fn remove_trust() -> Result<(), BenchmarkError> {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
         Trust::<T>::issue_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
-    }: _(RawOrigin::Signed(caller.clone()), target.clone())
-    verify {
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone());
+
         assert_eq!(CurrentIssued::<T>::get(), 0);
         assert!(!TrustIssuance::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
     }
 
-    remove_revoked_trust {
+    #[benchmark]
+    fn remove_revoked_trust() -> Result<(), BenchmarkError> {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
         Trust::<T>::revoke_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
-    }: _(RawOrigin::Signed(caller.clone()), target.clone())
-    verify {
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone());
+
         assert_eq!(CurrentRevoked::<T>::get(), 0);
         assert!(!TrustRevocation::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
     }
 
-    request_trust {
+    #[benchmark]
+    fn request_trust() -> Result<(), BenchmarkError> {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller.clone()), target.clone())
-    verify {
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone());
+
         assert_eq!(CurrentRequests::<T>::get(), 1);
         assert!(TrustRequestList::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
     }
 
-    cancel_trust_request {
+    #[benchmark]
+    fn cancel_trust_request() -> Result<(), BenchmarkError> {
         let target: T::AccountId = whitelisted_caller();
         let caller: T::AccountId = whitelisted_caller();
         Trust::<T>::request_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
-    }: _(RawOrigin::Signed(caller.clone()), target.clone())
-    verify {
+
+        #[extrinsic_call]
+        _(RawOrigin::Signed(caller.clone()), target.clone());
+
         assert_eq!(CurrentRequests::<T>::get(), 0);
         assert!(!TrustRequestList::<T>::contains_key(caller.clone(), target.clone()));
-    }
-}
 
-impl_benchmark_test_suite!(Trust, crate::mock::new_test_ext(), crate::mock::Test);
+        Ok(())
+    }
+
+    impl_benchmark_test_suite!(Trust, crate::mock::new_test_ext(), crate::mock::Test);
+}
