@@ -34,6 +34,9 @@
           ]
         ]
       },
+      "transactionPayment": {
+        "multiplier": "1000000000000000000"
+      },
       "collatorSelection": {
         "invulnerables": [
             "5Eqn8sMqWPyD3JgKNyirWTrM7NNiQpFJQePvxFjPYAVbvy9P",
