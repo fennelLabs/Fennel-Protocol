@@ -14,7 +14,6 @@ pallets=(
     pallet_keystore
     pallet_signal
     pallet_trust
-    pallet_lockable
 )
 
 cargo build --release --features=runtime-benchmarks --bin=fennel-node
