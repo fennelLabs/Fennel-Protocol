@@ -9,8 +9,8 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get upgrade -y
 
 RUN rustup update nightly && \
-    rustup default nightly-2022-11-15 && \
-    rustup target add wasm32-unknown-unknown --toolchain nightly-2022-11-15
+    rustup default nightly && \
+    rustup target add wasm32-unknown-unknown --toolchain nightly
 
 WORKDIR /app
 COPY . .
