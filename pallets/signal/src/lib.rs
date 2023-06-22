@@ -18,7 +18,6 @@ pub use weights::*;
 pub mod pallet {
     use frame_support::{
         dispatch::DispatchResult,
-        inherent::Vec,
         pallet_prelude::*,
         traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons},
     };
@@ -36,10 +35,10 @@ pub mod pallet {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
         type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
+        type MaxSize: Get<u32>;
     }
 
     #[pallet::pallet]
-    #[pallet::generate_store(pub(super) trait Store)]
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
@@ -51,7 +50,7 @@ pub mod pallet {
         Blake2_128Concat,
         T::AccountId,
         Blake2_128Concat,
-        Vec<u8>,
+        BoundedVec<u8, T::MaxSize>,
         u8,
         ValueQuery,
     >;
@@ -65,7 +64,7 @@ pub mod pallet {
         Blake2_128Concat,
         T::AccountId,
         Blake2_128Concat,
-        Vec<u8>,
+        BoundedVec<u8, T::MaxSize>,
         u8,
         ValueQuery,
     >;
@@ -79,7 +78,7 @@ pub mod pallet {
         Blake2_128Concat,
         T::AccountId,
         Blake2_128Concat,
-        Vec<u8>,
+        BoundedVec<u8, T::MaxSize>,
         u8,
         ValueQuery,
     >;
@@ -87,15 +86,15 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        SignalParameterSet(Vec<u8>, u8, T::AccountId),
-        SignalSent(Vec<u8>, T::AccountId),
-        RatingSignalSent(Vec<u8>, u8, T::AccountId),
-        WhiteflagRatingSignalSent(Vec<u8>, u8, T::AccountId),
-        RatingSignalUpdated(Vec<u8>, u8, T::AccountId),
-        WhiteflagRatingSignalUpdated(Vec<u8>, u8, T::AccountId),
-        RatingSignalRevoked(Vec<u8>, T::AccountId),
-        WhiteflagRatingSignalRevoked(Vec<u8>, T::AccountId),
-        ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
+        SignalParameterSet(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
+        SignalSent(BoundedVec<u8, T::MaxSize>, T::AccountId),
+        RatingSignalSent(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
+        WhiteflagRatingSignalSent(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
+        RatingSignalUpdated(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
+        WhiteflagRatingSignalUpdated(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
+        RatingSignalRevoked(BoundedVec<u8, T::MaxSize>, T::AccountId),
+        WhiteflagRatingSignalRevoked(BoundedVec<u8, T::MaxSize>, T::AccountId),
+        ServiceSignalSent(BoundedVec<u8, T::MaxSize>, BoundedVec<u8, T::MaxSize>, T::AccountId),
         SignalLock(<T as frame_system::Config>::AccountId, BalanceOf<T>),
         SignalLockExtended(<T as frame_system::Config>::AccountId, BalanceOf<T>),
         SignalUnlock(<T as frame_system::Config>::AccountId),
@@ -115,7 +114,7 @@ pub mod pallet {
         #[pallet::call_index(0)]
         pub fn set_signal_parameter(
             origin: OriginFor<T>,
-            name: Vec<u8>,
+            name: BoundedVec<u8, T::MaxSize>,
             value: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -132,7 +131,7 @@ pub mod pallet {
         #[pallet::call_index(1)]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
-            target: Vec<u8>,
+            target: BoundedVec<u8, T::MaxSize>,
             rating: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -152,7 +151,7 @@ pub mod pallet {
         #[pallet::call_index(2)]
         pub fn send_whiteflag_rating_signal(
             origin: OriginFor<T>,
-            target: Vec<u8>,
+            target: BoundedVec<u8, T::MaxSize>,
             rating: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -172,7 +171,7 @@ pub mod pallet {
         #[pallet::call_index(3)]
         pub fn update_whiteflag_rating_signal(
             origin: OriginFor<T>,
-            target: Vec<u8>,
+            target: BoundedVec<u8, T::MaxSize>,
             new_rating: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -193,7 +192,7 @@ pub mod pallet {
         #[pallet::call_index(4)]
         pub fn update_rating_signal(
             origin: OriginFor<T>,
-            target: Vec<u8>,
+            target: BoundedVec<u8, T::MaxSize>,
             new_rating: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -212,7 +211,10 @@ pub mod pallet {
         /// Puts out a signal cancelling a previous rating.
         #[pallet::weight(<T as Config>::WeightInfo::revoke_rating_signal())]
         #[pallet::call_index(5)]
-        pub fn revoke_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
+        pub fn revoke_rating_signal(
+            origin: OriginFor<T>,
+            target: BoundedVec<u8, T::MaxSize>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
@@ -227,7 +229,7 @@ pub mod pallet {
         #[pallet::call_index(6)]
         pub fn revoke_whiteflag_rating_signal(
             origin: OriginFor<T>,
-            target: Vec<u8>,
+            target: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -243,7 +245,10 @@ pub mod pallet {
         /// without relying on storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
         #[pallet::call_index(7)]
-        pub fn send_signal(origin: OriginFor<T>, signal: Vec<u8>) -> DispatchResult {
+        pub fn send_signal(
+            origin: OriginFor<T>,
+            signal: BoundedVec<u8, T::MaxSize>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::SignalSent(signal, who));
             Ok(())
@@ -253,8 +258,8 @@ pub mod pallet {
         #[pallet::call_index(8)]
         pub fn send_service_signal(
             origin: OriginFor<T>,
-            service_identifier: Vec<u8>,
-            url: Vec<u8>,
+            service_identifier: BoundedVec<u8, T::MaxSize>,
+            url: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::ServiceSignalSent(service_identifier, url, who));

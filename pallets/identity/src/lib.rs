@@ -29,7 +29,6 @@ pub mod pallet {
     }
 
     #[pallet::pallet]
-    #[pallet::generate_store(pub(super) trait Store)]
     pub struct Pallet<T>(_);
 
     #[pallet::type_value]
@@ -238,7 +237,7 @@ pub mod pallet {
                 Ok(())
             })?;
             let new_id: u32 = <SignalCount<T>>::get();
-            <SignatureSignal<T>>::insert(&identity_id, &signal_id, &content);
+            <SignatureSignal<T>>::insert(identity_id, signal_id, &content);
             <SignalCount<T>>::put(new_id);
             Self::deposit_event(Event::SignedSignal(identity_id, who, content));
 

@@ -16,7 +16,7 @@ pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
-    use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
+    use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
 
     use crate::weights::WeightInfo;
@@ -25,10 +25,10 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
+        type MaxSize: Get<u32>;
     }
 
     #[pallet::pallet]
-    #[pallet::generate_store(pub(super) trait Store)]
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
@@ -36,8 +36,14 @@ pub mod pallet {
     /// This module's main storage will consist of a StorageDoubleMap connecting addresses to the
     /// list of keys they've submitted and not revoked.
     #[pallet::getter(fn key)]
-    pub type IssuedKeys<T: Config> =
-        StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, Vec<u8>, Vec<u8>>;
+    pub type IssuedKeys<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat,
+        T::AccountId,
+        Blake2_128Concat,
+        BoundedVec<u8, T::MaxSize>,
+        BoundedVec<u8, T::MaxSize>,
+    >;
 
     #[pallet::storage]
     #[pallet::getter(fn encryption_key)]
@@ -50,9 +56,9 @@ pub mod pallet {
         /// Announce when an identity has broadcast a new key as an event.
         EncryptionKeyIssued([u8; 32], T::AccountId),
         /// Announce when an identity has set a key as revoked.
-        KeyRevoked(Vec<u8>, T::AccountId),
+        KeyRevoked(BoundedVec<u8, T::MaxSize>, T::AccountId),
         /// Announce that a key exists.
-        KeyExists(Vec<u8>, Vec<u8>, T::AccountId),
+        KeyExists(BoundedVec<u8, T::MaxSize>, BoundedVec<u8, T::MaxSize>, T::AccountId),
     }
 
     #[pallet::error]
@@ -67,8 +73,8 @@ pub mod pallet {
         #[pallet::call_index(0)]
         pub fn announce_key(
             origin: OriginFor<T>,
-            fingerprint: Vec<u8>,
-            location: Vec<u8>,
+            fingerprint: BoundedVec<u8, T::MaxSize>,
+            location: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
@@ -82,7 +88,10 @@ pub mod pallet {
         /// and informing the network.
         #[pallet::weight(T::WeightInfo::revoke_key())]
         #[pallet::call_index(1)]
-        pub fn revoke_key(origin: OriginFor<T>, key_index: Vec<u8>) -> DispatchResult {
+        pub fn revoke_key(
+            origin: OriginFor<T>,
+            key_index: BoundedVec<u8, T::MaxSize>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             <IssuedKeys<T>>::remove(&who, &key_index);
@@ -97,7 +106,7 @@ pub mod pallet {
         pub fn issue_encryption_key(origin: OriginFor<T>, key: [u8; 32]) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <IssuedEncryptionKeys<T>>::insert(&who, &key);
+            <IssuedEncryptionKeys<T>>::insert(&who, key);
 
             Self::deposit_event(Event::EncryptionKeyIssued(key, who));
             Ok(())
