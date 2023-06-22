@@ -5,6 +5,7 @@ use super::*;
 use crate::Pallet as Signal;
 
 use frame_benchmarking::{account as benchmark_account, v2::*};
+use frame_support::BoundedVec;
 use frame_system::RawOrigin;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
@@ -22,7 +23,9 @@ mod benchmarks {
 
     #[benchmark]
     fn send_rating_signal() -> Result<(), BenchmarkError> {
-        let target = "TEST".as_bytes().to_vec();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
         #[extrinsic_call]
@@ -36,7 +39,9 @@ mod benchmarks {
 
     #[benchmark]
     fn update_rating_signal() -> Result<(), BenchmarkError> {
-        let target = "TEST".as_bytes().to_vec();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
         #[extrinsic_call]
@@ -49,7 +54,9 @@ mod benchmarks {
 
     #[benchmark]
     fn revoke_rating_signal() -> Result<(), BenchmarkError> {
-        let target = "TEST".as_bytes().to_vec();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
         let caller = get_origin::<T>("Anakin");
         Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 0)?;
 
@@ -64,19 +71,25 @@ mod benchmarks {
 
     #[benchmark]
     fn send_signal() -> Result<(), BenchmarkError> {
-        let target = "TEST".as_bytes().to_vec();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
         #[extrinsic_call]
-        _(RawOrigin::Signed(caller), target);
+        _(RawOrigin::Signed(caller), target.into());
 
         Ok(())
     }
 
     #[benchmark]
     fn send_service_signal() -> Result<(), BenchmarkError> {
-        let service = "TEST".as_bytes().to_vec();
-        let url = "TEST".as_bytes().to_vec();
+        let service =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
+        let url =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
         #[extrinsic_call]

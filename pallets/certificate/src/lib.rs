@@ -70,10 +70,7 @@ pub mod pallet {
             account_id: &T::AccountId,
             recipient_id: &T::AccountId,
         ) -> bool {
-            match <CertificateList<T>>::try_get(account_id, recipient_id) {
-                Result::Ok(_) => true,
-                Result::Err(_) => false,
-            }
+            <CertificateList<T>>::try_get(account_id, recipient_id).is_ok()
         }
     }
 

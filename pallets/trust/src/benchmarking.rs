@@ -115,6 +115,22 @@ mod benchmarks {
         Ok(())
     }
 
+    #[benchmark(extra)]
+    fn request_trust_already_exists() -> Result<(), BenchmarkError> {
+        let target: T::AccountId = whitelisted_caller();
+        let caller: T::AccountId = whitelisted_caller();
+
+        Trust::<T>::request_trust(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
+
+        #[extrinsic_call]
+        request_trust(RawOrigin::Signed(caller.clone()), target.clone());
+
+        assert_eq!(CurrentRequests::<T>::get(), 1);
+        assert!(TrustRequestList::<T>::contains_key(caller.clone(), target.clone()));
+
+        Ok(())
+    }
+
     #[benchmark]
     fn cancel_trust_request() -> Result<(), BenchmarkError> {
         let target: T::AccountId = whitelisted_caller();

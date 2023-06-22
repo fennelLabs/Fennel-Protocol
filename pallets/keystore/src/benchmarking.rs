@@ -4,12 +4,8 @@ use crate::Pallet as Keystore;
 
 use codec::alloc::string::{String, ToString};
 use frame_benchmarking::{account as benchmark_account, v2::*};
-use frame_support::inherent::Vec;
+use frame_support::BoundedVec;
 use frame_system::RawOrigin;
-
-pub fn from_str_to_vec(string: String) -> Vec<u8> {
-    string.as_bytes().to_vec()
-}
 
 pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
     RawOrigin::Signed(get_account::<T>(name))
@@ -26,8 +22,14 @@ mod benchmarks {
     #[benchmark]
     fn announce_key() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
-        let location = from_str_to_vec("location".to_string());
-        let fingerprint = from_str_to_vec("fingerprint".to_string());
+        let location = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+            "location".as_bytes().to_vec(),
+        )
+        .unwrap();
+        let fingerprint = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+            "fingerprint".as_bytes().to_vec(),
+        )
+        .unwrap();
 
         #[extrinsic_call]
         _(origin.clone(), fingerprint.clone(), location.clone());
@@ -41,7 +43,10 @@ mod benchmarks {
     #[benchmark]
     fn revoke_key() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
-        let key_index = from_str_to_vec("somekey".to_string());
+        let key_index = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+            "somekey".as_bytes().to_vec(),
+        )
+        .unwrap();
 
         #[extrinsic_call]
         _(origin.clone(), key_index.clone());

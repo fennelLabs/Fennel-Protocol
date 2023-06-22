@@ -16,7 +16,7 @@ pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
-    use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
+    use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
 
     use crate::weights::WeightInfo;
@@ -25,6 +25,7 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
+        type MaxSize: Get<u32>;
     }
 
     #[pallet::pallet]
@@ -39,7 +40,7 @@ pub mod pallet {
         Blake2_128Concat,
         T::AccountId,
         Blake2_128Concat,
-        Vec<u8>,
+        BoundedVec<u8, T::MaxSize>,
         u8,
         ValueQuery,
     >;
@@ -47,11 +48,11 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        SignalSent(Vec<u8>, T::AccountId),
-        RatingSignalSent(Vec<u8>, u8, T::AccountId),
-        RatingSignalUpdated(Vec<u8>, u8, T::AccountId),
-        RatingSignalRevoked(Vec<u8>, T::AccountId),
-        ServiceSignalSent(Vec<u8>, Vec<u8>, T::AccountId),
+        SignalSent(BoundedVec<u8, T::MaxSize>, T::AccountId),
+        RatingSignalSent(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
+        RatingSignalUpdated(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
+        RatingSignalRevoked(BoundedVec<u8, T::MaxSize>, T::AccountId),
+        ServiceSignalSent(BoundedVec<u8, T::MaxSize>, BoundedVec<u8, T::MaxSize>, T::AccountId),
     }
 
     #[pallet::error]
@@ -68,7 +69,7 @@ pub mod pallet {
         #[pallet::call_index(0)]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
-            target: Vec<u8>,
+            target: BoundedVec<u8, T::MaxSize>,
             rating: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -84,7 +85,7 @@ pub mod pallet {
         #[pallet::call_index(1)]
         pub fn update_rating_signal(
             origin: OriginFor<T>,
-            target: Vec<u8>,
+            target: BoundedVec<u8, T::MaxSize>,
             new_rating: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -98,7 +99,10 @@ pub mod pallet {
         /// Puts out a signal cancelling a previous rating.
         #[pallet::weight(<T as Config>::WeightInfo::revoke_rating_signal())]
         #[pallet::call_index(2)]
-        pub fn revoke_rating_signal(origin: OriginFor<T>, target: Vec<u8>) -> DispatchResult {
+        pub fn revoke_rating_signal(
+            origin: OriginFor<T>,
+            target: BoundedVec<u8, T::MaxSize>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
@@ -111,7 +115,10 @@ pub mod pallet {
         /// without relying on storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
         #[pallet::call_index(3)]
-        pub fn send_signal(origin: OriginFor<T>, signal: Vec<u8>) -> DispatchResult {
+        pub fn send_signal(
+            origin: OriginFor<T>,
+            signal: BoundedVec<u8, T::MaxSize>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::SignalSent(signal, who));
             Ok(())
@@ -121,8 +128,8 @@ pub mod pallet {
         #[pallet::call_index(4)]
         pub fn send_service_signal(
             origin: OriginFor<T>,
-            service_identifier: Vec<u8>,
-            url: Vec<u8>,
+            service_identifier: BoundedVec<u8, T::MaxSize>,
+            url: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
             Self::deposit_event(Event::ServiceSignalSent(service_identifier, url, who));

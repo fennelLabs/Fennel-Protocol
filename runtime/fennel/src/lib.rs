@@ -235,6 +235,8 @@ pub fn native_version() -> NativeVersion {
 parameter_types! {
     pub const Version: RuntimeVersion = VERSION;
     pub const IdentityMaxSize: u32 = 1024;
+    pub const KeystoreMaxSize: u32 = 1024;
+    pub const SignalMaxSize: u32 = 1024;
 
     // This part is copied from Substrate's `bin/node/runtime/src/lib.rs`.
     //  The `RuntimeBlockLength` and `RuntimeBlockWeights` exist here because the
@@ -463,6 +465,7 @@ impl pallet_collator_selection::Config for Runtime {
 impl pallet_keystore::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_keystore::weights::SubstrateWeight<Runtime>;
+    type MaxSize = KeystoreMaxSize;
 }
 
 impl pallet_trust::Config for Runtime {
@@ -473,17 +476,18 @@ impl pallet_trust::Config for Runtime {
 impl pallet_signal::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_signal::weights::SubstrateWeight<Runtime>;
+    type MaxSize = SignalMaxSize;
 }
 
 impl pallet_fennel_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_fennel_identity::weights::SubstrateWeights<Runtime>;
+    type WeightInfo = pallet_fennel_identity::weights::SubstrateWeight<Runtime>;
     type MaxSize = IdentityMaxSize;
 }
 
 impl pallet_certificate::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_certificate::weights::SubstrateWeights<Runtime>;
+    type WeightInfo = pallet_certificate::weights::SubstrateWeight<Runtime>;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
