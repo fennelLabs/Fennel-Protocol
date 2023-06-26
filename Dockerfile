@@ -1,4 +1,5 @@
 FROM rust:1.70 as base
+WORKDIR app
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update -y && \
     ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
@@ -11,21 +12,14 @@ RUN DEBIAN_FRONTEND=noninteractive \
 RUN rustup update nightly
 RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown --toolchain nightly
+RUN cargo install cargo-chef
 
 FROM base as planner
-WORKDIR app
-RUN cargo install cargo-chef
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
-FROM base as cacher
-WORKDIR app
-RUN cargo install cargo-chef
+FROM base as builder
 COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
-
-FROM base as builder
-WORKDIR /app
 COPY . .
-COPY --from=cacher /app/target target
 RUN cargo build --release
