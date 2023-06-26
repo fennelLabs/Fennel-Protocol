@@ -8,7 +8,7 @@ upstream websocket {
 }
 
 server {
-    server_name chain-2.fennellabs.com;
+    server_name protocol-beta.fennellabs.com;
 
     location / {
         proxy_pass http://websocket;
