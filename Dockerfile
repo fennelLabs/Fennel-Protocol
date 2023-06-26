@@ -1,5 +1,5 @@
 FROM rust:1.70 as base
-WORKDIR app
+WORKDIR /app
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update -y && \
     ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
