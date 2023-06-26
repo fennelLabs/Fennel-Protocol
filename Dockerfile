@@ -24,8 +24,7 @@ RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release
 
-FROM debian:buster-slim as runtime
-WORKDIR /app
+FROM base as runtime
 COPY --from=builder /app/target/release/fennel-node /app/fennel-node
 COPY --from=builder /app/polkadotspec.json /app/polkadotspec.json
 COPY --from=builder /app/raw-parachain-chainspec.json /app/raw-parachain-chainspec.json
