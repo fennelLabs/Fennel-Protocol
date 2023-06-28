@@ -1,8 +1,6 @@
 #![cfg(feature = "runtime-benchmarks")]
 use super::*;
-use crate::Pallet as Keystore;
 
-use codec::alloc::string::{String, ToString};
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::BoundedVec;
 use frame_system::RawOrigin;
