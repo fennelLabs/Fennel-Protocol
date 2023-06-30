@@ -22,6 +22,11 @@ mod benchmarks {
     #[benchmark]
     fn create_identity() -> Result<(), BenchmarkError> {
         let anakin = get_origin::<T>("Anakin");
+
+        for _ in 0..1000 {
+            Identity::<T>::create_identity(anakin.clone().into())?;
+        }
+
         let previous_identity_num = IdentityNumber::<T>::get();
 
         #[extrinsic_call]

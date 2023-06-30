@@ -1,5 +1,7 @@
 #![cfg(feature = "runtime-benchmarks")]
+
 use super::*;
+use crate::Pallet as Keystore;
 
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::BoundedVec;
@@ -45,6 +47,12 @@ mod benchmarks {
             "somekey".as_bytes().to_vec(),
         )
         .unwrap();
+
+        Keystore::<T>::announce_key(
+            origin.clone().into(),
+            key_index.clone(),
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(vec![0; 32]).unwrap(),
+        )?;
 
         #[extrinsic_call]
         _(origin.clone(), key_index.clone());

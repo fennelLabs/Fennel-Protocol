@@ -39,7 +39,10 @@ mod benchmarks {
     fn revoke_certificate() -> Result<(), BenchmarkError> {
         let target = get_account::<T>("Montgomery");
         let caller = get_origin::<T>("Leonard");
-        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
+
+        for _ in 0..1000 {
+            Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
+        }
 
         #[extrinsic_call]
         _(caller, target);

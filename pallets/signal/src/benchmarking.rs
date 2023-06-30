@@ -32,6 +32,14 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
+        for i in 0..100 {
+            Signal::<T>::send_rating_signal(
+                RawOrigin::Signed(caller.clone()).into(),
+                target.clone(),
+                i,
+            )?;
+        }
+
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
 
@@ -49,11 +57,20 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
+        // Generate a bunch of signals.
+        for i in 0..100 {
+            Signal::<T>::send_rating_signal(
+                RawOrigin::Signed(caller.clone()).into(),
+                target.clone(),
+                i,
+            )?;
+        }
+
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), target.clone(), 1);
 
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
-        assert_last_event::<T>(Event::RatingSignalSent(target, 1, caller).into());
+        assert_last_event::<T>(Event::RatingSignalUpdated(target, 1, caller).into());
 
         Ok(())
     }
@@ -64,7 +81,10 @@ mod benchmarks {
             BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
                 .unwrap();
         let caller = get_origin::<T>("Anakin");
-        Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 0)?;
+
+        for i in 0..100 {
+            Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), i)?;
+        }
 
         #[extrinsic_call]
         _(caller, target.clone());
@@ -83,6 +103,10 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
+        for _ in 0..10000 {
+            Signal::<T>::send_signal(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
+        }
+
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), target.clone().into());
 
@@ -100,6 +124,14 @@ mod benchmarks {
             BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
+
+        for _ in 0..10000 {
+            Signal::<T>::send_service_signal(
+                RawOrigin::Signed(caller.clone()).into(),
+                service.clone(),
+                url.clone(),
+            )?;
+        }
 
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), service.clone(), url.clone());
