@@ -11,6 +11,8 @@ sudo certbot --nginx --non-interactive --agree-tos --email info@fennellabs.com -
 sudo systemctl restart nginx
 gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin us-east1-docker.pkg.dev
 docker pull us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/polkadot-protocol:latest
+docker stop fennel-validator-1
+docker rm fennel-validator-1
 docker run -dt -p 30333:30333 -p 9944:9944 -p 9934:9934 --name fennel-validator-1 us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/polkadot-protocol:latest
 docker exec fennel-validator-1 /app/polkadot key insert --base-path /tmp/relay/bob --chain /app/chainspec.json --key-type babe --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-validator-key.sh)"
 docker exec fennel-validator-1 /app/polkadot key insert --base-path /tmp/relay/bob --chain /app/chainspec.json --key-type imon --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-validator-key.sh)"

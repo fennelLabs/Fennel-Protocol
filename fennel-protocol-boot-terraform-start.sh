@@ -11,6 +11,8 @@ sudo certbot --nginx --non-interactive --agree-tos --email info@fennellabs.com -
 sudo systemctl restart nginx
 gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin us-east1-docker.pkg.dev
 docker pull us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/polkadot-protocol:latest
+docker stop relay-boot
+docker rm relay-boot
 docker run -dt -p 9944:9944 -p 30333:30333 -p 9934:9934 --name relay-boot us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/polkadot-protocol:latest
 docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type babe --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
 docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type imon --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
