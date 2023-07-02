@@ -70,6 +70,24 @@ mod benchmarks {
     }
 
     #[benchmark]
+    fn add_or_update_long_identity_trait() -> Result<(), BenchmarkError> {
+        let anakin = get_origin::<T>("Anakin");
+        let name: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();
+        let value: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();
+
+        let identity_index: u32 = IdentityNumber::<T>::get();
+        Identity::<T>::create_identity(anakin.clone().into())?;
+
+        #[extrinsic_call]
+        add_or_update_identity_trait(anakin.clone(), identity_index.into(), name.into(), value.into());
+
+        let key: T::AccountId = get_account::<T>("Anakin");
+        assert!(IdentityList::<T>::contains_key(key));
+
+        Ok(())
+    }
+
+    #[benchmark]
     fn remove_identity_trait() -> Result<(), BenchmarkError> {
         let anakin = get_origin::<T>("Anakin");
         let name: BoundedVec<u8, T::MaxSize> = "name".as_bytes().to_vec().try_into().unwrap();
@@ -94,6 +112,30 @@ mod benchmarks {
     }
 
     #[benchmark]
+    fn remove_long_identity_trait() -> Result<(), BenchmarkError> {
+        let anakin = get_origin::<T>("Anakin");
+        let name: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();
+        let value: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();
+
+        let identity_index: u32 = IdentityNumber::<T>::get();
+        Identity::<T>::create_identity(anakin.clone().into())?;
+        Identity::<T>::add_or_update_identity_trait(
+            anakin.clone().into(),
+            identity_index.into(),
+            name.clone(),
+            value.into(),
+        )?;
+
+        #[extrinsic_call]
+        remove_identity_trait(anakin.clone(), identity_index.into(), name.into());
+
+        let key: T::AccountId = get_account::<T>("Anakin");
+        assert!(IdentityList::<T>::contains_key(key));
+
+        Ok(())
+    }
+
+    #[benchmark]
     fn sign_for_identity() -> Result<(), BenchmarkError> {
         let anakin = get_origin::<T>("Anakin");
         let value: BoundedVec<u8, T::MaxSize> =
@@ -104,6 +146,22 @@ mod benchmarks {
 
         #[extrinsic_call]
         _(anakin.clone(), identity_index.into(), value.into());
+
+        assert_eq!(SignalCount::<T>::get(), identity_index + 1);
+
+        Ok(())
+    }
+
+    #[benchmark(extra)]
+    fn sign_for_identity_big_vector() -> Result<(), BenchmarkError> {
+        let anakin = get_origin::<T>("Anakin");
+        let value: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();
+
+        let identity_index = IdentityNumber::<T>::get();
+        Identity::<T>::create_identity(anakin.clone().into())?;
+
+        #[extrinsic_call]
+        sign_for_identity(anakin.clone(), identity_index.into(), value.into());
 
         assert_eq!(SignalCount::<T>::get(), identity_index + 1);
 

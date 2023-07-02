@@ -41,6 +41,27 @@ mod benchmarks {
     }
 
     #[benchmark]
+    fn announce_key_with_long_vectors() -> Result<(), BenchmarkError> {
+        let origin = get_origin::<T>("Anakin");
+        let location = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+            vec![0; 1000],
+        )
+        .unwrap();
+        let fingerprint = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+            vec![0; 1000],
+        )
+        .unwrap();
+
+        #[extrinsic_call]
+        announce_key(origin.clone(), fingerprint.clone(), location.clone());
+
+        let origin_address = get_account::<T>("Anakin");
+        assert_eq!(IssuedKeys::<T>::get(&origin_address, &fingerprint), Some(location));
+
+        Ok(())
+    }
+
+    #[benchmark]
     fn revoke_key() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
         let key_index = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
