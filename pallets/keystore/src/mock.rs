@@ -57,7 +57,7 @@ impl system::Config for Test {
 impl pallet_keystore::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
-    type MaxSize = ConstU32<100>;
+    type MaxSize = ConstU32<1000>;
 }
 
 // Build genesis storage according to the mock runtime.

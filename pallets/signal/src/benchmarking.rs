@@ -17,6 +17,10 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
     RawOrigin::Signed(get_account::<T>(name))
 }
 
+pub fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
+    frame_system::Pallet::<T>::assert_last_event(generic_event.into());
+}
+
 #[benchmarks]
 mod benchmarks {
     use super::*;
@@ -46,11 +50,20 @@ mod benchmarks {
 
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
+        for i in 0..100 {
+            Signal::<T>::send_rating_signal(
+                RawOrigin::Signed(caller.clone()).into(),
+                target.clone(),
+                i,
+            )?;
+        }
+
         #[extrinsic_call]
         _(RawOrigin::Signed(&caller), target.clone(), 0);
 
         assert!(RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
+        assert_last_event::<T>(Event::RatingSignalSent(target, 0, caller).into());
 
         Ok(())
     }
@@ -79,10 +92,20 @@ mod benchmarks {
         let caller: T::AccountId = get_account::<T>("//Alice");
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
+        // Generate a bunch of signals.
+        for i in 0..100 {
+            Signal::<T>::send_rating_signal(
+                RawOrigin::Signed(caller.clone()).into(),
+                target.clone(),
+                i,
+            )?;
+        }
+
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), target.clone(), 1);
 
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
+        assert_last_event::<T>(Event::RatingSignalUpdated(target, 1, caller).into());
 
         Ok(())
     }
@@ -109,13 +132,17 @@ mod benchmarks {
                 .unwrap();
 
         let caller = get_origin::<T>("Anakin");
-        Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 0)?;
+
+        for i in 0..100 {
+            Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), i)?;
+        }
 
         #[extrinsic_call]
         _(caller, target.clone());
 
         let caller: T::AccountId = get_account::<T>("Anakin");
-        assert!(!RatingSignalList::<T>::contains_key(caller, target.clone()));
+        assert!(!RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
+        assert_last_event::<T>(Event::RatingSignalRevoked(target, caller).into());
 
         Ok(())
     }
@@ -127,8 +154,14 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = get_account::<T>("//Alice");
 
+        for _ in 0..10000 {
+            Signal::<T>::send_signal(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
+        }
+
         #[extrinsic_call]
-        _(RawOrigin::Signed(caller), target.into());
+        _(RawOrigin::Signed(caller.clone()), target.clone().into());
+
+        assert_last_event::<T>(Event::SignalSent(target, caller).into());
 
         Ok(())
     }
@@ -157,8 +190,18 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = get_account::<T>("//Alice");
 
+        for _ in 0..10000 {
+            Signal::<T>::send_service_signal(
+                RawOrigin::Signed(caller.clone()).into(),
+                service.clone(),
+                url.clone(),
+            )?;
+        }
+
         #[extrinsic_call]
-        _(RawOrigin::Signed(caller), service, url);
+        _(RawOrigin::Signed(caller.clone()), service.clone(), url.clone());
+
+        assert_last_event::<T>(Event::ServiceSignalSent(service, url, caller).into());
 
         Ok(())
     }

@@ -63,6 +63,7 @@ pub mod pallet {
         NoneValue,
         StorageOverflow,
         CertificateNotOwned,
+        CertificateExists,
     }
 
     impl<T: Config> Pallet<T> {
@@ -83,6 +84,10 @@ pub mod pallet {
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            ensure!(
+                !Self::is_certificate_owned_by_sender(&who, &recipient),
+                Error::<T>::CertificateExists
+            );
             // Insert a placeholder value into storage - if the pair (who, recipient) exists, we
             // know there's a certificate present for the pair, regardless of value.
             <CertificateList<T>>::insert(&who, recipient.clone(), CERTIFICATE_EXISTS);

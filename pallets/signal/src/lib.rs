@@ -254,6 +254,8 @@ pub mod pallet {
             Ok(())
         }
 
+        /// Sends a hexadecimal signal tagged for a particular application or service using Fennel
+        /// Protocol.
         #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
         #[pallet::call_index(8)]
         pub fn send_service_signal(
