@@ -42,14 +42,10 @@ mod benchmarks {
     #[benchmark]
     fn announce_key_with_long_vectors() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
-        let location = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
-            vec![0; 1000],
-        )
-        .unwrap();
-        let fingerprint = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
-            vec![0; 1000],
-        )
-        .unwrap();
+        let location =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(vec![0; 1000]).unwrap();
+        let fingerprint =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(vec![0; 1000]).unwrap();
 
         #[extrinsic_call]
         announce_key(origin.clone(), fingerprint.clone(), location.clone());

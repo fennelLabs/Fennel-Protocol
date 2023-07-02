@@ -79,7 +79,12 @@ mod benchmarks {
         Identity::<T>::create_identity(anakin.clone().into())?;
 
         #[extrinsic_call]
-        add_or_update_identity_trait(anakin.clone(), identity_index.into(), name.into(), value.into());
+        add_or_update_identity_trait(
+            anakin.clone(),
+            identity_index.into(),
+            name.into(),
+            value.into(),
+        );
 
         let key: T::AccountId = get_account::<T>("Anakin");
         assert!(IdentityList::<T>::contains_key(key));
