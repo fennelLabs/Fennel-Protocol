@@ -52,5 +52,27 @@ mod benchmarks {
         Ok(())
     }
 
+    #[benchmark(extra)]
+    fn revoke_certificate_heavy_storage() -> Result<(), BenchmarkError> {
+        let caller = get_origin::<T>("Leonard");
+
+        // Generate a larger set of certificates.
+        for i in 0..10000 {
+            let target: T::AccountId = benchmark_account("target", i, 0);
+            Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
+        }
+
+        let target = get_account::<T>("Montgomery");
+        Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
+        #[extrinsic_call]
+        revoke_certificate(caller, target);
+
+        let caller_account_id: T::AccountId = get_account::<T>("Leonard");
+        let target_account_id: T::AccountId = get_account::<T>("Montgomery");
+        assert!(!CertificateList::<T>::contains_key(caller_account_id, target_account_id));
+
+        Ok(())
+    }
+
     impl_benchmark_test_suite!(Certificate, crate::mock::new_test_ext(), crate::mock::Test);
 }
