@@ -41,7 +41,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark]
+    #[benchmark(extra)]
     fn announce_a_whole_lotta_keys() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
         let location = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
@@ -77,7 +77,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark]
+    #[benchmark(extra)]
     fn announce_key_with_long_vectors() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
         let location =
@@ -117,7 +117,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark]
+    #[benchmark(extra)]
     fn revoke_one_of_many_keys() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
 
@@ -167,7 +167,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark]
+    #[benchmark(extra)]
     fn issue_a_ton_of_encryption_keys() -> Result<(), BenchmarkError> {
         // Set up a load of encryption keys in storage
         // so we can see what impact it has on runtime.
