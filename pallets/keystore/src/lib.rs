@@ -65,6 +65,8 @@ pub mod pallet {
     pub enum Error<T> {
         NoneValue,
         StorageOverflow,
+        KeyExists,
+        KeyDoesNotExist,
     }
 
     #[pallet::call]
@@ -77,6 +79,8 @@ pub mod pallet {
             location: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
+
+            ensure!(!<IssuedKeys<T>>::contains_key(&who, &fingerprint), Error::<T>::KeyExists);
 
             <IssuedKeys<T>>::insert(&who, &fingerprint, &location);
 
@@ -93,6 +97,8 @@ pub mod pallet {
             key_index: BoundedVec<u8, T::MaxSize>,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
+
+            ensure!(<IssuedKeys<T>>::contains_key(&who, &key_index), Error::<T>::KeyDoesNotExist);
 
             <IssuedKeys<T>>::remove(&who, &key_index);
 
