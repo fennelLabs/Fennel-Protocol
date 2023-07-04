@@ -59,7 +59,7 @@ mod benchmarks {
         }
 
         #[extrinsic_call]
-        _(RawOrigin::Signed(&caller), target.clone(), 0);
+        _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
 
         assert!(RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
@@ -132,6 +132,8 @@ mod benchmarks {
                 .unwrap();
 
         let caller = get_origin::<T>("Anakin");
+        let caller_account = get_account::<T>("Anakin");
+        T::Currency::make_free_balance_be(&caller_account, DepositBalanceOf::<T>::max_value());
 
         for i in 0..100 {
             Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), i)?;
@@ -172,6 +174,9 @@ mod benchmarks {
             BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
                 .unwrap();
         let caller = get_origin::<T>("Anakin");
+        let caller_account = get_account::<T>("Anakin");
+        
+        T::Currency::make_free_balance_be(&caller_account, DepositBalanceOf::<T>::max_value());
         Signal::<T>::send_whiteflag_rating_signal(caller.clone().into(), target.clone(), 0)?;
 
         #[extrinsic_call]
