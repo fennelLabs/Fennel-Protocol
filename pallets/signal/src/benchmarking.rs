@@ -175,7 +175,7 @@ mod benchmarks {
                 .unwrap();
         let caller = get_origin::<T>("Anakin");
         let caller_account = get_account::<T>("Anakin");
-        
+
         T::Currency::make_free_balance_be(&caller_account, DepositBalanceOf::<T>::max_value());
         Signal::<T>::send_whiteflag_rating_signal(caller.clone().into(), target.clone(), 0)?;
 
