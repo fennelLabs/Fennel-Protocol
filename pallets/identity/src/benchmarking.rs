@@ -53,6 +53,22 @@ mod benchmarks {
     }
 
     #[benchmark]
+    fn revoke_identity_heavy_storage() -> Result<(), BenchmarkError> {
+        let anakin = get_origin::<T>("Anakin");
+
+        for _ in 0..1000 {
+            Identity::<T>::create_identity(anakin.clone().into())?;
+        }
+
+        #[extrinsic_call]
+        revoke_identity(anakin.clone(), 301);
+
+        assert_eq!(RevokedIdentityNumber::<T>::get(), 1);
+
+        Ok(())
+    }
+
+    #[benchmark]
     fn add_or_update_identity_trait() -> Result<(), BenchmarkError> {
         let anakin = get_origin::<T>("Anakin");
         let name: BoundedVec<u8, T::MaxSize> = "name".as_bytes().to_vec().try_into().unwrap();
