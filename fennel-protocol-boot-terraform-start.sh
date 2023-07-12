@@ -13,12 +13,13 @@ gcloud auth print-access-token | docker login -u oauth2accesstoken --password-st
 docker pull us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/polkadot-protocol:latest
 docker stop relay-boot
 docker rm relay-boot
-docker run -dt -p 9944:9944 -p 30333:30333 -p 9934:9934 --name relay-boot us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/polkadot-protocol:latest
-docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type babe --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
-docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type imon --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
-docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type para --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
-docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type asgn --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
-docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type audi --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
-docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type beef --scheme ecdsa --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
-docker exec relay-boot /app/polkadot key insert --base-path /tmp/relay/alice --chain /app/chainspec.json --key-type gran --scheme ed25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
-docker exec relay-boot /app/polkadot --validator --base-path /tmp/relay/alice --chain /app/chainspec.json --port 30333 --rpc-port 9944 --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" --name FnlDot0 --node-key $(gsutil cat gs://whiteflag-0-admin/fennel-node-key.sh) --rpc-cors all --prometheus-external --rpc-methods Unsafe --rpc-external
+docker volume create relay-boot
+docker run -dt -p 9944:9944 -p 30333:30333 -p 9934:9934 -v relay-boot:/chain --name relay-boot us-east1-docker.pkg.dev/whiteflag-0/fennel-docker-registry/polkadot-protocol:latest
+docker exec relay-boot /app/polkadot key insert --base-path /chain/relay/alice --chain /app/chainspec.json --key-type babe --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
+docker exec relay-boot /app/polkadot key insert --base-path /chain/relay/alice --chain /app/chainspec.json --key-type imon --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
+docker exec relay-boot /app/polkadot key insert --base-path /chain/relay/alice --chain /app/chainspec.json --key-type para --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
+docker exec relay-boot /app/polkadot key insert --base-path /chain/relay/alice --chain /app/chainspec.json --key-type asgn --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
+docker exec relay-boot /app/polkadot key insert --base-path /chain/relay/alice --chain /app/chainspec.json --key-type audi --scheme sr25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
+docker exec relay-boot /app/polkadot key insert --base-path /chain/relay/alice --chain /app/chainspec.json --key-type beef --scheme ecdsa --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
+docker exec relay-boot /app/polkadot key insert --base-path /chain/relay/alice --chain /app/chainspec.json --key-type gran --scheme ed25519 --suri "$(gsutil cat gs://whiteflag-0-admin/fennel-boot-key.sh)"
+docker exec relay-boot /app/polkadot --validator --base-path /chain/relay/alice --chain /app/chainspec.json --port 30333 --rpc-port 9944 --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" --name FnlDot0 --node-key $(gsutil cat gs://whiteflag-0-admin/fennel-node-key.sh) --rpc-cors all --prometheus-external --rpc-methods Unsafe --rpc-external
