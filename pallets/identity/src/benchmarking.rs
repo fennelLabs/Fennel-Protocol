@@ -115,7 +115,7 @@ mod benchmarks {
         let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-        for i in 0..1000 {
+        for i in 0..100_000 {
             let name: BoundedVec<u8, T::MaxSize> =
                 format!("name{}", i).as_bytes().to_vec().try_into().unwrap();
             let value: BoundedVec<u8, T::MaxSize> =
@@ -174,7 +174,7 @@ mod benchmarks {
         let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-        for i in 0..1000 {
+        for i in 0..100_000 {
             let name: BoundedVec<u8, T::MaxSize> =
                 format!("name{}", i).as_bytes().to_vec().try_into().unwrap();
             let value: BoundedVec<u8, T::MaxSize> =
@@ -263,7 +263,7 @@ mod benchmarks {
         let identity_index = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-        for i in 0..999 {
+        for i in 0..99_999 {
             let value: BoundedVec<u8, T::MaxSize> =
                 format!("I am your father. {}", i).as_bytes().to_vec().try_into().unwrap();
 
@@ -277,7 +277,7 @@ mod benchmarks {
         #[extrinsic_call]
         sign_for_identity(anakin.clone(), identity_index.into(), vec![0; 1000].try_into().unwrap());
 
-        assert_eq!(SignalCount::<T>::get(), identity_index + 1000);
+        assert_eq!(SignalCount::<T>::get(), identity_index + 100_000);
 
         Ok(())
     }

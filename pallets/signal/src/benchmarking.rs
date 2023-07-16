@@ -32,11 +32,11 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
-        for i in 0..100 {
+        for _ in 0..100_000 {
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
                 target.clone(),
-                i,
+                3,
             )?;
         }
 
@@ -58,11 +58,11 @@ mod benchmarks {
         let caller: T::AccountId = whitelisted_caller();
 
         // Generate a bunch of signals.
-        for i in 0..100 {
+        for _ in 0..100_000 {
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
                 target.clone(),
-                i,
+                3,
             )?;
         }
 
@@ -82,8 +82,8 @@ mod benchmarks {
                 .unwrap();
         let caller = get_origin::<T>("Anakin");
 
-        for i in 0..100 {
-            Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), i)?;
+        for _ in 0..100_000 {
+            Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 2)?;
         }
 
         #[extrinsic_call]
@@ -103,7 +103,7 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
-        for _ in 0..10000 {
+        for _ in 0..100_000 {
             Signal::<T>::send_signal(RawOrigin::Signed(caller.clone()).into(), target.clone())?;
         }
 
@@ -125,7 +125,7 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
-        for _ in 0..10000 {
+        for _ in 0..100_000 {
             Signal::<T>::send_service_signal(
                 RawOrigin::Signed(caller.clone()).into(),
                 service.clone(),
