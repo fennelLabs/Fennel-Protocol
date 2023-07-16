@@ -240,7 +240,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark(extra)]
+    #[benchmark]
     fn sign_for_identity_big_vector() -> Result<(), BenchmarkError> {
         let anakin = get_origin::<T>("Anakin");
         let value: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();

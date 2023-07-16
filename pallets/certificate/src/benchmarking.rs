@@ -52,7 +52,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark(extra)]
+    #[benchmark]
     fn revoke_certificate_heavy_storage() -> Result<(), BenchmarkError> {
         let caller = get_origin::<T>("Leonard");
 
