@@ -53,6 +53,22 @@ mod benchmarks {
     }
 
     #[benchmark]
+    fn revoke_identity_heavy_storage() -> Result<(), BenchmarkError> {
+        let anakin = get_origin::<T>("Anakin");
+
+        for _ in 0..1000 {
+            Identity::<T>::create_identity(anakin.clone().into())?;
+        }
+
+        #[extrinsic_call]
+        revoke_identity(anakin.clone(), 301);
+
+        assert_eq!(RevokedIdentityNumber::<T>::get(), 1);
+
+        Ok(())
+    }
+
+    #[benchmark]
     fn add_or_update_identity_trait() -> Result<(), BenchmarkError> {
         let anakin = get_origin::<T>("Anakin");
         let name: BoundedVec<u8, T::MaxSize> = "name".as_bytes().to_vec().try_into().unwrap();
@@ -99,7 +115,7 @@ mod benchmarks {
         let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-        for i in 0..1000 {
+        for i in 0..100_000 {
             let name: BoundedVec<u8, T::MaxSize> =
                 format!("name{}", i).as_bytes().to_vec().try_into().unwrap();
             let value: BoundedVec<u8, T::MaxSize> =
@@ -158,7 +174,7 @@ mod benchmarks {
         let identity_index: u32 = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-        for i in 0..1000 {
+        for i in 0..100_000 {
             let name: BoundedVec<u8, T::MaxSize> =
                 format!("name{}", i).as_bytes().to_vec().try_into().unwrap();
             let value: BoundedVec<u8, T::MaxSize> =
@@ -224,7 +240,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark(extra)]
+    #[benchmark]
     fn sign_for_identity_big_vector() -> Result<(), BenchmarkError> {
         let anakin = get_origin::<T>("Anakin");
         let value: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();
@@ -247,7 +263,7 @@ mod benchmarks {
         let identity_index = IdentityNumber::<T>::get();
         Identity::<T>::create_identity(anakin.clone().into())?;
 
-        for i in 0..999 {
+        for i in 0..99_999 {
             let value: BoundedVec<u8, T::MaxSize> =
                 format!("I am your father. {}", i).as_bytes().to_vec().try_into().unwrap();
 
@@ -261,7 +277,7 @@ mod benchmarks {
         #[extrinsic_call]
         sign_for_identity(anakin.clone(), identity_index.into(), vec![0; 1000].try_into().unwrap());
 
-        assert_eq!(SignalCount::<T>::get(), identity_index + 1000);
+        assert_eq!(SignalCount::<T>::get(), identity_index + 100_000);
 
         Ok(())
     }

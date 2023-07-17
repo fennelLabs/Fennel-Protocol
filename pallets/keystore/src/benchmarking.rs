@@ -42,7 +42,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark(extra)]
+    #[benchmark]
     fn announce_a_whole_lotta_keys() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
         let location = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
@@ -78,8 +78,38 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark(extra)]
+    #[benchmark]
     fn announce_key_with_long_vectors() -> Result<(), BenchmarkError> {
+        let origin = get_origin::<T>("Anakin");
+        let location =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(vec![0; 1000]).unwrap();
+        let fingerprint =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(vec![0; 1000]).unwrap();
+
+        #[extrinsic_call]
+        announce_key(origin.clone(), fingerprint.clone(), location.clone());
+
+        let origin_address = get_account::<T>("Anakin");
+        assert_eq!(IssuedKeys::<T>::get(&origin_address, &fingerprint), Some(location));
+
+        Ok(())
+    }
+
+    #[benchmark]
+    fn announce_a_bunch_of_long_keys() -> Result<(), BenchmarkError> {
+        // Check how the extrinsic performs with a lot of keys in storage already.
+        for i in 0..100_000 {
+            let origin = get_origin::<T>("Anakin");
+            let fingerprint = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("fingerprint{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
+            let location =
+                BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(vec![0; 1000]).unwrap();
+
+            Keystore::<T>::announce_key(origin.into(), fingerprint, location)?;
+        }
+
         let origin = get_origin::<T>("Anakin");
         let location =
             BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(vec![0; 1000]).unwrap();
@@ -118,7 +148,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark(extra)]
+    #[benchmark]
     fn revoke_one_of_many_keys() -> Result<(), BenchmarkError> {
         let origin = get_origin::<T>("Anakin");
 
@@ -168,7 +198,7 @@ mod benchmarks {
         Ok(())
     }
 
-    #[benchmark(extra)]
+    #[benchmark]
     fn issue_a_ton_of_encryption_keys() -> Result<(), BenchmarkError> {
         // Set up a load of encryption keys in storage
         // so we can see what impact it has on runtime.
