@@ -84,6 +84,29 @@ mod benchmarks {
     }
 
     #[benchmark]
+    fn send_many_whiteflag_rating_signals() -> Result<(), BenchmarkError> {
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
+
+        let caller: T::AccountId = get_account::<T>("//Alice");
+        T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
+
+        for _ in 0..100_000 {
+            Signal::<T>::send_whiteflag_rating_signal(
+                RawOrigin::Signed(caller.clone()).into(),
+                target.clone(),
+                0,
+            )?;
+        }
+
+        #[extrinsic_call]
+        send_whiteflag_rating_signal(RawOrigin::Signed(caller), target, 0);
+
+        Ok(())
+    }
+
+    #[benchmark]
     fn update_rating_signal() -> Result<(), BenchmarkError> {
         let target =
             BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
