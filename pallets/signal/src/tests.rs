@@ -17,7 +17,7 @@ fn test_set_signal_parameter() {
             crate::Event::SignalParameterSet(
                 BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
                 0,
-                1
+                1,
             )
             .into(),
         );
