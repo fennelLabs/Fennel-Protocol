@@ -36,7 +36,11 @@ mod benchmarks {
         let caller: T::AccountId = get_account::<T>("//Alice");
 
         #[extrinsic_call]
-        _(RawOrigin::Signed(caller), target, 0);
+        _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
+
+        assert!(SignalParameterList::<T>::contains_key(caller.clone(), target.clone()));
+        assert_eq!(SignalParameterList::<T>::get(caller.clone(), target.clone()), 0);
+        assert_last_event::<T>(Event::SignalParameterSet(target, 0, caller).into());
 
         Ok(())
     }
@@ -78,7 +82,10 @@ mod benchmarks {
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
         #[extrinsic_call]
-        _(RawOrigin::Signed(caller), target, 0);
+        _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
+
+        assert!(WhiteflagRatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
+        assert_last_event::<T>(Event::WhiteflagRatingSignalSent(target, 0, caller).into());
 
         Ok(())
     }
@@ -101,7 +108,10 @@ mod benchmarks {
         }
 
         #[extrinsic_call]
-        send_whiteflag_rating_signal(RawOrigin::Signed(caller), target, 0);
+        send_whiteflag_rating_signal(RawOrigin::Signed(caller.clone()), target.clone(), 0);
+
+        assert!(WhiteflagRatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
+        assert_last_event::<T>(Event::WhiteflagRatingSignalSent(target, 0, caller).into());
 
         Ok(())
     }
@@ -170,7 +180,10 @@ mod benchmarks {
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
         #[extrinsic_call]
-        _(RawOrigin::Signed(caller), target, 0);
+        _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
+
+        assert_eq!(WhiteflagRatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
+        assert_last_event::<T>(Event::WhiteflagRatingSignalUpdated(target, 0, caller).into());
 
         Ok(())
     }
@@ -230,7 +243,15 @@ mod benchmarks {
         Signal::<T>::send_whiteflag_rating_signal(caller.clone().into(), target.clone(), 0)?;
 
         #[extrinsic_call]
-        _(caller, target);
+        _(caller, target.clone());
+
+        assert!(!WhiteflagRatingSignalList::<T>::contains_key(
+            caller_account.clone(),
+            target.clone()
+        ));
+        assert_last_event::<T>(
+            Event::WhiteflagRatingSignalRevoked(target.clone(), caller_account).into(),
+        );
 
         Ok(())
     }
