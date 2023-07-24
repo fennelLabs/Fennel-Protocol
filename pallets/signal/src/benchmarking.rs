@@ -236,6 +236,35 @@ mod benchmarks {
     }
 
     #[benchmark]
+    fn revoke_whiteflag_rating_signal_from_heavy_storage() -> Result<(), BenchmarkError> {
+        for i in 0..100_000 {
+            let caller = RawOrigin::Signed(benchmark_account("Anakin", 0, i));
+            let caller_account = benchmark_account("Anakin", 0, i);
+            T::Currency::make_free_balance_be(&caller_account, DepositBalanceOf::<T>::max_value());
+            let target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                "TEST".as_bytes().to_vec(),
+            )
+            .unwrap();
+            Signal::<T>::send_whiteflag_rating_signal(caller.clone().into(), target.clone(), 0)?;
+        }
+
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
+        let caller = get_origin::<T>("Anakin");
+        let caller_account = get_account::<T>("Anakin");
+
+        T::Currency::make_free_balance_be(&caller_account, DepositBalanceOf::<T>::max_value());
+        Signal::<T>::send_whiteflag_rating_signal(caller.clone().into(), target.clone(), 0)?;
+        #[extrinsic_call]
+        revoke_whiteflag_rating_signal(caller, target.clone());
+
+        assert!(!WhiteflagRatingSignalList::<T>::contains_key(caller_account, target));
+
+        Ok(())
+    }
+
+    #[benchmark]
     fn send_service_signal() -> Result<(), BenchmarkError> {
         let service =
             BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
