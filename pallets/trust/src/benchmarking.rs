@@ -7,6 +7,10 @@ use crate::Pallet as Trust;
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_system::RawOrigin;
 
+pub fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
+    frame_system::Pallet::<T>::assert_last_event(generic_event.into());
+}
+
 #[benchmarks]
 mod benchmarks {
     use super::*;
@@ -17,7 +21,10 @@ mod benchmarks {
         let caller: T::AccountId = whitelisted_caller();
 
         #[extrinsic_call]
-        _(RawOrigin::Signed(caller), target, 0);
+        _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
+
+        assert_eq!(TrustParameterList::<T>::get(&caller, &target), 0);
+        assert_last_event::<T>(Event::TrustParameterSet(target, 0, caller).into());
 
         Ok(())
     }
