@@ -489,6 +489,7 @@ impl pallet_fennel_identity::Config for Runtime {
 impl pallet_certificate::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_certificate::weights::SubstrateWeight<Runtime>;
+    type Currency = Balances;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.

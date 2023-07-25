@@ -7,6 +7,8 @@ use sp_runtime::{
     traits::{BlakeTwo256, IdentityLookup},
 };
 
+pub type Balance = u128;
+
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
 type Block = frame_system::mocking::MockBlock<Test>;
 
@@ -19,6 +21,7 @@ frame_support::construct_runtime!(
     {
         System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
         CertificateModule: pallet_certificate::{Pallet, Call, Storage, Event<T>},
+        Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
     }
 );
 
@@ -45,7 +48,7 @@ impl system::Config for Test {
     type BlockHashCount = BlockHashCount;
     type Version = ();
     type PalletInfo = PalletInfo;
-    type AccountData = ();
+    type AccountData = pallet_balances::AccountData<Balance>;
     type OnNewAccount = ();
     type OnKilledAccount = ();
     type SystemWeightInfo = ();
@@ -54,9 +57,30 @@ impl system::Config for Test {
     type MaxConsumers = frame_support::traits::ConstU32<16>;
 }
 
+parameter_types! {
+    pub const ExistentialDeposit: u128 = 1;
+}
+
+impl pallet_balances::Config for Test {
+    type MaxReserves = ();
+    type ReserveIdentifier = [u8; 8];
+    type MaxLocks = ();
+    type Balance = Balance;
+    type RuntimeEvent = RuntimeEvent;
+    type DustRemoval = ();
+    type ExistentialDeposit = ExistentialDeposit;
+    type AccountStore = System;
+    type WeightInfo = ();
+    type HoldIdentifier = [u8; 8];
+    type FreezeIdentifier = [u8; 8];
+    type MaxFreezes = ();
+    type MaxHolds = ();
+}
+
 impl pallet_certificate::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
+    type Currency = Balances;
 }
 
 // Build genesis storage according to the mock runtime.

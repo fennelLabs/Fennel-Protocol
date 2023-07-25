@@ -18,15 +18,25 @@ const CERTIFICATE_EXISTS: bool = true;
 
 #[frame_support::pallet]
 pub mod pallet {
-    use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
+    use frame_support::{
+        dispatch::DispatchResult,
+        pallet_prelude::*,
+        traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons},
+    };
     use frame_system::pallet_prelude::*;
 
     use crate::{weights::WeightInfo, CERTIFICATE_EXISTS};
+
+    const LOCK_ID: LockIdentifier = *b"certlock";
+
+    type BalanceOf<T> =
+        <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
+        type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
     }
 
     #[pallet::pallet]
@@ -56,6 +66,8 @@ pub mod pallet {
     pub enum Event<T: Config> {
         CertificateSent(T::AccountId, T::AccountId),
         CertificateRevoked(T::AccountId, T::AccountId),
+        CertificateLock(<T as frame_system::Config>::AccountId, BalanceOf<T>),
+        CertificateUnlock(<T as frame_system::Config>::AccountId, BalanceOf<T>),
     }
 
     #[pallet::error]
@@ -64,6 +76,7 @@ pub mod pallet {
         StorageOverflow,
         CertificateNotOwned,
         CertificateExists,
+        InsufficientBalance,
     }
 
     impl<T: Config> Pallet<T> {
@@ -84,12 +97,23 @@ pub mod pallet {
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            if T::Currency::total_balance(&who) < T::Currency::minimum_balance() {
+                return Err(Error::<T>::InsufficientBalance.into())
+            }
+
             ensure!(
                 !Self::is_certificate_owned_by_sender(&who, &recipient),
                 Error::<T>::CertificateExists
             );
             // Insert a placeholder value into storage - if the pair (who, recipient) exists, we
             // know there's a certificate present for the pair, regardless of value.
+            T::Currency::set_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
+
+            Self::deposit_event(Event::CertificateLock(
+                who.clone(),
+                T::Currency::free_balance(&who),
+            ));
+
             <CertificateList<T>>::insert(&who, recipient.clone(), CERTIFICATE_EXISTS);
 
             Self::deposit_event(Event::CertificateSent(recipient, who));
@@ -104,10 +128,20 @@ pub mod pallet {
         pub fn revoke_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            if T::Currency::total_balance(&who) < T::Currency::minimum_balance() {
+                return Err(Error::<T>::InsufficientBalance.into())
+            }
+
             ensure!(
                 Self::is_certificate_owned_by_sender(&who, &recipient),
                 Error::<T>::CertificateNotOwned
             );
+
+            T::Currency::remove_lock(LOCK_ID, &who);
+            Self::deposit_event(Event::CertificateUnlock(
+                who.clone(),
+                T::Currency::free_balance(&who),
+            ));
 
             <CertificateList<T>>::remove(&who, recipient.clone());
 

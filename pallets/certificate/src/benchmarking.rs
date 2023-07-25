@@ -5,6 +5,7 @@ use super::*;
 use crate::Pallet as Certificate;
 
 use frame_benchmarking::{account as benchmark_account, v2::*};
+use frame_support::{sp_runtime::traits::Bounded, traits::Currency};
 use frame_system::RawOrigin;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
@@ -19,11 +20,16 @@ pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
 #[benchmarks]
 mod benchmarks {
     use super::*;
+    type BalanceOf<T> =
+        <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
     #[benchmark]
     fn send_certificate() -> Result<(), BenchmarkError> {
         let target = get_account::<T>("James");
         let caller = get_origin::<T>("Spock");
+        let caller_account: T::AccountId = get_account::<T>("Spock");
+
+        T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
 
         #[extrinsic_call]
         _(caller, target);
@@ -38,6 +44,9 @@ mod benchmarks {
     #[benchmark]
     fn send_certificate_heavy_storage() -> Result<(), BenchmarkError> {
         let caller = get_origin::<T>("Leonard");
+        let caller_account: T::AccountId = get_account::<T>("Leonard");
+
+        T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
 
         // Generate a larger set of certificates.
         for i in 0..10000 {
@@ -59,7 +68,10 @@ mod benchmarks {
     #[benchmark]
     fn revoke_certificate() -> Result<(), BenchmarkError> {
         let caller = get_origin::<T>("Leonard");
+        let caller_account: T::AccountId = get_account::<T>("Leonard");
         let target = get_account::<T>("Montgomery");
+
+        T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
 
         Certificate::<T>::send_certificate(caller.clone().into(), target.clone())?;
 
@@ -76,6 +88,9 @@ mod benchmarks {
     #[benchmark]
     fn revoke_certificate_heavy_storage() -> Result<(), BenchmarkError> {
         let caller = get_origin::<T>("Leonard");
+        let caller_account: T::AccountId = get_account::<T>("Leonard");
+
+        T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
 
         // Generate a larger set of certificates.
         for i in 0..10000 {
