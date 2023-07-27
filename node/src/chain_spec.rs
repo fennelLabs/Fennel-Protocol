@@ -208,6 +208,13 @@ fn testnet_genesis(
                 })
                 .collect(),
         },
+        council: fennel_runtime::CouncilConfig {
+            members: endowed_accounts.iter().cloned().collect(),
+            phantom: Default::default(),
+        },
+        democracy: fennel_runtime::DemocracyConfig::default(),
+        technical_committee: fennel_runtime::TechnicalCommitteeConfig::default(),
+        treasury: fennel_runtime::TreasuryConfig::default(),
         // no need to pass anything to aura, in fact it will panic if we do. Session will take care
         // of this.
         aura: Default::default(),

@@ -7,7 +7,14 @@ repeat=$2
 
 pallets=(
     pallet_balances
+    pallet_collator_selection
     pallet_timestamp
+    pallet_collective
+    pallet_democracy
+    pallet_preimage
+    pallet_scheduler
+    pallet_treasury
+    pallet_utility
     pallet_session
     pallet_certificate
     pallet_fennel_identity

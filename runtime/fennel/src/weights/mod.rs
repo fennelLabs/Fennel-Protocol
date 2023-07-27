@@ -19,6 +19,15 @@
 
 pub mod block_weights;
 pub mod extrinsic_weights;
+pub mod pallet_collective_council;
+pub mod pallet_collective_technical_committee;
+pub mod pallet_democracy;
+pub mod pallet_preimage;
+pub mod pallet_scheduler;
+pub mod pallet_session;
+pub mod pallet_timestamp;
+pub mod pallet_treasury;
+pub mod pallet_utility;
 pub mod paritydb_weights;
 pub mod rocksdb_weights;
 
