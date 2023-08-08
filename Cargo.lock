@@ -2758,7 +2758,7 @@ dependencies = [
  "pallet-balances",
  "pallet-certificate",
  "pallet-collator-selection",
- "pallet-fennel-identity",
+ "pallet-identity 0.1.0",
  "pallet-keystore",
  "pallet-session",
  "pallet-signal",
@@ -4218,7 +4218,7 @@ dependencies = [
  "pallet-elections-phragmen",
  "pallet-fast-unstake",
  "pallet-grandpa",
- "pallet-identity",
+ "pallet-identity 4.0.0-dev",
  "pallet-im-online",
  "pallet-indices",
  "pallet-membership",
@@ -6012,20 +6012,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-fennel-identity"
-version = "0.1.0"
-dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
-]
-
-[[package]]
 name = "pallet-grandpa"
 version = "4.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?branch=polkadot-v0.9.43#5e49f6e44820affccaf517fd22af564f4b495d40"
@@ -6046,6 +6032,20 @@ dependencies = [
  "sp-session",
  "sp-staking",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-identity"
+version = "0.1.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -7921,7 +7921,7 @@ dependencies = [
  "pallet-elections-phragmen",
  "pallet-fast-unstake",
  "pallet-grandpa",
- "pallet-identity",
+ "pallet-identity 4.0.0-dev",
  "pallet-im-online",
  "pallet-indices",
  "pallet-membership",
@@ -8933,7 +8933,7 @@ dependencies = [
  "pallet-democracy",
  "pallet-elections-phragmen",
  "pallet-grandpa",
- "pallet-identity",
+ "pallet-identity 4.0.0-dev",
  "pallet-im-online",
  "pallet-indices",
  "pallet-membership",
@@ -13357,7 +13357,7 @@ dependencies = [
  "pallet-elections-phragmen",
  "pallet-fast-unstake",
  "pallet-grandpa",
- "pallet-identity",
+ "pallet-identity 4.0.0-dev",
  "pallet-im-online",
  "pallet-indices",
  "pallet-membership",

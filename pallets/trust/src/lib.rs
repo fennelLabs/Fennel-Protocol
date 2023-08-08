@@ -18,12 +18,15 @@ pub use weights::*;
 pub mod pallet {
     use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
+    use sp_runtime::traits::One;
 
     use crate::weights::WeightInfo;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
+        /// The overarching event type.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+        /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
     }
 
@@ -81,24 +84,37 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
+        /// Announce that a trust parameter has been set
         TrustParameterSet(Vec<u8>, u8, T::AccountId),
+        /// Announce that an account has issued trust to another account
         TrustIssued(T::AccountId, T::AccountId),
+        /// Announce that an account has revoked trust from another account
         TrustRevoked(T::AccountId, T::AccountId),
+        /// Announce that an account has requested trust from another account
         TrustRequest(T::AccountId, T::AccountId),
+        /// Announce that an account has cancelled a trust request from another account
         TrustRequestRemoved(T::AccountId, T::AccountId),
+        /// Announce that an account has removed trust from another account
         TrustIssuanceRemoved(T::AccountId, T::AccountId),
+        /// Announce that an account has removed a trust revocation from another account
         TrustRevocationRemoved(T::AccountId, T::AccountId),
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        NoneValue,
+        /// The given action would cause the total number of trust actions to overflow
         StorageOverflow,
+        /// The requested trust action already exists
         TrustExists,
+        /// The requested trust action does not exist
         TrustNotFound,
+        /// The requested trust request already exists
         TrustRequestExists,
+        /// The requested trust request does not exist
         TrustRequestNotFound,
+        /// The requested trust revocation already exists
         TrustRevocationExists,
+        /// The requested trust revocation does not exist
         TrustRevocationNotFound,
     }
 
@@ -112,7 +128,8 @@ pub mod pallet {
 
             if !<TrustIssuance<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentIssued<T>>::get();
-                let new_total: u32 = total.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                let new_total: u32 =
+                    total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustIssuance<T>>::insert(&who, &address, total);
                 <CurrentIssued<T>>::put(new_total);
                 Self::deposit_event(Event::TrustIssued(who, address));
@@ -131,7 +148,8 @@ pub mod pallet {
 
             if <TrustIssuance<T>>::contains_key(&who, &address) {
                 let key = <CurrentIssued<T>>::get();
-                let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustIssuance<T>>::remove(&who, &address);
                 <CurrentIssued<T>>::put(new_key);
                 Self::deposit_event(Event::TrustIssuanceRemoved(address, who));
@@ -150,7 +168,8 @@ pub mod pallet {
 
             if !<TrustRequestList<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentRequests<T>>::get();
-                let new_total: u32 = total.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                let new_total: u32 =
+                    total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <CurrentRequests<T>>::put(new_total);
                 <TrustRequestList<T>>::insert(&who, &address, total);
                 Self::deposit_event(Event::TrustRequest(who, address));
@@ -169,7 +188,8 @@ pub mod pallet {
 
             if <TrustRequestList<T>>::contains_key(&who, &address) {
                 let key = <CurrentRequests<T>>::get();
-                let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRequestList<T>>::remove(&who, &address);
                 <CurrentRequests<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRequestRemoved(address, who));
@@ -188,7 +208,8 @@ pub mod pallet {
 
             if !<TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
-                let new_key: u32 = key.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRevocation<T>>::insert(&who, &address, key);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevoked(address, who));
@@ -207,7 +228,8 @@ pub mod pallet {
 
             if <TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
-                let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRevocation<T>>::remove(&who, &address);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevocationRemoved(address, who));

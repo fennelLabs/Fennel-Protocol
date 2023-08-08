@@ -25,7 +25,7 @@ smallvec = "1.10.0"
 pallet-trust = { default-features = false, path = '../../pallets/trust', version = '0.1.0' }
 pallet-keystore = { default-features = false, path = '../../pallets/keystore', version = '0.1.0' }
 pallet-signal = { default-features = false, path = '../../pallets/signal', version = '0.1.0' }
-pallet-fennel-identity = { default-features = false, path = '../../pallets/identity', version = '0.1.0' }
+pallet-identity = { default-features = false, path = '../../pallets/identity', version = '0.1.0' }
 pallet-certificate = { default-features = false, path = '../../pallets/certificate', version = '0.1.0' }
 
 # Substrate
@@ -125,7 +125,7 @@ std = [
 	"xcm-executor/std",
 	"xcm/std",
 	"substrate-wasm-builder",
-    "pallet-fennel-identity/std",
+    "pallet-identity/std",
     "pallet-keystore/std",
     "pallet-signal/std",
     "pallet-trust/std",
@@ -147,7 +147,7 @@ runtime-benchmarks = [
 	"cumulus-pallet-session-benchmarking/runtime-benchmarks",
 	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
     "cumulus-pallet-parachain-system/runtime-benchmarks",
-    "pallet-fennel-identity/runtime-benchmarks",
+    "pallet-identity/runtime-benchmarks",
     "pallet-keystore/runtime-benchmarks",
     "pallet-signal/runtime-benchmarks",
     "pallet-trust/runtime-benchmarks",
@@ -180,7 +180,7 @@ try-runtime = [
 	"pallet-transaction-payment/try-runtime",
 	"pallet-xcm/try-runtime",
 	"parachain-info/try-runtime",
-    "pallet-fennel-identity/try-runtime",
+    "pallet-identity/try-runtime",
     "pallet-keystore/try-runtime",
     "pallet-certificate/try-runtime",
     "pallet-session/try-runtime",

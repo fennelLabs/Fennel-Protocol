@@ -15,7 +15,7 @@ fn test_issue_key() {
             luke.clone(),
             skywalker.clone()
         ));
-        System::assert_last_event(crate::Event::KeyExists(luke, skywalker, 1).into());
+        System::assert_last_event(crate::Event::KeyAnnounced(luke, 1).into());
     });
 }
 
@@ -32,9 +32,8 @@ fn test_revoke_key() {
             skywalker.clone()
         ));
         System::assert_last_event(
-            crate::Event::KeyExists(
+            crate::Event::KeyAnnounced(
                 BoundedVec::<u8, ConstU32<1000>>::try_from("Luke".as_bytes().to_vec()).unwrap(),
-                skywalker.clone(),
                 1,
             )
             .into(),
@@ -50,6 +49,6 @@ fn test_issue_encryption_key() {
         System::set_block_number(1);
         let luke = [0; 32];
         assert_ok!(KeystoreModule::issue_encryption_key(RuntimeOrigin::signed(1), luke.clone()));
-        System::assert_last_event(crate::Event::EncryptionKeyIssued(luke, 1).into());
+        System::assert_last_event(crate::Event::EncryptionKeyIssued(1).into());
     });
 }

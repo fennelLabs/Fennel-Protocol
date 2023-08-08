@@ -7,6 +7,7 @@ use crate::Pallet as Signal;
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::{sp_runtime::traits::Bounded, traits::Currency, BoundedVec};
 use frame_system::RawOrigin;
+use scale_info::prelude::format;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
     let account: T::AccountId = benchmark_account(name, 0, 0);
@@ -40,7 +41,7 @@ mod benchmarks {
 
         assert!(SignalParameterList::<T>::contains_key(caller.clone(), target.clone()));
         assert_eq!(SignalParameterList::<T>::get(caller.clone(), target.clone()), 0);
-        assert_last_event::<T>(Event::SignalParameterSet(target, 0, caller).into());
+        assert_last_event::<T>(Event::SignalParameterSet(caller).into());
 
         Ok(())
     }
@@ -54,10 +55,14 @@ mod benchmarks {
 
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
-        for _ in 0..100_000 {
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
-                target.clone(),
+                loop_target,
                 3,
             )?;
         }
@@ -67,7 +72,7 @@ mod benchmarks {
 
         assert!(RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
-        assert_last_event::<T>(Event::RatingSignalSent(target, 0, caller).into());
+        assert_last_event::<T>(Event::RatingSignalSent(caller).into());
 
         Ok(())
     }
@@ -85,7 +90,7 @@ mod benchmarks {
         _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
 
         assert!(WhiteflagRatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
-        assert_last_event::<T>(Event::WhiteflagRatingSignalSent(target, 0, caller).into());
+        assert_last_event::<T>(Event::WhiteflagRatingSignalSent(caller).into());
 
         Ok(())
     }
@@ -111,7 +116,7 @@ mod benchmarks {
         send_whiteflag_rating_signal(RawOrigin::Signed(caller.clone()), target.clone(), 0);
 
         assert!(WhiteflagRatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
-        assert_last_event::<T>(Event::WhiteflagRatingSignalSent(target, 0, caller).into());
+        assert_last_event::<T>(Event::WhiteflagRatingSignalSent(caller).into());
 
         Ok(())
     }
@@ -126,19 +131,29 @@ mod benchmarks {
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
         // Generate a bunch of signals.
-        for _ in 0..100_000 {
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
-                target.clone(),
+                loop_target,
                 3,
             )?;
         }
+
+        Signal::<T>::send_rating_signal(
+            RawOrigin::Signed(caller.clone()).into(),
+            target.clone(),
+            3,
+        )?;
 
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), target.clone(), 1);
 
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
-        assert_last_event::<T>(Event::RatingSignalUpdated(target, 1, caller).into());
+        assert_last_event::<T>(Event::RatingSignalUpdated(caller).into());
 
         Ok(())
     }
@@ -165,7 +180,7 @@ mod benchmarks {
         update_whiteflag_rating_signal(RawOrigin::Signed(caller.clone()), target.clone(), 1);
 
         assert_eq!(WhiteflagRatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
-        assert_last_event::<T>(Event::WhiteflagRatingSignalUpdated(target, 1, caller).into());
+        assert_last_event::<T>(Event::WhiteflagRatingSignalUpdated(caller).into());
 
         Ok(())
     }
@@ -183,7 +198,7 @@ mod benchmarks {
         _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
 
         assert_eq!(WhiteflagRatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
-        assert_last_event::<T>(Event::WhiteflagRatingSignalUpdated(target, 0, caller).into());
+        assert_last_event::<T>(Event::WhiteflagRatingSignalUpdated(caller).into());
 
         Ok(())
     }
@@ -198,16 +213,22 @@ mod benchmarks {
         let caller_account = get_account::<T>("Anakin");
         T::Currency::make_free_balance_be(&caller_account, DepositBalanceOf::<T>::max_value());
 
-        for _ in 0..100_000 {
-            Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 2)?;
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
+            Signal::<T>::send_rating_signal(caller.clone().into(), loop_target, 2)?;
         }
+
+        Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 2)?;
 
         #[extrinsic_call]
         _(caller, target.clone());
 
         let caller: T::AccountId = get_account::<T>("Anakin");
         assert!(!RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
-        assert_last_event::<T>(Event::RatingSignalRevoked(target, caller).into());
+        assert_last_event::<T>(Event::RatingSignalRevoked(caller).into());
 
         Ok(())
     }
@@ -250,7 +271,7 @@ mod benchmarks {
             target.clone()
         ));
         assert_last_event::<T>(
-            Event::WhiteflagRatingSignalRevoked(target.clone(), caller_account).into(),
+            Event::WhiteflagRatingSignalRevoked(caller_account).into(),
         );
 
         Ok(())
