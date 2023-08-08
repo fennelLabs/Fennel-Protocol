@@ -23,6 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
+        // Can we add a one line doc comment for each config. Please refer to my suggestions made in certificate and identity pallet .
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
         type MaxSize: Get<u32>;
@@ -32,6 +33,7 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
+    // Why do we need this as Unbounded?
     #[pallet::unbounded]
     /// This module's main storage will consist of a StorageDoubleMap connecting addresses to the
     /// list of keys they've submitted and not revoked.
@@ -54,23 +56,27 @@ pub mod pallet {
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         /// Announce when an identity has broadcast a new key as an event.
+        // Why are we passing encryption key in event?
         EncryptionKeyIssued([u8; 32], T::AccountId),
         /// Announce when an identity has set a key as revoked.
         KeyRevoked(BoundedVec<u8, T::MaxSize>, T::AccountId),
         /// Announce that a key exists.
+        // This looks like a error message. Can we rename it to `KeyAnnounced`? Why do we need to pass information in event?
         KeyExists(BoundedVec<u8, T::MaxSize>, BoundedVec<u8, T::MaxSize>, T::AccountId),
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        NoneValue,
-        StorageOverflow,
+        // NoneValue,
+        // StorageOverflow,
+        // Can we add a one line doc comment for each error? Please apply same practice for all error in other pallets as well.
         KeyExists,
         KeyDoesNotExist,
     }
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
+        // Can we add documentation here?
         #[pallet::weight(T::WeightInfo::announce_key())]
         #[pallet::call_index(0)]
         pub fn announce_key(

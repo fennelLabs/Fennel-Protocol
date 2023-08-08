@@ -25,17 +25,19 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
+        /// The overarching event type.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+        /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
     }
 
     #[pallet::pallet]
     pub struct Pallet<T>(_);
 
-    #[pallet::type_value]
-    pub fn DefaultCurrent<T: Config>() -> u32 {
-        0
-    }
+    // #[pallet::type_value]
+    // pub fn DefaultCurrent<T: Config>() -> u32 {
+    //     0
+    // }
 
     #[pallet::storage]
     #[pallet::unbounded]
@@ -54,26 +56,33 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
+        // Can we add a one line doc comment for each event? Please apply same practice for all events in other pallets as well. For ex:
+        /// A `certificate` was sent.
         CertificateSent(T::AccountId, T::AccountId),
         CertificateRevoked(T::AccountId, T::AccountId),
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        NoneValue,
-        StorageOverflow,
+        // I don't find its usage. Can we remove this?
+        //NoneValue,
+        // I don't find its usage. Can we remove this?
+        //StorageOverflow,
+        // Can we add a one line doc comment for each error? Please apply same practice for all events in other pallets as well. For ex:
+        /// This `certificate` is not owned.
         CertificateNotOwned,
         CertificateExists,
     }
 
-    impl<T: Config> Pallet<T> {
-        fn is_certificate_owned_by_sender(
-            account_id: &T::AccountId,
-            recipient_id: &T::AccountId,
-        ) -> bool {
-            <CertificateList<T>>::try_get(account_id, recipient_id).is_ok()
-        }
-    }
+    // We don't need this.
+    // impl<T: Config> Pallet<T> {
+    //     fn is_certificate_owned_by_sender(
+    //         account_id: &T::AccountId,
+    //         recipient_id: &T::AccountId,
+    //     ) -> bool {
+    //         <CertificateList<T>>::try_get(account_id, recipient_id).is_ok()
+    //     }
+    // }
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
@@ -84,8 +93,13 @@ pub mod pallet {
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // ensure!(
+            //     !Self::is_certificate_owned_by_sender(&who, &recipient),
+            //     Error::<T>::CertificateExists
+            // );
+
             ensure!(
-                !Self::is_certificate_owned_by_sender(&who, &recipient),
+                !CertificateList::<T>::contains_key(&who, &recipient),
                 Error::<T>::CertificateExists
             );
             // Insert a placeholder value into storage - if the pair (who, recipient) exists, we
@@ -104,8 +118,13 @@ pub mod pallet {
         pub fn revoke_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            // ensure!(
+            //     Self::is_certificate_owned_by_sender(&who, &recipient),
+            //     Error::<T>::CertificateNotOwned
+            // );
+
             ensure!(
-                Self::is_certificate_owned_by_sender(&who, &recipient),
+                CertificateList::<T>::contains_key(&who, &recipient),
                 Error::<T>::CertificateNotOwned
             );
 

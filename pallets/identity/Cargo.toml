@@ -4,6 +4,7 @@ description = 'FRAME pallet providing specialized identity functionality in line
 edition = '2021'
 homepage = 'https://fennellabs.com'
 license = 'Unlicense'
+# Can we rename to pallet-identity to make it consistent with other pallets
 name = 'pallet-fennel-identity'
 publish = false
 readme = 'README.md'
@@ -19,6 +20,7 @@ codec = { default-features = false, features = ['derive', 'max-encoded-len'], pa
 frame-benchmarking = { default-features = false, git = 'https://github.com/paritytech/substrate.git', optional = true, branch = "polkadot-v0.9.43" }
 frame-support = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v0.9.43" }
 frame-system = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v0.9.43" }
+sp-runtime = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v0.9.43" }
 
 [dev-dependencies]
 sp-core = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v0.9.43" }
@@ -34,6 +36,7 @@ std = [
     'frame-support/std',
     'frame-system/std',
     'frame-benchmarking/std',
-    'scale-info/std'
+    'scale-info/std',
+    'sp-runtime/std'
 ]
 try-runtime = ['frame-support/try-runtime', 'frame-system/try-runtime']

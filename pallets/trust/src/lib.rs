@@ -23,6 +23,7 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
+        // Can we add a one line doc comment for each config? Please refer to my suggestions made in certificate and identity pallet .
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type WeightInfo: WeightInfo;
     }
@@ -67,6 +68,7 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
+        // Can we add a one line doc comment for each event?
         TrustIssued(T::AccountId, T::AccountId),
         TrustRevoked(T::AccountId, T::AccountId),
         TrustRequest(T::AccountId, T::AccountId),
@@ -77,7 +79,8 @@ pub mod pallet {
 
     #[pallet::error]
     pub enum Error<T> {
-        NoneValue,
+        // Can we add a one line doc comment for each error?
+        // NoneValue,
         StorageOverflow,
         TrustExists,
         TrustNotFound,
@@ -97,6 +100,7 @@ pub mod pallet {
 
             if !<TrustIssuance<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentIssued<T>>::get();
+                // Replace this magic number `1` with `One::one()`. Please see identity pallet for reference.
                 let new_total: u32 = total.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustIssuance<T>>::insert(&who, &address, total);
                 <CurrentIssued<T>>::put(new_total);
@@ -116,6 +120,7 @@ pub mod pallet {
 
             if <TrustIssuance<T>>::contains_key(&who, &address) {
                 let key = <CurrentIssued<T>>::get();
+                // Replace this magic number `1` with `One::one()`. Please see identity pallet for reference.
                 let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustIssuance<T>>::remove(&who, &address);
                 <CurrentIssued<T>>::put(new_key);
@@ -135,6 +140,7 @@ pub mod pallet {
 
             if !<TrustRequestList<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentRequests<T>>::get();
+                // Replace this magic number `1` with `One::one()`. Please see identity pallet for reference.
                 let new_total: u32 = total.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
                 <CurrentRequests<T>>::put(new_total);
                 <TrustRequestList<T>>::insert(&who, &address, total);
@@ -154,6 +160,7 @@ pub mod pallet {
 
             if <TrustRequestList<T>>::contains_key(&who, &address) {
                 let key = <CurrentRequests<T>>::get();
+                // Replace this magic number `1` with `One::one()`. Please see identity pallet for reference.
                 let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRequestList<T>>::remove(&who, &address);
                 <CurrentRequests<T>>::put(new_key);
@@ -173,6 +180,7 @@ pub mod pallet {
 
             if !<TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
+                // Replace this magic number `1` with `One::one()`. Please see identity pallet for reference.
                 let new_key: u32 = key.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRevocation<T>>::insert(&who, &address, key);
                 <CurrentRevoked<T>>::put(new_key);
@@ -192,6 +200,7 @@ pub mod pallet {
 
             if <TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
+                // Replace this magic number `1` with `One::one()`. Please see identity pallet for reference.
                 let new_key: u32 = key.checked_sub(1).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRevocation<T>>::remove(&who, &address);
                 <CurrentRevoked<T>>::put(new_key);
