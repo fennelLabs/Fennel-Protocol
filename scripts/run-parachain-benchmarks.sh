@@ -17,7 +17,7 @@ pallets=(
     pallet_utility
     pallet_session
     pallet_certificate
-    pallet_fennel_identity
+    pallet_identity
     pallet_keystore
     pallet_signal
     pallet_trust

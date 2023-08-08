@@ -20,11 +20,15 @@ pub mod pallet {
     use codec::alloc::collections::BTreeSet;
     use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
+    use sp_runtime::traits::One;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
+        /// The overarching event type.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+        /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
+        // Please add one line of comment here about this config
         type MaxSize: Get<u32>;
     }
 
@@ -62,7 +66,6 @@ pub mod pallet {
         StorageMap<_, Blake2_128Concat, T::AccountId, BTreeSet<u32>, ValueQuery>;
 
     #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn identity_trait_list)]
     /// Maps identity ID numbers to their key/value attributes.
     pub type IdentityTraitList<T: Config> = StorageDoubleMap<
@@ -76,7 +79,6 @@ pub mod pallet {
     >;
 
     #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn get_signal_record)]
     /// Tracks all signals sent by an identity.
     pub type SignatureSignal<T: Config> = StorageDoubleMap<
@@ -108,8 +110,9 @@ pub mod pallet {
     #[pallet::error]
     #[derive(PartialEq, Eq)]
     pub enum Error<T> {
-        NoneValue,
+        /// The provided value is too large.
         StorageOverflow,
+        /// The current account does not own the identity.
         IdentityNotOwned,
     }
 
@@ -131,7 +134,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
             let current_id: u32 = <IdentityNumber<T>>::get();
             <IdentityNumber<T>>::try_mutate(|current_id| -> DispatchResult {
-                *current_id = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                *current_id =
+                    current_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 Ok(())
             })?;
             let new_id: u32 = <IdentityNumber<T>>::get();
@@ -154,7 +158,8 @@ pub mod pallet {
         pub fn revoke_identity(origin: OriginFor<T>, identity_id: u32) -> DispatchResult {
             let who = ensure_signed(origin)?;
             <RevokedIdentityNumber<T>>::try_mutate(|current_id| -> DispatchResult {
-                *current_id = current_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                *current_id =
+                    current_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 Ok(())
             })?;
 
@@ -217,6 +222,7 @@ pub mod pallet {
 
             Ok(())
         }
+
         /// Issue a signed Fennel signal on behalf of an owned identity.
         #[pallet::weight(T::WeightInfo::sign_for_identity())]
         #[pallet::call_index(4)]
@@ -233,7 +239,8 @@ pub mod pallet {
             );
             let signal_id: u32 = <SignalCount<T>>::get();
             <SignalCount<T>>::try_mutate(|signal_id| -> DispatchResult {
-                *signal_id = signal_id.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+                *signal_id =
+                    signal_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 Ok(())
             })?;
             let new_id: u32 = <SignalCount<T>>::get();

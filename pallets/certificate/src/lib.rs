@@ -34,18 +34,15 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
+        /// The overarching event type.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+        /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
         type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
     }
 
     #[pallet::pallet]
     pub struct Pallet<T>(_);
-
-    #[pallet::type_value]
-    pub fn DefaultCurrent<T: Config>() -> u32 {
-        0
-    }
 
     #[pallet::storage]
     #[pallet::unbounded]
@@ -64,7 +61,9 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
+        /// A `certificate` was sent.
         CertificateSent(T::AccountId, T::AccountId),
+        /// A `certificate` was revoked.
         CertificateRevoked(T::AccountId, T::AccountId),
         CertificateLock(<T as frame_system::Config>::AccountId, BalanceOf<T>),
         CertificateUnlock(<T as frame_system::Config>::AccountId, BalanceOf<T>),
@@ -72,20 +71,11 @@ pub mod pallet {
 
     #[pallet::error]
     pub enum Error<T> {
-        NoneValue,
-        StorageOverflow,
+        /// The current account does not own the certificate.
         CertificateNotOwned,
+        /// The certificate already exists.
         CertificateExists,
         InsufficientBalance,
-    }
-
-    impl<T: Config> Pallet<T> {
-        fn is_certificate_owned_by_sender(
-            account_id: &T::AccountId,
-            recipient_id: &T::AccountId,
-        ) -> bool {
-            <CertificateList<T>>::try_get(account_id, recipient_id).is_ok()
-        }
     }
 
     #[pallet::call]
@@ -102,7 +92,7 @@ pub mod pallet {
             }
 
             ensure!(
-                !Self::is_certificate_owned_by_sender(&who, &recipient),
+                !CertificateList::<T>::contains_key(&who, &recipient),
                 Error::<T>::CertificateExists
             );
             // Insert a placeholder value into storage - if the pair (who, recipient) exists, we
@@ -133,7 +123,7 @@ pub mod pallet {
             }
 
             ensure!(
-                Self::is_certificate_owned_by_sender(&who, &recipient),
+                CertificateList::<T>::contains_key(&who, &recipient),
                 Error::<T>::CertificateNotOwned
             );
 
