@@ -66,8 +66,6 @@ pub mod pallet {
         StorageMap<_, Blake2_128Concat, T::AccountId, BTreeSet<u32>, ValueQuery>;
 
     #[pallet::storage]
-    // Is this storage item Unbounded?
-    #[pallet::unbounded]
     #[pallet::getter(fn identity_trait_list)]
     /// Maps identity ID numbers to their key/value attributes.
     pub type IdentityTraitList<T: Config> = StorageDoubleMap<
@@ -81,8 +79,6 @@ pub mod pallet {
     >;
 
     #[pallet::storage]
-    // Is this storage item Unbounded?
-    #[pallet::unbounded]
     #[pallet::getter(fn get_signal_record)]
     /// Tracks all signals sent by an identity.
     pub type SignatureSignal<T: Config> = StorageDoubleMap<
@@ -114,9 +110,9 @@ pub mod pallet {
     #[pallet::error]
     #[derive(PartialEq, Eq)]
     pub enum Error<T> {
-        // NoneValue,
+        /// The provided value is too large.
         StorageOverflow,
-        // Can we add a one line doc comment for each error? Please apply same practice for all error in other pallets as well.
+        /// The current account does not own the identity.
         IdentityNotOwned,
     }
 
@@ -225,6 +221,7 @@ pub mod pallet {
 
             Ok(())
         }
+        
         /// Issue a signed Fennel signal on behalf of an owned identity.
         #[pallet::weight(T::WeightInfo::sign_for_identity())]
         #[pallet::call_index(4)]

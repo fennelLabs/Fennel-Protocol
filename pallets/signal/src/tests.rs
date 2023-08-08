@@ -14,8 +14,6 @@ fn test_send_rating_signal() {
         ));
         System::assert_last_event(
             crate::Event::RatingSignalSent(
-                BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
-                0,
                 1,
             )
             .into(),
@@ -27,15 +25,18 @@ fn test_send_rating_signal() {
 fn test_update_rating_signal() {
     new_test_ext().execute_with(|| {
         System::set_block_number(1);
-        assert_ok!(SignalModule::update_rating_signal(
+        assert!(SignalModule::send_rating_signal(
             RuntimeOrigin::signed(1),
             BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
             0
+        ).is_ok());
+        assert_ok!(SignalModule::update_rating_signal(
+            RuntimeOrigin::signed(1),
+            BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
+            1
         ));
         System::assert_last_event(
             crate::Event::RatingSignalUpdated(
-                BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
-                0,
                 1,
             )
             .into(),
@@ -54,8 +55,6 @@ fn test_revoke_rating_signal() {
         ));
         System::assert_last_event(
             crate::Event::RatingSignalSent(
-                BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
-                0,
                 1,
             )
             .into(),
@@ -66,7 +65,6 @@ fn test_revoke_rating_signal() {
         ));
         System::assert_last_event(
             crate::Event::RatingSignalRevoked(
-                BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
                 1,
             )
             .into(),

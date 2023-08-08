@@ -4,8 +4,7 @@ description = 'FRAME pallet providing specialized identity functionality in line
 edition = '2021'
 homepage = 'https://fennellabs.com'
 license = 'Unlicense'
-# Can we rename to pallet-identity to make it consistent with other pallets
-name = 'pallet-fennel-identity'
+name = 'pallet-identity'
 publish = false
 readme = 'README.md'
 repository = 'https://github.com/fennelLabs/fennel-protocol/'

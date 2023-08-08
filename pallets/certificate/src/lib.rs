@@ -34,11 +34,6 @@ pub mod pallet {
     #[pallet::pallet]
     pub struct Pallet<T>(_);
 
-    // #[pallet::type_value]
-    // pub fn DefaultCurrent<T: Config>() -> u32 {
-    //     0
-    // }
-
     #[pallet::storage]
     #[pallet::unbounded]
     #[pallet::getter(fn certificate_list)]
@@ -56,33 +51,19 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        // Can we add a one line doc comment for each event? Please apply same practice for all events in other pallets as well. For ex:
         /// A `certificate` was sent.
         CertificateSent(T::AccountId, T::AccountId),
+        /// A `certificate` was revoked.
         CertificateRevoked(T::AccountId, T::AccountId),
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        // I don't find its usage. Can we remove this?
-        //NoneValue,
-        // I don't find its usage. Can we remove this?
-        //StorageOverflow,
-        // Can we add a one line doc comment for each error? Please apply same practice for all events in other pallets as well. For ex:
-        /// This `certificate` is not owned.
+        /// The current account does not own the certificate.
         CertificateNotOwned,
+        /// The certificate already exists.
         CertificateExists,
     }
-
-    // We don't need this.
-    // impl<T: Config> Pallet<T> {
-    //     fn is_certificate_owned_by_sender(
-    //         account_id: &T::AccountId,
-    //         recipient_id: &T::AccountId,
-    //     ) -> bool {
-    //         <CertificateList<T>>::try_get(account_id, recipient_id).is_ok()
-    //     }
-    // }
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
@@ -92,11 +73,6 @@ pub mod pallet {
         #[pallet::call_index(0)]
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
-
-            // ensure!(
-            //     !Self::is_certificate_owned_by_sender(&who, &recipient),
-            //     Error::<T>::CertificateExists
-            // );
 
             ensure!(
                 !CertificateList::<T>::contains_key(&who, &recipient),
@@ -117,11 +93,6 @@ pub mod pallet {
         /// origin.
         pub fn revoke_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
-
-            // ensure!(
-            //     Self::is_certificate_owned_by_sender(&who, &recipient),
-            //     Error::<T>::CertificateNotOwned
-            // );
 
             ensure!(
                 CertificateList::<T>::contains_key(&who, &recipient),

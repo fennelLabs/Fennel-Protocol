@@ -1,4 +1,4 @@
-use crate as pallet_fennel_identity;
+use crate as pallet_identity;
 use frame_support::parameter_types;
 use frame_system as system;
 use sp_core::{ConstU32, H256};
@@ -18,7 +18,7 @@ frame_support::construct_runtime!(
         UncheckedExtrinsic = UncheckedExtrinsic,
     {
         System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
-        IdentityModule: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>},
+        IdentityModule: pallet_identity::{Pallet, Call, Storage, Event<T>},
     }
 );
 
@@ -54,7 +54,7 @@ impl system::Config for Test {
     type MaxConsumers = frame_support::traits::ConstU32<16>;
 }
 
-impl pallet_fennel_identity::Config for Test {
+impl pallet_identity::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
     type MaxSize = ConstU32<1000>;

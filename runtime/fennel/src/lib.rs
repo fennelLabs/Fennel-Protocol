@@ -49,7 +49,7 @@ use xcm_config::{RelayLocation, XcmConfig, XcmOriginToTransactDispatchOrigin};
 pub use sp_runtime::BuildStorage;
 
 pub use pallet_certificate;
-pub use pallet_fennel_identity;
+pub use pallet_identity;
 pub use pallet_keystore;
 pub use pallet_signal;
 pub use pallet_trust;
@@ -479,9 +479,9 @@ impl pallet_signal::Config for Runtime {
     type MaxSize = SignalMaxSize;
 }
 
-impl pallet_fennel_identity::Config for Runtime {
+impl pallet_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_fennel_identity::weights::SubstrateWeight<Runtime>;
+    type WeightInfo = pallet_identity::weights::SubstrateWeight<Runtime>;
     type MaxSize = IdentityMaxSize;
 }
 
@@ -524,7 +524,7 @@ construct_runtime!(
         Trust: pallet_trust::{Pallet, Call, Storage, Event<T>} = 34,
         Keystore: pallet_keystore::{Pallet, Call, Storage, Event<T>} = 35,
         Signal: pallet_signal::{Pallet, Call, Storage, Event<T>} = 36,
-        Identity: pallet_fennel_identity::{Pallet, Call, Storage, Event<T>} = 37,
+        Identity: pallet_identity::{Pallet, Call, Storage, Event<T>} = 37,
         Certificate: pallet_certificate::{Pallet, Call, Storage, Event<T>} = 38,
 
     }
@@ -542,7 +542,7 @@ mod benches {
         [pallet_trust, Trust]
         [pallet_keystore, Keystore]
         [pallet_signal, Signal]
-        [pallet_fennel_identity, Identity]
+        [pallet_identity, Identity]
         [pallet_certificate, Certificate]
     );
 }
