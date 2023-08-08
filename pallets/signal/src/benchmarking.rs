@@ -36,7 +36,8 @@ mod benchmarks {
         for i in 0..100_000 {
             let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
                 format!("TEST{}", i).as_bytes().to_vec(),
-            ).unwrap();
+            )
+            .unwrap();
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
                 loop_target,
@@ -65,7 +66,8 @@ mod benchmarks {
         for i in 0..100_000 {
             let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
                 format!("TEST{}", i).as_bytes().to_vec(),
-            ).unwrap();
+            )
+            .unwrap();
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
                 loop_target,
@@ -98,7 +100,8 @@ mod benchmarks {
         for i in 0..100_000 {
             let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
                 format!("TEST{}", i).as_bytes().to_vec(),
-            ).unwrap();
+            )
+            .unwrap();
             Signal::<T>::send_rating_signal(caller.clone().into(), loop_target, 2)?;
         }
 

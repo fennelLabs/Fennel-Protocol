@@ -135,7 +135,8 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
             let current_id: u32 = <IdentityNumber<T>>::get();
             <IdentityNumber<T>>::try_mutate(|current_id| -> DispatchResult {
-                *current_id = current_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                *current_id =
+                    current_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 Ok(())
             })?;
             let new_id: u32 = <IdentityNumber<T>>::get();
@@ -158,7 +159,8 @@ pub mod pallet {
         pub fn revoke_identity(origin: OriginFor<T>, identity_id: u32) -> DispatchResult {
             let who = ensure_signed(origin)?;
             <RevokedIdentityNumber<T>>::try_mutate(|current_id| -> DispatchResult {
-                *current_id = current_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                *current_id =
+                    current_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 Ok(())
             })?;
 
@@ -221,7 +223,7 @@ pub mod pallet {
 
             Ok(())
         }
-        
+
         /// Issue a signed Fennel signal on behalf of an owned identity.
         #[pallet::weight(T::WeightInfo::sign_for_identity())]
         #[pallet::call_index(4)]
@@ -238,7 +240,8 @@ pub mod pallet {
             );
             let signal_id: u32 = <SignalCount<T>>::get();
             <SignalCount<T>>::try_mutate(|signal_id| -> DispatchResult {
-                *signal_id = signal_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                *signal_id =
+                    signal_id.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 Ok(())
             })?;
             let new_id: u32 = <SignalCount<T>>::get();

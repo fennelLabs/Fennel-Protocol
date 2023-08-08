@@ -112,7 +112,8 @@ pub mod pallet {
 
             if !<TrustIssuance<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentIssued<T>>::get();
-                let new_total: u32 = total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                let new_total: u32 =
+                    total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustIssuance<T>>::insert(&who, &address, total);
                 <CurrentIssued<T>>::put(new_total);
                 Self::deposit_event(Event::TrustIssued(who, address));
@@ -131,7 +132,8 @@ pub mod pallet {
 
             if <TrustIssuance<T>>::contains_key(&who, &address) {
                 let key = <CurrentIssued<T>>::get();
-                let new_key: u32 = key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustIssuance<T>>::remove(&who, &address);
                 <CurrentIssued<T>>::put(new_key);
                 Self::deposit_event(Event::TrustIssuanceRemoved(address, who));
@@ -150,7 +152,8 @@ pub mod pallet {
 
             if !<TrustRequestList<T>>::contains_key(&who, &address) {
                 let total: u32 = <CurrentRequests<T>>::get();
-                let new_total: u32 = total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                let new_total: u32 =
+                    total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <CurrentRequests<T>>::put(new_total);
                 <TrustRequestList<T>>::insert(&who, &address, total);
                 Self::deposit_event(Event::TrustRequest(who, address));
@@ -169,7 +172,8 @@ pub mod pallet {
 
             if <TrustRequestList<T>>::contains_key(&who, &address) {
                 let key = <CurrentRequests<T>>::get();
-                let new_key: u32 = key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRequestList<T>>::remove(&who, &address);
                 <CurrentRequests<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRequestRemoved(address, who));
@@ -188,7 +192,8 @@ pub mod pallet {
 
             if !<TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
-                let new_key: u32 = key.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRevocation<T>>::insert(&who, &address, key);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevoked(address, who));
@@ -207,7 +212,8 @@ pub mod pallet {
 
             if <TrustRevocation<T>>::contains_key(&who, &address) {
                 let key: u32 = <CurrentRevoked<T>>::get();
-                let new_key: u32 = key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+                let new_key: u32 =
+                    key.checked_sub(One::one()).ok_or(Error::<T>::StorageOverflow)?;
                 <TrustRevocation<T>>::remove(&who, &address);
                 <CurrentRevoked<T>>::put(new_key);
                 Self::deposit_event(Event::TrustRevocationRemoved(address, who));
