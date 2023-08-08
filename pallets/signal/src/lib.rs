@@ -23,8 +23,11 @@ pub mod pallet {
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
+        /// The overarching event type.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+        /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
+        /// The maximum size of a signal.
         type MaxSize: Get<u32>;
     }
 
@@ -32,7 +35,6 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn rating_signal_list)]
     /// Maps identity numbers to a signal transaction hash and a rating number.
     pub type RatingSignalList<T: Config> = StorageDoubleMap<
@@ -48,17 +50,24 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
+        /// Represents a signal sent by an identity.
         SignalSent(BoundedVec<u8, T::MaxSize>, T::AccountId),
-        RatingSignalSent(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
-        RatingSignalUpdated(BoundedVec<u8, T::MaxSize>, u8, T::AccountId),
-        RatingSignalRevoked(BoundedVec<u8, T::MaxSize>, T::AccountId),
+        /// Represents a signal sent by an identity for a particular application or service.
         ServiceSignalSent(BoundedVec<u8, T::MaxSize>, BoundedVec<u8, T::MaxSize>, T::AccountId),
+        /// Indicates that an identity issued a new rating signal.
+        RatingSignalSent(T::AccountId),
+        /// Indicates that an identity updated a rating signal.
+        RatingSignalUpdated(T::AccountId),
+        /// Indicates that an identity revoked a rating signal.
+        RatingSignalRevoked(T::AccountId),
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        NoneValue,
-        StorageOverflow,
+        /// Requested rating signal already exists.
+        RatingSignalAlreadyExists,
+        /// Requested rating signal does not exist.
+        RatingSignalDoesNotExist,
     }
 
     #[pallet::call]
@@ -74,8 +83,13 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            ensure!(
+                !<RatingSignalList<T>>::contains_key(who.clone(), target.clone()),
+                Error::<T>::RatingSignalAlreadyExists
+            );
+
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
-            Self::deposit_event(Event::RatingSignalSent(target, rating, who));
+            Self::deposit_event(Event::RatingSignalSent(who));
 
             Ok(())
         }
@@ -90,8 +104,13 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            ensure!(
+                <RatingSignalList<T>>::contains_key(who.clone(), target.clone()),
+                Error::<T>::RatingSignalDoesNotExist
+            );
+
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
-            Self::deposit_event(Event::RatingSignalUpdated(target, new_rating, who));
+            Self::deposit_event(Event::RatingSignalUpdated(who));
 
             Ok(())
         }
@@ -105,8 +124,13 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            ensure!(
+                <RatingSignalList<T>>::contains_key(who.clone(), target.clone()),
+                Error::<T>::RatingSignalDoesNotExist
+            );
+
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
-            Self::deposit_event(Event::RatingSignalRevoked(target, who));
+            Self::deposit_event(Event::RatingSignalRevoked(who));
 
             Ok(())
         }

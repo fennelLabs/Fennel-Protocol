@@ -7,6 +7,7 @@ use crate::Pallet as Signal;
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::BoundedVec;
 use frame_system::RawOrigin;
+use scale_info::prelude::format;
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
     let account: T::AccountId = benchmark_account(name, 0, 0);
@@ -32,10 +33,14 @@ mod benchmarks {
                 .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 
-        for _ in 0..100_000 {
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
-                target.clone(),
+                loop_target,
                 3,
             )?;
         }
@@ -45,7 +50,7 @@ mod benchmarks {
 
         assert!(RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 0);
-        assert_last_event::<T>(Event::RatingSignalSent(target, 0, caller).into());
+        assert_last_event::<T>(Event::RatingSignalSent(caller).into());
 
         Ok(())
     }
@@ -58,19 +63,29 @@ mod benchmarks {
         let caller: T::AccountId = whitelisted_caller();
 
         // Generate a bunch of signals.
-        for _ in 0..100_000 {
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
             Signal::<T>::send_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
-                target.clone(),
+                loop_target,
                 3,
             )?;
         }
+
+        Signal::<T>::send_rating_signal(
+            RawOrigin::Signed(caller.clone()).into(),
+            target.clone(),
+            3,
+        )?;
 
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), target.clone(), 1);
 
         assert_eq!(RatingSignalList::<T>::get(caller.clone(), target.clone()), 1);
-        assert_last_event::<T>(Event::RatingSignalUpdated(target, 1, caller).into());
+        assert_last_event::<T>(Event::RatingSignalUpdated(caller).into());
 
         Ok(())
     }
@@ -82,16 +97,22 @@ mod benchmarks {
                 .unwrap();
         let caller = get_origin::<T>("Anakin");
 
-        for _ in 0..100_000 {
-            Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 2)?;
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
+            Signal::<T>::send_rating_signal(caller.clone().into(), loop_target, 2)?;
         }
+
+        Signal::<T>::send_rating_signal(caller.clone().into(), target.clone(), 2)?;
 
         #[extrinsic_call]
         _(caller, target.clone());
 
         let caller: T::AccountId = get_account::<T>("Anakin");
         assert!(!RatingSignalList::<T>::contains_key(caller.clone(), target.clone()));
-        assert_last_event::<T>(Event::RatingSignalRevoked(target, caller).into());
+        assert_last_event::<T>(Event::RatingSignalRevoked(caller).into());
 
         Ok(())
     }
