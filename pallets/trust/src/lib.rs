@@ -16,7 +16,7 @@ pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
-    use frame_support::{dispatch::DispatchResult, inherent::Vec, pallet_prelude::*};
+    use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
     use sp_runtime::traits::One;
 
@@ -28,6 +28,8 @@ pub mod pallet {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
+        /// The maximum size of a trust parameter string
+        type MaxTrustParameterSize: Get<u32>;
     }
 
     #[pallet::pallet]
@@ -68,7 +70,6 @@ pub mod pallet {
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, T::AccountId, u32>;
 
     #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn trust_paramter_list)]
     /// An account and a parameter string to an integer value.
     pub type TrustParameterList<T: Config> = StorageDoubleMap<
@@ -76,7 +77,7 @@ pub mod pallet {
         Blake2_128Concat,
         T::AccountId,
         Blake2_128Concat,
-        Vec<u8>,
+        BoundedVec<u8, T::MaxTrustParameterSize>,
         u8,
         ValueQuery,
     >;
@@ -85,7 +86,7 @@ pub mod pallet {
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         /// Announce that a trust parameter has been set
-        TrustParameterSet(Vec<u8>, u8, T::AccountId),
+        TrustParameterSet(T::AccountId),
         /// Announce that an account has issued trust to another account
         TrustIssued(T::AccountId, T::AccountId),
         /// Announce that an account has revoked trust from another account
@@ -245,13 +246,13 @@ pub mod pallet {
         #[pallet::call_index(6)]
         pub fn set_trust_parameter(
             origin: OriginFor<T>,
-            name: Vec<u8>,
+            name: BoundedVec<u8, T::MaxTrustParameterSize>,
             value: u8,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             <TrustParameterList<T>>::insert(who.clone(), name.clone(), value);
-            Self::deposit_event(Event::TrustParameterSet(name, value, who));
+            Self::deposit_event(Event::TrustParameterSet(who));
 
             Ok(())
         }

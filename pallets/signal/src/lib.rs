@@ -61,7 +61,6 @@ pub mod pallet {
     >;
 
     #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn whiteflag_rating_signal_list)]
     /// Maps identity numbers to a signal transaction hash and a rating number.
     pub type WhiteflagRatingSignalList<T: Config> = StorageDoubleMap<
@@ -75,7 +74,6 @@ pub mod pallet {
     >;
 
     #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn signal_paramter_list)]
     /// Maps identity numbers to a signal transaction hash and a rating number.
     pub type SignalParameterList<T: Config> = StorageDoubleMap<
