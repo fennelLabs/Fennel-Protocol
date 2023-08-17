@@ -44,25 +44,31 @@ pub mod pallet {
     /// The total number of trust actions currently active
     pub type CurrentIssued<T: Config> =
         StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
+
     #[pallet::storage]
     #[pallet::getter(fn get_trust_issuance)]
     /// A Map of lists of all addresses that each address has issued trust for
     pub type TrustIssuance<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, T::AccountId, u32>;
+
     #[pallet::storage]
     #[pallet::getter(fn get_current_non_trust_count)]
     /// The current number of _non_trust actions currently active
     pub type CurrentRevoked<T: Config> =
         StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
+
     #[pallet::storage]
     #[pallet::getter(fn get_non_trust_issuance)]
     /// A Map of lists of all addresses that each address has revoked trust for
     pub type TrustRevocation<T: Config> =
         StorageDoubleMap<_, Blake2_128Concat, T::AccountId, Blake2_128Concat, T::AccountId, u32>;
+
     #[pallet::storage]
     #[pallet::getter(fn get_current_trust_requests)]
+    /// The current number of trust requests currently active
     pub type CurrentRequests<T: Config> =
         StorageValue<Value = u32, QueryKind = ValueQuery, OnEmpty = DefaultCurrent<T>>;
+
     #[pallet::storage]
     #[pallet::getter(fn get_trust_request)]
     /// A map listing all requests for trust from one account to another.
