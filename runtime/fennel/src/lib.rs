@@ -242,6 +242,7 @@ parameter_types! {
     pub const IdentityMaxSize: u32 = 1024;
     pub const KeystoreMaxSize: u32 = 1024;
     pub const SignalMaxSize: u32 = 1024;
+    pub const TrustParameterMaxSize: u32 = 1024;
 
     // This part is copied from Substrate's `bin/node/runtime/src/lib.rs`.
     //  The `RuntimeBlockLength` and `RuntimeBlockWeights` exist here because the
@@ -687,6 +688,7 @@ impl pallet_keystore::Config for Runtime {
 impl pallet_trust::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_trust::weights::SubstrateWeight<Runtime>;
+    type MaxTrustParameterSize = TrustParameterMaxSize;
 }
 
 impl pallet_signal::Config for Runtime {

@@ -1,5 +1,7 @@
 use crate::{mock::*, Error};
 use frame_support::{assert_noop, assert_ok};
+use sp_core::ConstU32;
+use sp_runtime::BoundedVec;
 
 #[test]
 fn test_set_trust_parameter() {
@@ -7,12 +9,10 @@ fn test_set_trust_parameter() {
         System::set_block_number(1);
         assert_ok!(TrustModule::set_trust_parameter(
             RuntimeOrigin::signed(1),
-            "TEST".as_bytes().to_vec(),
+            BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
             0
         ));
-        System::assert_last_event(
-            crate::Event::TrustParameterSet("TEST".as_bytes().to_vec(), 0, 1).into(),
-        );
+        System::assert_last_event(crate::Event::TrustParameterSet(1).into());
     });
 }
 

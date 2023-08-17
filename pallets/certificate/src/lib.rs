@@ -45,7 +45,6 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn certificate_list)]
     /// Maps accounts to the array of identities it owns.
     pub type CertificateList<T: Config> = StorageDoubleMap<

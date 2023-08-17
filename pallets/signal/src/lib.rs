@@ -61,21 +61,6 @@ pub mod pallet {
     >;
 
     #[pallet::storage]
-    #[pallet::unbounded]
-    #[pallet::getter(fn whiteflag_rating_signal_list)]
-    /// Maps identity numbers to a signal transaction hash and a rating number.
-    pub type WhiteflagRatingSignalList<T: Config> = StorageDoubleMap<
-        _,
-        Blake2_128Concat,
-        T::AccountId,
-        Blake2_128Concat,
-        BoundedVec<u8, T::MaxSize>,
-        u8,
-        ValueQuery,
-    >;
-
-    #[pallet::storage]
-    #[pallet::unbounded]
     #[pallet::getter(fn signal_paramter_list)]
     /// Maps identity numbers to a signal transaction hash and a rating number.
     pub type SignalParameterList<T: Config> = StorageDoubleMap<
@@ -93,12 +78,6 @@ pub mod pallet {
     pub enum Event<T: Config> {
         /// Indicates that a signal parameter has been set.
         SignalParameterSet(T::AccountId),
-        /// Indicates that a Whiteflag rating signal has been sent.
-        WhiteflagRatingSignalSent(T::AccountId),
-        /// Indicates that a Whiteflag rating signal has been updated.
-        WhiteflagRatingSignalUpdated(T::AccountId),
-        /// Indicates that a Whiteflag rating signal has been revoked.
-        WhiteflagRatingSignalRevoked(T::AccountId),
         /// Indicates that a signal lock has been created.
         SignalLock(<T as frame_system::Config>::AccountId, BalanceOf<T>),
         /// Indicates that a signal lock has been extended.
@@ -160,53 +139,15 @@ pub mod pallet {
                 !<RatingSignalList<T>>::contains_key(who.clone(), target.clone()),
                 Error::<T>::RatingSignalAlreadyExists
             );
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
+            ensure!(
+                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                Error::<T>::InsufficientBalance
+            );
+
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             T::Currency::set_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLock(who.clone(), LOCK_PRICE.into()));
             Self::deposit_event(Event::RatingSignalSent(who));
-
-            Ok(())
-        }
-
-        #[pallet::weight(<T as Config>::WeightInfo::send_whiteflag_rating_signal())]
-        #[pallet::call_index(2)]
-        pub fn send_whiteflag_rating_signal(
-            origin: OriginFor<T>,
-            target: BoundedVec<u8, T::MaxSize>,
-            rating: u8,
-        ) -> DispatchResult {
-            let who = ensure_signed(origin)?;
-
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
-            <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
-            T::Currency::set_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
-            Self::deposit_event(Event::SignalLock(who.clone(), LOCK_PRICE.into()));
-            Self::deposit_event(Event::WhiteflagRatingSignalSent(who));
-
-            Ok(())
-        }
-
-        #[pallet::weight(<T as Config>::WeightInfo::update_whiteflag_rating_signal())]
-        #[pallet::call_index(3)]
-        pub fn update_whiteflag_rating_signal(
-            origin: OriginFor<T>,
-            target: BoundedVec<u8, T::MaxSize>,
-            new_rating: u8,
-        ) -> DispatchResult {
-            let who = ensure_signed(origin)?;
-
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
-            <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
-            T::Currency::extend_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
-            Self::deposit_event(Event::SignalLockExtended(who.clone(), LOCK_PRICE.into()));
-            Self::deposit_event(Event::WhiteflagRatingSignalUpdated(who));
 
             Ok(())
         }
@@ -222,12 +163,13 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             ensure!(
+                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                Error::<T>::InsufficientBalance
+            );
+            ensure!(
                 <RatingSignalList<T>>::contains_key(who.clone(), target.clone()),
                 Error::<T>::RatingSignalDoesNotExist
             );
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
             T::Currency::extend_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
@@ -255,22 +197,6 @@ pub mod pallet {
             T::Currency::remove_lock(LOCK_ID, &who);
             Self::deposit_event(Event::SignalUnlock(who.clone()));
             Self::deposit_event(Event::RatingSignalRevoked(who));
-
-            Ok(())
-        }
-
-        #[pallet::weight(<T as Config>::WeightInfo::revoke_whiteflag_rating_signal())]
-        #[pallet::call_index(6)]
-        pub fn revoke_whiteflag_rating_signal(
-            origin: OriginFor<T>,
-            target: BoundedVec<u8, T::MaxSize>,
-        ) -> DispatchResult {
-            let who = ensure_signed(origin)?;
-
-            <WhiteflagRatingSignalList<T>>::remove(who.clone(), target.clone());
-            T::Currency::remove_lock(LOCK_ID, &who);
-            Self::deposit_event(Event::SignalUnlock(who.clone()));
-            Self::deposit_event(Event::WhiteflagRatingSignalRevoked(who));
 
             Ok(())
         }

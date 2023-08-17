@@ -47,7 +47,8 @@ mod benchmarks {
         #[extrinsic_call]
         _(anakin.clone(), identity_num);
 
-        assert_eq!(RevokedIdentityNumber::<T>::get(), 1);
+        // Check that the identity no longer exists in the IdentityList.
+        assert!(!IdentityList::<T>::contains_key(identity_num));
 
         Ok(())
     }
@@ -63,7 +64,8 @@ mod benchmarks {
         #[extrinsic_call]
         revoke_identity(anakin.clone(), 301);
 
-        assert_eq!(RevokedIdentityNumber::<T>::get(), 1);
+        // Check that the identity no longer exists in the IdentityList.
+        assert!(!IdentityList::<T>::contains_key(301));
 
         Ok(())
     }
@@ -80,8 +82,7 @@ mod benchmarks {
         #[extrinsic_call]
         _(anakin.clone(), identity_index.into(), name.into(), value.into());
 
-        let key: T::AccountId = get_account::<T>("Anakin");
-        assert!(IdentityList::<T>::contains_key(key));
+        assert!(IdentityList::<T>::contains_key(identity_index));
 
         Ok(())
     }
@@ -103,8 +104,7 @@ mod benchmarks {
             value.into(),
         );
 
-        let key: T::AccountId = get_account::<T>("Anakin");
-        assert!(IdentityList::<T>::contains_key(key));
+        assert!(IdentityList::<T>::contains_key(identity_index));
 
         Ok(())
     }
@@ -138,8 +138,7 @@ mod benchmarks {
         #[extrinsic_call]
         add_or_update_identity_trait(obiwan, new_identity_index.into(), name.into(), value.into());
 
-        let key: T::AccountId = get_account::<T>("Obi-Wan");
-        assert!(IdentityList::<T>::contains_key(key));
+        assert!(IdentityList::<T>::contains_key(new_identity_index));
 
         Ok(())
     }
@@ -162,8 +161,7 @@ mod benchmarks {
         #[extrinsic_call]
         _(anakin.clone(), identity_index.into(), name.into());
 
-        let key: T::AccountId = get_account::<T>("Anakin");
-        assert!(IdentityList::<T>::contains_key(key));
+        assert!(IdentityList::<T>::contains_key(identity_index));
 
         Ok(())
     }
@@ -193,8 +191,7 @@ mod benchmarks {
         #[extrinsic_call]
         remove_identity_trait(anakin.clone(), identity_index.into(), name.into());
 
-        let key: T::AccountId = get_account::<T>("Anakin");
-        assert!(IdentityList::<T>::contains_key(key));
+        assert!(IdentityList::<T>::contains_key(identity_index));
 
         Ok(())
     }
@@ -217,67 +214,7 @@ mod benchmarks {
         #[extrinsic_call]
         remove_identity_trait(anakin.clone(), identity_index.into(), name.into());
 
-        let key: T::AccountId = get_account::<T>("Anakin");
-        assert!(IdentityList::<T>::contains_key(key));
-
-        Ok(())
-    }
-
-    #[benchmark]
-    fn sign_for_identity() -> Result<(), BenchmarkError> {
-        let anakin = get_origin::<T>("Anakin");
-        let value: BoundedVec<u8, T::MaxSize> =
-            "I am your father.".as_bytes().to_vec().try_into().unwrap();
-
-        let identity_index = IdentityNumber::<T>::get();
-        Identity::<T>::create_identity(anakin.clone().into())?;
-
-        #[extrinsic_call]
-        _(anakin.clone(), identity_index.into(), value.into());
-
-        assert_eq!(SignalCount::<T>::get(), identity_index + 1);
-
-        Ok(())
-    }
-
-    #[benchmark]
-    fn sign_for_identity_big_vector() -> Result<(), BenchmarkError> {
-        let anakin = get_origin::<T>("Anakin");
-        let value: BoundedVec<u8, T::MaxSize> = vec![0; 1000].try_into().unwrap();
-
-        let identity_index = IdentityNumber::<T>::get();
-        Identity::<T>::create_identity(anakin.clone().into())?;
-
-        #[extrinsic_call]
-        sign_for_identity(anakin.clone(), identity_index.into(), value.into());
-
-        assert_eq!(SignalCount::<T>::get(), identity_index + 1);
-
-        Ok(())
-    }
-
-    #[benchmark]
-    fn sign_for_identity_many_times() -> Result<(), BenchmarkError> {
-        let anakin = get_origin::<T>("Anakin");
-
-        let identity_index = IdentityNumber::<T>::get();
-        Identity::<T>::create_identity(anakin.clone().into())?;
-
-        for i in 0..99_999 {
-            let value: BoundedVec<u8, T::MaxSize> =
-                format!("I am your father. {}", i).as_bytes().to_vec().try_into().unwrap();
-
-            Identity::<T>::sign_for_identity(
-                anakin.clone().into(),
-                identity_index.into(),
-                value.into(),
-            )?;
-        }
-
-        #[extrinsic_call]
-        sign_for_identity(anakin.clone(), identity_index.into(), vec![0; 1000].try_into().unwrap());
-
-        assert_eq!(SignalCount::<T>::get(), identity_index + 100_000);
+        assert!(IdentityList::<T>::contains_key(identity_index));
 
         Ok(())
     }
