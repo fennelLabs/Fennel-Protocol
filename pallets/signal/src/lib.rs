@@ -158,9 +158,11 @@ pub mod pallet {
                 !<RatingSignalList<T>>::contains_key(who.clone(), target.clone()),
                 Error::<T>::RatingSignalAlreadyExists
             );
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
+            ensure!(
+                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                Error::<T>::InsufficientBalance
+            );
+
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             T::Currency::set_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLock(who.clone(), LOCK_PRICE.into()));
@@ -178,9 +180,15 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
+            ensure!(
+                !<WhiteflagRatingSignalList<T>>::contains_key(who.clone(), target.clone()),
+                Error::<T>::RatingSignalAlreadyExists
+            );
+            ensure!(
+                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                Error::<T>::InsufficientBalance
+            );
+
             <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             T::Currency::set_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLock(who.clone(), LOCK_PRICE.into()));
@@ -198,9 +206,15 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
+            ensure!(
+                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                Error::<T>::InsufficientBalance
+            );
+            ensure!(
+                <WhiteflagRatingSignalList<T>>::contains_key(who.clone(), target.clone()),
+                Error::<T>::RatingSignalDoesNotExist
+            );
+
             <WhiteflagRatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
             T::Currency::extend_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
             Self::deposit_event(Event::SignalLockExtended(who.clone(), LOCK_PRICE.into()));
@@ -220,12 +234,13 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             ensure!(
+                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                Error::<T>::InsufficientBalance
+            );
+            ensure!(
                 <RatingSignalList<T>>::contains_key(who.clone(), target.clone()),
                 Error::<T>::RatingSignalDoesNotExist
             );
-            if T::Currency::free_balance(&who) <= LOCK_PRICE.into() {
-                return Err(Error::<T>::InsufficientBalance.into())
-            }
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
             T::Currency::extend_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
@@ -265,6 +280,10 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
+            ensure!(
+                <WhiteflagRatingSignalList<T>>::contains_key(who.clone(), target.clone()),
+                Error::<T>::RatingSignalDoesNotExist
+            );
             <WhiteflagRatingSignalList<T>>::remove(who.clone(), target.clone());
             T::Currency::remove_lock(LOCK_ID, &who);
             Self::deposit_event(Event::SignalUnlock(who.clone()));

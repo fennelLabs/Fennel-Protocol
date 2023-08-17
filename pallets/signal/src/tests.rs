@@ -13,12 +13,7 @@ fn test_set_signal_parameter() {
             0,
         )
         .unwrap();
-        System::assert_last_event(
-            crate::Event::SignalParameterSet(
-                1,
-            )
-            .into(),
-        );
+        System::assert_last_event(crate::Event::SignalParameterSet(1).into());
     });
 }
 
@@ -63,12 +58,7 @@ fn test_send_whiteflag_rating_signal() {
             0,
         )
         .unwrap();
-        System::assert_last_event(
-            crate::Event::WhiteflagRatingSignalSent(
-                1,
-            )
-            .into(),
-        );
+        System::assert_last_event(crate::Event::WhiteflagRatingSignalSent(1).into());
     });
 }
 
@@ -111,18 +101,19 @@ fn test_update_whiteflag_rating_signal() {
     new_test_ext().execute_with(|| {
         System::set_block_number(1);
         let _ = Balances::deposit_creating(&1, 100);
+        SignalModule::send_whiteflag_rating_signal(
+            RuntimeOrigin::signed(1),
+            BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
+            1,
+        )
+        .unwrap();
         SignalModule::update_whiteflag_rating_signal(
             RuntimeOrigin::signed(1),
             BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
             0,
         )
         .unwrap();
-        System::assert_last_event(
-            crate::Event::WhiteflagRatingSignalUpdated(
-                1,
-            )
-            .into(),
-        );
+        System::assert_last_event(crate::Event::WhiteflagRatingSignalUpdated(1).into());
     });
 }
 

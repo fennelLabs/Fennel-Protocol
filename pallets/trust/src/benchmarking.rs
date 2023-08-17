@@ -5,8 +5,8 @@ use super::*;
 use crate::Pallet as Trust;
 
 use frame_benchmarking::{account as benchmark_account, v2::*};
-use frame_system::RawOrigin;
 use frame_support::BoundedVec;
+use frame_system::RawOrigin;
 
 pub fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
     frame_system::Pallet::<T>::assert_last_event(generic_event.into());
@@ -18,7 +18,9 @@ mod benchmarks {
 
     #[benchmark]
     fn set_trust_parameter() -> Result<(), BenchmarkError> {
-        let target = BoundedVec::<u8, <T as pallet::Config>::MaxTrustParameterSize>::try_from("TEST".as_bytes().to_vec())
+        let target = BoundedVec::<u8, <T as pallet::Config>::MaxTrustParameterSize>::try_from(
+            "TEST".as_bytes().to_vec(),
+        )
         .unwrap();
         let caller: T::AccountId = whitelisted_caller();
 

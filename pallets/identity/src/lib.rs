@@ -54,8 +54,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn identity_list)]
     /// Maps accounts to the array of identities it owns.
-    pub type IdentityList<T: Config> =
-        StorageMap<_, Blake2_128Concat, u32, T::AccountId>;
+    pub type IdentityList<T: Config> = StorageMap<_, Blake2_128Concat, u32, T::AccountId>;
 
     #[pallet::storage]
     #[pallet::getter(fn identity_trait_list)]
@@ -118,10 +117,7 @@ pub mod pallet {
             let new_id: u32 = <IdentityNumber<T>>::get();
 
             // Ensure that the index current_id isn't already in use.
-            ensure!(
-                !<IdentityList<T>>::contains_key(&current_id),
-                Error::<T>::StorageOverflow
-            );
+            ensure!(!<IdentityList<T>>::contains_key(&current_id), Error::<T>::StorageOverflow);
 
             <IdentityList<T>>::try_mutate(&current_id, |owner| -> DispatchResult {
                 *owner = Some(who.clone());

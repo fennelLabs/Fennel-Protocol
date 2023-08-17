@@ -12,9 +12,7 @@ fn test_set_trust_parameter() {
             BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
             0
         ));
-        System::assert_last_event(
-            crate::Event::TrustParameterSet(1).into(),
-        );
+        System::assert_last_event(crate::Event::TrustParameterSet(1).into());
     });
 }
 

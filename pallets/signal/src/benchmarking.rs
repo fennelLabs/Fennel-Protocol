@@ -104,10 +104,14 @@ mod benchmarks {
         let caller: T::AccountId = get_account::<T>("//Alice");
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
-        for _ in 0..100_000 {
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
             Signal::<T>::send_whiteflag_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
-                target.clone(),
+                loop_target,
                 0,
             )?;
         }
@@ -168,14 +172,23 @@ mod benchmarks {
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
 
         // Generate a bunch of signals.
-        for _ in 0..100_000 {
+        for i in 0..100_000 {
+            let loop_target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
+                format!("TEST{}", i).as_bytes().to_vec(),
+            )
+            .unwrap();
             Signal::<T>::send_whiteflag_rating_signal(
                 RawOrigin::Signed(caller.clone()).into(),
-                target.clone(),
+                loop_target,
                 3,
             )?;
         }
 
+        Signal::<T>::send_whiteflag_rating_signal(
+            RawOrigin::Signed(caller.clone()).into(),
+            target.clone(),
+            3,
+        )?;
         #[extrinsic_call]
         update_whiteflag_rating_signal(RawOrigin::Signed(caller.clone()), target.clone(), 1);
 
@@ -193,6 +206,12 @@ mod benchmarks {
 
         let caller: T::AccountId = get_account::<T>("//Alice");
         T::Currency::make_free_balance_be(&caller, DepositBalanceOf::<T>::max_value());
+
+        Signal::<T>::send_whiteflag_rating_signal(
+            RawOrigin::Signed(caller.clone()).into(),
+            target.clone(),
+            3,
+        )?;
 
         #[extrinsic_call]
         _(RawOrigin::Signed(caller.clone()), target.clone(), 0);
@@ -270,9 +289,7 @@ mod benchmarks {
             caller_account.clone(),
             target.clone()
         ));
-        assert_last_event::<T>(
-            Event::WhiteflagRatingSignalRevoked(caller_account).into(),
-        );
+        assert_last_event::<T>(Event::WhiteflagRatingSignalRevoked(caller_account).into());
 
         Ok(())
     }
@@ -280,8 +297,8 @@ mod benchmarks {
     #[benchmark]
     fn revoke_whiteflag_rating_signal_from_heavy_storage() -> Result<(), BenchmarkError> {
         for i in 0..100_000 {
-            let caller = RawOrigin::Signed(benchmark_account("Anakin", 0, i));
-            let caller_account = benchmark_account("Anakin", 0, i);
+            let caller = RawOrigin::Signed(benchmark_account("Anakin", 1, i));
+            let caller_account = benchmark_account("Anakin", 1, i);
             T::Currency::make_free_balance_be(&caller_account, DepositBalanceOf::<T>::max_value());
             let target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from(
                 "TEST".as_bytes().to_vec(),
