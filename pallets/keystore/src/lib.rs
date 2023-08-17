@@ -49,6 +49,7 @@ pub mod pallet {
 
     #[pallet::storage]
     #[pallet::getter(fn encryption_key)]
+    /// Maps an account to an encryption key that they've issued.
     pub type IssuedEncryptionKeys<T: Config> =
         StorageMap<_, Blake2_128Concat, T::AccountId, [u8; 32]>;
 
