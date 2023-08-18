@@ -133,16 +133,14 @@ pub mod pallet {
         pub fn issue_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            if !<TrustIssuance<T>>::contains_key(&who, &address) {
-                let total: u32 = <CurrentIssued<T>>::get();
-                let new_total: u32 =
-                    total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
-                <TrustIssuance<T>>::insert(&who, &address, total);
-                <CurrentIssued<T>>::put(new_total);
-                Self::deposit_event(Event::TrustIssued(who, address));
-            } else {
-                return Err(Error::<T>::TrustExists.into())
-            }
+            ensure!(!<TrustIssuance<T>>::contains_key(&who, &address), Error::<T>::TrustExists);
+
+            let total: u32 = <CurrentIssued<T>>::get();
+            let new_total: u32 =
+                total.checked_add(One::one()).ok_or(Error::<T>::StorageOverflow)?;
+            <TrustIssuance<T>>::insert(&who, &address, total);
+            <CurrentIssued<T>>::put(new_total);
+            Self::deposit_event(Event::TrustIssued(who, address));
 
             Ok(())
         }
