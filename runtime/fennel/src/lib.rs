@@ -12,7 +12,7 @@ pub mod xcm_config;
 use cumulus_pallet_parachain_system::RelayNumberStrictlyIncreases;
 use smallvec::smallvec;
 use sp_api::impl_runtime_apis;
-use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
+use sp_core::{crypto::KeyTypeId, OpaqueMetadata, ConstBool};
 use sp_runtime::{
     create_runtime_str, generic, impl_opaque_keys,
     traits::{AccountIdLookup, BlakeTwo256, Block as BlockT, IdentifyAccount, Verify},
@@ -269,22 +269,20 @@ parameter_types! {
 // Configure FRAME pallets to include in runtime.
 
 impl frame_system::Config for Runtime {
+    /// The basic Block type used by the runtime.
+    type Block = Block;
+    /// The index type for blocks.
+    type Nonce = Index;
     /// The identifier used to distinguish between accounts.
     type AccountId = AccountId;
     /// The aggregated dispatch type that is available for extrinsics.
     type RuntimeCall = RuntimeCall;
     /// The lookup mechanism to get account ID from whatever is passed in dispatchers.
     type Lookup = AccountIdLookup<AccountId, ()>;
-    /// The index type for storing how many extrinsics an account has signed.
-    type Index = Index;
-    /// The index type for blocks.
-    type BlockNumber = BlockNumber;
     /// The type for hashing blocks and tries.
     type Hash = Hash;
     /// The hashing algorithm used.
     type Hashing = BlakeTwo256;
-    /// The header type.
-    type Header = generic::Header<BlockNumber, BlakeTwo256>;
     /// The ubiquitous event type.
     type RuntimeEvent = RuntimeEvent;
     /// The ubiquitous origin type.
@@ -336,6 +334,7 @@ parameter_types! {
 }
 
 impl pallet_balances::Config for Runtime {
+    type RuntimeHoldReason = RuntimeHoldReason;
     type MaxLocks = ConstU32<50>;
     /// The type for recording an account's balance.
     type Balance = Balance;
@@ -347,7 +346,6 @@ impl pallet_balances::Config for Runtime {
     type WeightInfo = pallet_balances::weights::SubstrateWeight<Runtime>;
     type MaxReserves = ConstU32<50>;
     type ReserveIdentifier = [u8; 8];
-    type HoldIdentifier = ();
     type FreezeIdentifier = ();
     type MaxHolds = ConstU32<0>;
     type MaxFreezes = ConstU32<0>;
@@ -426,6 +424,7 @@ impl pallet_session::Config for Runtime {
 }
 
 impl pallet_aura::Config for Runtime {
+    type AllowMultipleBlocksPerSlot = ConstBool<false>;
     type AuthorityId = AuraId;
     type DisabledValidators = ();
     type MaxAuthorities = ConstU32<100_000>;
@@ -448,12 +447,12 @@ pub type CollatorSelectionUpdateOrigin = EitherOfDiverse<
 >;
 
 impl pallet_collator_selection::Config for Runtime {
+    type MinEligibleCollators = ConstU32<1>;
     type RuntimeEvent = RuntimeEvent;
     type Currency = Balances;
     type UpdateOrigin = CollatorSelectionUpdateOrigin;
     type PotId = PotId;
     type MaxCandidates = MaxCandidates;
-    type MinCandidates = MinCandidates;
     type MaxInvulnerables = MaxInvulnerables;
     // should be a multiple of session or things will get inconsistent
     type KickThreshold = Period;
@@ -495,10 +494,7 @@ impl pallet_certificate::Config for Runtime {
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
-    pub enum Runtime where
-        Block = Block,
-        NodeBlock = opaque::Block,
-        UncheckedExtrinsic = UncheckedExtrinsic,
+    pub enum Runtime
     {
         // System support stuff.
         System: frame_system = 0,

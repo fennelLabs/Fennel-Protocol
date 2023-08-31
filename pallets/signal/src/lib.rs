@@ -39,7 +39,7 @@ pub mod pallet {
         /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
         /// Accesses the chain's native currency for this pallet.
-        type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
+        type Currency: LockableCurrency<Self::AccountId, Moment = frame_system::pallet_prelude::BlockNumberFor<Self>>;
         /// The maximum size of a signal.
         type MaxSize: Get<u32>;
     }
