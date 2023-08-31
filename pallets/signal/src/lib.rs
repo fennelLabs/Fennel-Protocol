@@ -143,6 +143,12 @@ pub mod pallet {
                 !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
                 Error::<T>::InsufficientBalance
             );
+            T::Currency::ensure_can_withdraw(
+                &who,
+                LOCK_PRICE.into(),
+                WithdrawReasons::all(),
+                <T as Config>::Currency::free_balance(&who),
+            )?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
             T::Currency::set_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
