@@ -2,8 +2,10 @@ use crate as pallet_trust;
 use frame_support::parameter_types;
 use frame_system as system;
 use sp_core::{ConstU32, H256};
-use sp_runtime::traits::{BlakeTwo256, IdentityLookup};
-use sp_runtime::BuildStorage;
+use sp_runtime::{
+    traits::{BlakeTwo256, IdentityLookup},
+    BuildStorage,
+};
 
 type Block = frame_system::mocking::MockBlock<Test>;
 
@@ -55,7 +57,8 @@ impl pallet_trust::Config for Test {
 
 // Build genesis storage according to the mock runtime.
 pub fn new_test_ext() -> sp_io::TestExternalities {
-    RuntimeGenesisConfig {
-        system: Default::default(),
-    }.build_storage().unwrap().into()
+    RuntimeGenesisConfig { system: Default::default() }
+        .build_storage()
+        .unwrap()
+        .into()
 }
