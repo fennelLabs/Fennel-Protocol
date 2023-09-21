@@ -14,17 +14,17 @@ targets = ['x86_64-unknown-linux-gnu']
 [dependencies]
 scale-info = { version = "2.1", default-features = false, features = ["derive"] }
 codec = { default-features = false, features = ['derive', 'max-encoded-len'], package = 'parity-scale-codec', version = "3.1" }
-frame-benchmarking = { default-features = false, git = 'https://github.com/paritytech/substrate.git', optional = true, branch = "polkadot-v1.0.0" }
-frame-support = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v1.0.0" }
-frame-system = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v1.0.0" }
-pallet-balances = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v1.0.0" }
-pallet-uniques = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v1.0.0" }
+frame-benchmarking = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', optional = true, branch = "release-polkadot-v1.1.0" }
+frame-support = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+frame-system = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+pallet-balances = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+pallet-uniques = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
 
 [dev-dependencies]
 log = { version = "0.4", default-features = false, features = ['release_max_level_warn'] }
-sp-core = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v1.0.0" }
-sp-io = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v1.0.0" }
-sp-runtime = { default-features = false, git = 'https://github.com/paritytech/substrate.git', branch = "polkadot-v1.0.0" }
+sp-core = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+sp-io = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+sp-runtime = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
 
 [features]
 default = ['std']

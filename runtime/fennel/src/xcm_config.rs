@@ -4,7 +4,7 @@ use super::{
 };
 use core::{marker::PhantomData, ops::ControlFlow};
 use frame_support::{
-    log, match_types, parameter_types,
+    __private::log, match_types, parameter_types,
     traits::{ConstU32, Everything, Nothing, ProcessMessageError},
     weights::Weight,
 };
