@@ -282,9 +282,9 @@ pub fn run() -> Result<()> {
                 //     !cli.relay_chain_args.is_empty()
                 // {
                 //     warn!(
-                //         "Detected relay chain node arguments together with --relay-chain-rpc-url. \
-				// 		   This command starts a minimal Polkadot node that only uses a \
-				// 		   network-related subset of all relay chain CLI options."
+                //         "Detected relay chain node arguments together with --relay-chain-rpc-url.
+                // \ 		   This command starts a minimal Polkadot node that only uses a
+                // \ 		   network-related subset of all relay chain CLI options."
                 //     );
                 // }
 

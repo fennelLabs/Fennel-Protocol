@@ -7,8 +7,7 @@ use crate::Pallet as Keystore;
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::BoundedVec;
 use frame_system::RawOrigin;
-use scale_info::prelude::format;
-use scale_info::prelude::vec;
+use scale_info::prelude::{format, vec};
 
 pub fn get_origin<T: Config>(name: &'static str) -> RawOrigin<T::AccountId> {
     RawOrigin::Signed(get_account::<T>(name))

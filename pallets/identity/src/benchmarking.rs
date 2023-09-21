@@ -5,8 +5,7 @@ use crate::Pallet as Identity;
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::BoundedVec;
 use frame_system::RawOrigin;
-use scale_info::prelude::format;
-use scale_info::prelude::vec;
+use scale_info::prelude::{format, vec};
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
     let account: T::AccountId = benchmark_account(name, 0, 0);
