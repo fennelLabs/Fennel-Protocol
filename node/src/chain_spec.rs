@@ -125,9 +125,9 @@ pub fn local_testnet_config() -> ChainSpec {
 
     ChainSpec::from_genesis(
         // Name
-        "Local Testnet",
+        "Fennel Local",
         // ID
-        "local_testnet",
+        "fennel-local",
         ChainType::Local,
         move || {
             testnet_genesis(
@@ -165,7 +165,7 @@ pub fn local_testnet_config() -> ChainSpec {
         // Telemetry
         None,
         // Protocol ID
-        Some("template-local"),
+        Some("fennel-local"),
         // Fork ID
         None,
         // Properties
