@@ -68,7 +68,7 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Creates an on-chain event with a Certificate payload defined as part of the transaction
         /// and commits the details to storage.
-        #[pallet::weight(<T as Config>::WeightInfo::send_certificate())]
+        #[pallet::weight(T::WeightInfo::send_certificate())]
         #[pallet::call_index(0)]
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;

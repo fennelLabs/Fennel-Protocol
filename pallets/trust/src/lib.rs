@@ -128,7 +128,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// Fully give `origin`'s trust to account `address`
-        #[pallet::weight(<T as Config>::WeightInfo::issue_trust())]
+        #[pallet::weight(T::WeightInfo::issue_trust())]
         #[pallet::call_index(0)]
         pub fn issue_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -146,7 +146,7 @@ pub mod pallet {
         }
 
         /// Remove issued trust from an account `address`, making their trust status 'Unknown'
-        #[pallet::weight(<T as Config>::WeightInfo::remove_trust())]
+        #[pallet::weight(T::WeightInfo::remove_trust())]
         #[pallet::call_index(1)]
         pub fn remove_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -163,7 +163,7 @@ pub mod pallet {
         }
 
         /// Place a request for `address` to issue explicit trust to the sender.
-        #[pallet::weight(<T as Config>::WeightInfo::request_trust())]
+        #[pallet::weight(T::WeightInfo::request_trust())]
         #[pallet::call_index(2)]
         pub fn request_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -184,7 +184,7 @@ pub mod pallet {
         }
 
         /// Rescind or cancel a trust request placed to `address`.
-        #[pallet::weight(<T as Config>::WeightInfo::cancel_trust_request())]
+        #[pallet::weight(T::WeightInfo::cancel_trust_request())]
         #[pallet::call_index(3)]
         pub fn cancel_trust_request(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -203,8 +203,11 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Explcitly mark an account as untrusted
-        #[pallet::weight(<T as Config>::WeightInfo::revoke_trust())]
+        /// Explicitly mark an account as untrusted.
+        /// As opposed to removing a given trust connection between two accounts,
+        /// this extrinsic will broadcast active distrust to the network.
+        /// This is functionally like adding an address to a public block list or a spam list.
+        #[pallet::weight(T::WeightInfo::revoke_trust())]
         #[pallet::call_index(4)]
         pub fn revoke_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -224,7 +227,7 @@ pub mod pallet {
         }
 
         /// Return an untrusted `address` to an Unknown trust state
-        #[pallet::weight(<T as Config>::WeightInfo::remove_revoked_trust())]
+        #[pallet::weight(T::WeightInfo::remove_revoked_trust())]
         #[pallet::call_index(5)]
         pub fn remove_revoked_trust(origin: OriginFor<T>, address: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;
@@ -244,7 +247,7 @@ pub mod pallet {
         }
 
         /// Defines coefficients that participants should use to weight rating functions.
-        #[pallet::weight(<T as Config>::WeightInfo::set_trust_parameter())]
+        #[pallet::weight(T::WeightInfo::set_trust_parameter())]
         #[pallet::call_index(6)]
         pub fn set_trust_parameter(
             origin: OriginFor<T>,
@@ -253,7 +256,7 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <TrustParameterList<T>>::insert(who.clone(), name.clone(), value);
+            <TrustParameterList<T>>::insert(who.clone(), name, value);
             Self::deposit_event(Event::TrustParameterSet(who));
 
             Ok(())
