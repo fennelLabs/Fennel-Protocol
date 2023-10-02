@@ -4,6 +4,7 @@ use frame_support::{assert_noop, assert_ok};
 #[test]
 fn test_send_certificate() {
     new_test_ext().execute_with(|| {
+        // Why do we need to set block number?
         System::set_block_number(1);
         assert_ok!(CertificateModule::send_certificate(RuntimeOrigin::signed(1), 1));
         System::assert_last_event(crate::Event::CertificateSent(1, 1).into());

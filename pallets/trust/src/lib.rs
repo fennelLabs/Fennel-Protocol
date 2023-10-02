@@ -203,6 +203,7 @@ pub mod pallet {
             Ok(())
         }
 
+        // What is the difference between this extrinsic and `remove_trust`
         /// Explcitly mark an account as untrusted
         #[pallet::weight(<T as Config>::WeightInfo::revoke_trust())]
         #[pallet::call_index(4)]
@@ -253,7 +254,7 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            <TrustParameterList<T>>::insert(who.clone(), name.clone(), value);
+            <TrustParameterList<T>>::insert(who.clone(), name, value);
             Self::deposit_event(Event::TrustParameterSet(who));
 
             Ok(())

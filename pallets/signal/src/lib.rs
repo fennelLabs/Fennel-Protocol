@@ -25,8 +25,11 @@ pub mod pallet {
 
     use crate::weights::WeightInfo;
 
+    // It should be configurable in runtime.
     const LOCK_ID: LockIdentifier = *b"fnlsignl";
 
+    // It should be configurable in runtime.
+    // How did you choose this number? I mean why 10?
     const LOCK_PRICE: u32 = 10;
 
     type BalanceOf<T> =
@@ -112,7 +115,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// Defines coefficients that participants should use to weight rating functions.
-        #[pallet::weight(<T as Config>::WeightInfo::set_signal_parameter())]
+        #[pallet::weight(T::WeightInfo::set_signal_parameter())]
         #[pallet::call_index(0)]
         pub fn set_signal_parameter(
             origin: OriginFor<T>,
@@ -129,7 +132,7 @@ pub mod pallet {
 
         /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating
         /// number.
-        #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
+        #[pallet::weight(T::WeightInfo::send_rating_signal())]
         #[pallet::call_index(1)]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
@@ -161,6 +164,7 @@ pub mod pallet {
             Ok(())
         }
 
+        // Please replace `<T as Config>` with `T`
         /// Updates an existing rating signal.
         #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
         #[pallet::call_index(4)]
@@ -210,6 +214,7 @@ pub mod pallet {
             Ok(())
         }
 
+        // Please explain the purpose of this extrinsic in detail. Who will call this extrinsic?
         /// Creates an on-chain event with a signal payload defined as part of the transaction
         /// without relying on storage.
         #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
@@ -223,6 +228,7 @@ pub mod pallet {
             Ok(())
         }
 
+        // Please explain the purpose of this extrinsic in detail. Who will call this extrinsic?
         /// Sends a hexadecimal signal tagged for a particular application or service using Fennel
         /// Protocol.
         #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
