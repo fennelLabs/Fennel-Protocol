@@ -19,15 +19,11 @@ pub mod pallet {
     use frame_support::{
         dispatch::DispatchResult,
         pallet_prelude::*,
-        traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons},
+        traits::{Currency, LockableCurrency, WithdrawReasons, LockIdentifier},
     };
     use frame_system::pallet_prelude::*;
 
     use crate::weights::WeightInfo;
-
-    const LOCK_ID: LockIdentifier = *b"fnlsignl";
-
-    const LOCK_PRICE: u32 = 10;
 
     type BalanceOf<T> =
         <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
@@ -45,6 +41,11 @@ pub mod pallet {
         >;
         /// The maximum size of a signal.
         type MaxSize: Get<u32>;
+        /// The identifier for the lock used to store signal deposits.
+        // type LockId: Parameter + Member + MaxEncodedLen + Ord + Copy;
+        type LockId: Get<LockIdentifier>;
+        /// The price of a signal lock.
+        type LockPrice: Get<u32>;
     }
 
     #[pallet::pallet]
@@ -143,19 +144,19 @@ pub mod pallet {
                 Error::<T>::RatingSignalAlreadyExists
             );
             ensure!(
-                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                !(T::Currency::free_balance(&who) <= T::LockPrice::get().into()),
                 Error::<T>::InsufficientBalance
             );
             T::Currency::ensure_can_withdraw(
                 &who,
-                LOCK_PRICE.into(),
+                T::LockPrice::get().into(),
                 WithdrawReasons::all(),
                 <T as Config>::Currency::free_balance(&who),
             )?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
-            T::Currency::set_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
-            Self::deposit_event(Event::SignalLock(who.clone(), LOCK_PRICE.into()));
+            T::Currency::set_lock(T::LockId::get(), &who, T::LockPrice::get().into(), WithdrawReasons::all());
+            Self::deposit_event(Event::SignalLock(who.clone(), T::LockPrice::get().into()));
             Self::deposit_event(Event::RatingSignalSent(who));
 
             Ok(())
@@ -172,7 +173,7 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             ensure!(
-                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                !(T::Currency::free_balance(&who) <= T::LockPrice::get().into()),
                 Error::<T>::InsufficientBalance
             );
             ensure!(
@@ -181,8 +182,8 @@ pub mod pallet {
             );
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
-            T::Currency::extend_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
-            Self::deposit_event(Event::SignalLockExtended(who.clone(), LOCK_PRICE.into()));
+            T::Currency::extend_lock(T::LockId::get(), &who, T::LockPrice::get().into(), WithdrawReasons::all());
+            Self::deposit_event(Event::SignalLockExtended(who.clone(), T::LockPrice::get().into()));
             Self::deposit_event(Event::RatingSignalUpdated(who));
 
             Ok(())
@@ -203,7 +204,7 @@ pub mod pallet {
             );
 
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
-            T::Currency::remove_lock(LOCK_ID, &who);
+            T::Currency::remove_lock(T::LockId::get(), &who);
             Self::deposit_event(Event::SignalUnlock(who.clone()));
             Self::deposit_event(Event::RatingSignalRevoked(who));
 

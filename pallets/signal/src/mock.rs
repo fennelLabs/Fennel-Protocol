@@ -54,6 +54,7 @@ impl system::Config for Test {
 
 parameter_types! {
     pub const ExistentialDeposit: u128 = 1;
+    pub const MockLockIdentifier: [u8; 8] = *b"signal  ";
 }
 
 impl pallet_balances::Config for Test {
@@ -77,6 +78,8 @@ impl pallet_signal::Config for Test {
     type WeightInfo = ();
     type Currency = Balances;
     type MaxSize = ConstU32<100>;
+    type LockId = MockLockIdentifier;
+    type LockPrice = ConstU32<10>;
 }
 
 // Build genesis storage according to the mock runtime.

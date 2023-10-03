@@ -244,6 +244,9 @@ parameter_types! {
     pub const SignalMaxSize: u32 = 1024;
     pub const TrustParameterMaxSize: u32 = 1024;
 
+    pub const SignalLockIdentifier: [u8; 8] = *b"fnlsignl";
+    pub const SignalLockPrice: u32 = 100;
+
     // This part is copied from Substrate's `bin/node/runtime/src/lib.rs`.
     //  The `RuntimeBlockLength` and `RuntimeBlockWeights` exist here because the
     // `DeletionWeightLimit` and `DeletionQueueDepth` depend on those to parameterize
@@ -484,6 +487,8 @@ impl pallet_signal::Config for Runtime {
     type Currency = Balances;
     type WeightInfo = pallet_signal::weights::SubstrateWeight<Runtime>;
     type MaxSize = SignalMaxSize;
+    type LockId = SignalLockIdentifier;
+    type LockPrice = SignalLockPrice;
 }
 
 impl pallet_identity::Config for Runtime {
