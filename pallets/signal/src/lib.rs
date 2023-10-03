@@ -19,7 +19,7 @@ pub mod pallet {
     use frame_support::{
         dispatch::DispatchResult,
         pallet_prelude::*,
-        traits::{Currency, LockableCurrency, WithdrawReasons, LockIdentifier},
+        traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons},
     };
     use frame_system::pallet_prelude::*;
 
@@ -155,7 +155,12 @@ pub mod pallet {
             )?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
-            T::Currency::set_lock(T::LockId::get(), &who, T::LockPrice::get().into(), WithdrawReasons::all());
+            T::Currency::set_lock(
+                T::LockId::get(),
+                &who,
+                T::LockPrice::get().into(),
+                WithdrawReasons::all(),
+            );
             Self::deposit_event(Event::SignalLock(who.clone(), T::LockPrice::get().into()));
             Self::deposit_event(Event::RatingSignalSent(who));
 
@@ -182,7 +187,12 @@ pub mod pallet {
             );
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
-            T::Currency::extend_lock(T::LockId::get(), &who, T::LockPrice::get().into(), WithdrawReasons::all());
+            T::Currency::extend_lock(
+                T::LockId::get(),
+                &who,
+                T::LockPrice::get().into(),
+                WithdrawReasons::all(),
+            );
             Self::deposit_event(Event::SignalLockExtended(who.clone(), T::LockPrice::get().into()));
             Self::deposit_event(Event::RatingSignalUpdated(who));
 
@@ -228,7 +238,8 @@ pub mod pallet {
 
         /// Sends a hexadecimal signal tagged for a particular application or service using Fennel
         /// Protocol. This is intended for specific signal-consuming applications like the Whiteflag
-        /// Protocol to issue events to the chain that can be immediately identified with their application.
+        /// Protocol to issue events to the chain that can be immediately identified with their
+        /// application.
         #[pallet::weight(T::WeightInfo::send_service_signal())]
         #[pallet::call_index(8)]
         pub fn send_service_signal(
