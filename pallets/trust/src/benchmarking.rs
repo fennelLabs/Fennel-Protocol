@@ -7,6 +7,7 @@ use crate::Pallet as Trust;
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::BoundedVec;
 use frame_system::RawOrigin;
+use scale_info::prelude::vec;
 
 pub fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
     frame_system::Pallet::<T>::assert_last_event(generic_event.into());

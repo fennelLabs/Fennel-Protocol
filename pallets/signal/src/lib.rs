@@ -25,10 +25,6 @@ pub mod pallet {
 
     use crate::weights::WeightInfo;
 
-    const LOCK_ID: LockIdentifier = *b"fnlsignl";
-
-    const LOCK_PRICE: u32 = 10;
-
     type BalanceOf<T> =
         <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
@@ -39,9 +35,17 @@ pub mod pallet {
         /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
         /// Accesses the chain's native currency for this pallet.
-        type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
+        type Currency: LockableCurrency<
+            Self::AccountId,
+            Moment = frame_system::pallet_prelude::BlockNumberFor<Self>,
+        >;
         /// The maximum size of a signal.
         type MaxSize: Get<u32>;
+        /// The identifier for the lock used to store signal deposits.
+        // type LockId: Parameter + Member + MaxEncodedLen + Ord + Copy;
+        type LockId: Get<LockIdentifier>;
+        /// The price of a signal lock.
+        type LockPrice: Get<u32>;
     }
 
     #[pallet::pallet]
@@ -109,7 +113,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// Defines coefficients that participants should use to weight rating functions.
-        #[pallet::weight(<T as Config>::WeightInfo::set_signal_parameter())]
+        #[pallet::weight(T::WeightInfo::set_signal_parameter())]
         #[pallet::call_index(0)]
         pub fn set_signal_parameter(
             origin: OriginFor<T>,
@@ -126,7 +130,7 @@ pub mod pallet {
 
         /// Creates an on-chain event with a transaction hash as a pointer and a u8 as a rating
         /// number.
-        #[pallet::weight(<T as Config>::WeightInfo::send_rating_signal())]
+        #[pallet::weight(T::WeightInfo::send_rating_signal())]
         #[pallet::call_index(1)]
         pub fn send_rating_signal(
             origin: OriginFor<T>,
@@ -140,20 +144,31 @@ pub mod pallet {
                 Error::<T>::RatingSignalAlreadyExists
             );
             ensure!(
-                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                !(T::Currency::free_balance(&who) <= T::LockPrice::get().into()),
                 Error::<T>::InsufficientBalance
             );
+            T::Currency::ensure_can_withdraw(
+                &who,
+                T::LockPrice::get().into(),
+                WithdrawReasons::all(),
+                <T as Config>::Currency::free_balance(&who),
+            )?;
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), rating);
-            T::Currency::set_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
-            Self::deposit_event(Event::SignalLock(who.clone(), LOCK_PRICE.into()));
+            T::Currency::set_lock(
+                T::LockId::get(),
+                &who,
+                T::LockPrice::get().into(),
+                WithdrawReasons::all(),
+            );
+            Self::deposit_event(Event::SignalLock(who.clone(), T::LockPrice::get().into()));
             Self::deposit_event(Event::RatingSignalSent(who));
 
             Ok(())
         }
 
         /// Updates an existing rating signal.
-        #[pallet::weight(<T as Config>::WeightInfo::update_rating_signal())]
+        #[pallet::weight(T::WeightInfo::update_rating_signal())]
         #[pallet::call_index(4)]
         pub fn update_rating_signal(
             origin: OriginFor<T>,
@@ -163,7 +178,7 @@ pub mod pallet {
             let who = ensure_signed(origin)?;
 
             ensure!(
-                !(T::Currency::free_balance(&who) <= LOCK_PRICE.into()),
+                !(T::Currency::free_balance(&who) <= T::LockPrice::get().into()),
                 Error::<T>::InsufficientBalance
             );
             ensure!(
@@ -172,15 +187,20 @@ pub mod pallet {
             );
 
             <RatingSignalList<T>>::insert(who.clone(), target.clone(), new_rating);
-            T::Currency::extend_lock(LOCK_ID, &who, LOCK_PRICE.into(), WithdrawReasons::all());
-            Self::deposit_event(Event::SignalLockExtended(who.clone(), LOCK_PRICE.into()));
+            T::Currency::extend_lock(
+                T::LockId::get(),
+                &who,
+                T::LockPrice::get().into(),
+                WithdrawReasons::all(),
+            );
+            Self::deposit_event(Event::SignalLockExtended(who.clone(), T::LockPrice::get().into()));
             Self::deposit_event(Event::RatingSignalUpdated(who));
 
             Ok(())
         }
 
         /// Puts out a signal cancelling a previous rating.
-        #[pallet::weight(<T as Config>::WeightInfo::revoke_rating_signal())]
+        #[pallet::weight(T::WeightInfo::revoke_rating_signal())]
         #[pallet::call_index(5)]
         pub fn revoke_rating_signal(
             origin: OriginFor<T>,
@@ -194,7 +214,7 @@ pub mod pallet {
             );
 
             <RatingSignalList<T>>::remove(who.clone(), target.clone());
-            T::Currency::remove_lock(LOCK_ID, &who);
+            T::Currency::remove_lock(T::LockId::get(), &who);
             Self::deposit_event(Event::SignalUnlock(who.clone()));
             Self::deposit_event(Event::RatingSignalRevoked(who));
 
@@ -202,8 +222,10 @@ pub mod pallet {
         }
 
         /// Creates an on-chain event with a signal payload defined as part of the transaction
-        /// without relying on storage.
-        #[pallet::weight(<T as Config>::WeightInfo::send_signal())]
+        /// without relying on storage. This is intended for signals that should be sent between
+        /// applications or on-chain protocols, such as if a user wants to alert the Whiteflag
+        /// network to a signal that was produced by a parallel application.
+        #[pallet::weight(T::WeightInfo::send_signal())]
         #[pallet::call_index(7)]
         pub fn send_signal(
             origin: OriginFor<T>,
@@ -215,8 +237,10 @@ pub mod pallet {
         }
 
         /// Sends a hexadecimal signal tagged for a particular application or service using Fennel
-        /// Protocol.
-        #[pallet::weight(<T as Config>::WeightInfo::send_service_signal())]
+        /// Protocol. This is intended for specific signal-consuming applications like the Whiteflag
+        /// Protocol to issue events to the chain that can be immediately identified with their
+        /// application.
+        #[pallet::weight(T::WeightInfo::send_service_signal())]
         #[pallet::call_index(8)]
         pub fn send_service_signal(
             origin: OriginFor<T>,

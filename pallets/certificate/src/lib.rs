@@ -38,7 +38,10 @@ pub mod pallet {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         /// Weight information for extrinsics in this pallet.
         type WeightInfo: WeightInfo;
-        type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
+        type Currency: LockableCurrency<
+            Self::AccountId,
+            Moment = frame_system::pallet_prelude::BlockNumberFor<Self>,
+        >;
     }
 
     #[pallet::pallet]
@@ -81,7 +84,7 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Creates an on-chain event with a Certificate payload defined as part of the transaction
         /// and commits the details to storage.
-        #[pallet::weight(<T as Config>::WeightInfo::send_certificate())]
+        #[pallet::weight(T::WeightInfo::send_certificate())]
         #[pallet::call_index(0)]
         pub fn send_certificate(origin: OriginFor<T>, recipient: T::AccountId) -> DispatchResult {
             let who = ensure_signed(origin)?;

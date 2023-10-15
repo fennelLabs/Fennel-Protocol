@@ -29,7 +29,6 @@ for p in ${pallets[@]}
 do
   ./target/release/fennel-node benchmark pallet \
     --chain=fennel-local \
-    --execution=wasm \
     --wasm-execution=compiled \
     --pallet=$p \
     --extrinsic='*' \

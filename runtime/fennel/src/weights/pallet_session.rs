@@ -9,7 +9,6 @@
 // benchmark
 // pallet
 // --chain=fennel-local
-// --execution=wasm
 // --wasm-execution=compiled
 // --pallet=pallet_session
 // --extrinsic=*

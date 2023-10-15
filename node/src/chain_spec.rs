@@ -7,7 +7,7 @@ use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
-pub type ChainSpec = sc_service::GenericChainSpec<fennel_runtime::GenesisConfig, Extensions>;
+pub type ChainSpec = sc_service::GenericChainSpec<fennel_runtime::RuntimeGenesisConfig, Extensions>;
 
 /// The default XCM version to set in genesis config.
 const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
@@ -100,6 +100,7 @@ pub fn development_config() -> ChainSpec {
                     get_account_id_from_seed::<sr25519::Public>("Eve//stash"),
                     get_account_id_from_seed::<sr25519::Public>("Ferdie//stash"),
                 ],
+                get_account_id_from_seed::<sr25519::Public>("Alice"),
                 1000.into(),
             )
         },
@@ -155,6 +156,7 @@ pub fn local_testnet_config() -> ChainSpec {
                     get_account_id_from_seed::<sr25519::Public>("Eve//stash"),
                     get_account_id_from_seed::<sr25519::Public>("Ferdie//stash"),
                 ],
+                get_account_id_from_seed::<sr25519::Public>("Alice"),
                 1000.into(),
             )
         },
@@ -179,18 +181,23 @@ pub fn local_testnet_config() -> ChainSpec {
 fn testnet_genesis(
     invulnerables: Vec<(AccountId, AuraId)>,
     endowed_accounts: Vec<AccountId>,
+    _root: AccountId,
     id: ParaId,
-) -> fennel_runtime::GenesisConfig {
-    fennel_runtime::GenesisConfig {
+) -> fennel_runtime::RuntimeGenesisConfig {
+    fennel_runtime::RuntimeGenesisConfig {
         system: fennel_runtime::SystemConfig {
             code: fennel_runtime::WASM_BINARY
                 .expect("WASM binary was not build, please build it!")
                 .to_vec(),
+            ..Default::default()
         },
         balances: fennel_runtime::BalancesConfig {
             balances: endowed_accounts.iter().cloned().map(|k| (k, 1 << 60)).collect(),
         },
-        parachain_info: fennel_runtime::ParachainInfoConfig { parachain_id: id },
+        parachain_info: fennel_runtime::ParachainInfoConfig {
+            parachain_id: id,
+            ..Default::default()
+        },
         collator_selection: fennel_runtime::CollatorSelectionConfig {
             invulnerables: invulnerables.iter().cloned().map(|(acc, _)| acc).collect(),
             candidacy_bond: EXISTENTIAL_DEPOSIT * 16,
@@ -222,6 +229,7 @@ fn testnet_genesis(
         parachain_system: Default::default(),
         polkadot_xcm: fennel_runtime::PolkadotXcmConfig {
             safe_xcm_version: Some(SAFE_XCM_VERSION),
+            ..Default::default()
         },
         transaction_payment: Default::default(),
     }

@@ -10,7 +10,6 @@
 // benchmark
 // pallet
 // --chain=fennel-local
-// --execution=wasm
 // --wasm-execution=compiled
 // --pallet=pallet_keystore
 // --extrinsic=*
@@ -82,8 +81,15 @@ impl<T: frame_system::Config> pallet_keystore::WeightInfo for SubstrateWeight<T>
 			.saturating_add(T::DbWeight::get().reads(1_u64))
 			.saturating_add(T::DbWeight::get().writes(1_u64))
 	}
-	/// Storage: Keystore IssuedEncryptionKeys (r:0 w:1)
-	/// Proof: Keystore IssuedEncryptionKeys (max_values: None, max_size: Some(80), added: 2555, mode: MaxEncodedLen)
+	/// Storage: `Keystore::IssuedKeys` (r:1 w:1)
+	/// Proof: `Keystore::IssuedKeys` (`max_values`: None, `max_size`: Some(2116), added: 4591, mode: `MaxEncodedLen`)
+	fn revoke_one_of_many_keys() -> Weight {
+		Weight::from_parts(51_000_000, 5581)
+			.saturating_add(T::DbWeight::get().reads(1_u64))
+			.saturating_add(T::DbWeight::get().writes(1_u64))
+	}
+	/// Storage: `Keystore::IssuedEncryptionKeys` (r:0 w:1)
+	/// Proof: `Keystore::IssuedEncryptionKeys` (`max_values`: None, `max_size`: Some(80), added: 2555, mode: `MaxEncodedLen`)
 	fn issue_encryption_key() -> Weight {
 		Weight::from_parts(8_000_000, 0)
 			.saturating_add(T::DbWeight::get().writes(1_u64))
@@ -164,8 +170,19 @@ impl WeightInfo for () {
 			.saturating_add(RocksDbWeight::get().reads(1_u64))
 			.saturating_add(RocksDbWeight::get().writes(1_u64))
 	}
-	/// Storage: Keystore IssuedEncryptionKeys (r:0 w:1)
-	/// Proof: Keystore IssuedEncryptionKeys (max_values: None, max_size: Some(80), added: 2555, mode: MaxEncodedLen)
+	/// Storage: `Keystore::IssuedKeys` (r:1 w:1)
+	/// Proof: `Keystore::IssuedKeys` (`max_values`: None, `max_size`: Some(2116), added: 4591, mode: `MaxEncodedLen`)
+	fn revoke_one_of_many_keys() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `2112`
+		//  Estimated: `5581`
+		// Minimum execution time: 46_000_000 picoseconds.
+		Weight::from_parts(51_000_000, 5581)
+			.saturating_add(RocksDbWeight::get().reads(1_u64))
+			.saturating_add(RocksDbWeight::get().writes(1_u64))
+	}
+	/// Storage: `Keystore::IssuedEncryptionKeys` (r:0 w:1)
+	/// Proof: `Keystore::IssuedEncryptionKeys` (`max_values`: None, `max_size`: Some(80), added: 2555, mode: `MaxEncodedLen`)
 	fn issue_encryption_key() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`

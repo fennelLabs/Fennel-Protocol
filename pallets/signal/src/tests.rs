@@ -89,6 +89,20 @@ fn test_revoke_rating_signal() {
 }
 
 #[test]
+fn test_revoke_rating_signal_fails_if_none() {
+    new_test_ext().execute_with(|| {
+        System::set_block_number(1);
+        assert_noop!(
+            SignalModule::revoke_rating_signal(
+                RuntimeOrigin::signed(1),
+                BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap()
+            ),
+            Error::<Test>::RatingSignalDoesNotExist
+        );
+    });
+}
+
+#[test]
 fn test_send_signal() {
     new_test_ext().execute_with(|| {
         System::set_block_number(1);

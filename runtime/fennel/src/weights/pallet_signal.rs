@@ -10,11 +10,10 @@
 // benchmark
 // pallet
 // --chain=fennel-local
-// --execution=wasm
 // --wasm-execution=compiled
 // --pallet=pallet_signal
 // --extrinsic=*
-// --steps=100
+// --steps=10
 // --repeat=100
 // --template=./scripts/templates/parachain-weight-template.hbs
 // --output=./runtime/fennel/src/weights

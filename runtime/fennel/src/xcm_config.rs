@@ -4,7 +4,8 @@ use super::{
 };
 use core::{marker::PhantomData, ops::ControlFlow};
 use frame_support::{
-    log, match_types, parameter_types,
+    __private::log,
+    match_types, parameter_types,
     traits::{ConstU32, Everything, Nothing, ProcessMessageError},
     weights::Weight,
 };
@@ -20,7 +21,10 @@ use xcm_builder::{
     SiblingParachainConvertsVia, SignedAccountId32AsNative, SignedToAccountId32,
     SovereignSignedViaLocation, TakeWeightCredit, UsingComponents, WithComputedOrigin,
 };
-use xcm_executor::{traits::ShouldExecute, XcmExecutor};
+use xcm_executor::{
+    traits::{Properties, ShouldExecute},
+    XcmExecutor,
+};
 
 parameter_types! {
     pub const RelayLocation: MultiLocation = MultiLocation::parent();
@@ -107,7 +111,7 @@ where
         origin: &MultiLocation,
         message: &mut [Instruction<RuntimeCall>],
         max_weight: Weight,
-        weight_credit: &mut Weight,
+        weight_credit: &mut Properties,
     ) -> Result<(), ProcessMessageError> {
         Deny::should_execute(origin, message, max_weight, weight_credit)?;
         Allow::should_execute(origin, message, max_weight, weight_credit)
@@ -121,7 +125,7 @@ impl ShouldExecute for DenyReserveTransferToRelayChain {
         origin: &MultiLocation,
         message: &mut [Instruction<RuntimeCall>],
         _max_weight: Weight,
-        _weight_credit: &mut Weight,
+        _weight_credit: &mut Properties,
     ) -> Result<(), ProcessMessageError> {
         message.matcher().match_next_inst_while(
             |_| true,
@@ -176,6 +180,7 @@ pub type Barrier = DenyThenTry<
 
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
+    type Aliasers = Nothing;
     type RuntimeCall = RuntimeCall;
     type XcmSender = XcmRouter;
     // How to withdraw and deposit an asset.

@@ -34,8 +34,8 @@ jobs:
           source ~/.cargo/env
           rustup update nightly
           rustup update stable
-          rustup default nightly-2022-11-15
-          rustup target add wasm32-unknown-unknown --toolchain nightly-2022-11-15
+          rustup default nightly
+          rustup target add wasm32-unknown-unknown --toolchain nightly
       
       - name: Check Formatting
         run: >

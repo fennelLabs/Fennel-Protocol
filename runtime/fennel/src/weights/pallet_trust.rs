@@ -10,7 +10,6 @@
 // benchmark
 // pallet
 // --chain=fennel-local
-// --execution=wasm
 // --wasm-execution=compiled
 // --pallet=pallet_trust
 // --extrinsic=*
@@ -51,10 +50,10 @@ impl<T: frame_system::Config> pallet_trust::WeightInfo for SubstrateWeight<T> {
 		Weight::from_parts(9_000_000, 0)
 			.saturating_add(T::DbWeight::get().writes(1_u64))
 	}
-	/// Storage: Trust TrustIssuance (r:1 w:1)
-	/// Proof: Trust TrustIssuance (max_values: None, max_size: Some(100), added: 2575, mode: MaxEncodedLen)
-	/// Storage: Trust CurrentIssued (r:1 w:1)
-	/// Proof: Trust CurrentIssued (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
+	/// Storage: `Trust::TrustIssuance` (r:1 w:1)
+	/// Proof: `Trust::TrustIssuance` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentIssued` (r:1 w:1)
+	/// Proof: `Trust::CurrentIssued` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	fn issue_trust() -> Weight {
 		Weight::from_parts(14_000_000, 3565)
 			.saturating_add(T::DbWeight::get().reads(2_u64))
@@ -69,12 +68,21 @@ impl<T: frame_system::Config> pallet_trust::WeightInfo for SubstrateWeight<T> {
 			.saturating_add(T::DbWeight::get().reads(2_u64))
 			.saturating_add(T::DbWeight::get().writes(2_u64))
 	}
-	/// Storage: Trust TrustRevocation (r:1 w:1)
-	/// Proof: Trust TrustRevocation (max_values: None, max_size: Some(100), added: 2575, mode: MaxEncodedLen)
-	/// Storage: Trust CurrentRevoked (r:1 w:1)
-	/// Proof: Trust CurrentRevoked (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
+	/// Storage: `Trust::TrustIssuance` (r:1 w:1)
+	/// Proof: `Trust::TrustIssuance` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentIssued` (r:1 w:1)
+	/// Proof: `Trust::CurrentIssued` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	fn issue_trust_repeatedly() -> Weight {
+		Weight::from_parts(26_000_000, 3565)
+			.saturating_add(T::DbWeight::get().reads(2_u64))
+			.saturating_add(T::DbWeight::get().writes(2_u64))
+	}
+	/// Storage: `Trust::TrustRevocation` (r:1 w:1)
+	/// Proof: `Trust::TrustRevocation` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentRevoked` (r:1 w:1)
+	/// Proof: `Trust::CurrentRevoked` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	fn revoke_trust() -> Weight {
-		Weight::from_parts(14_000_000, 3565)
+		Weight::from_parts(13_000_000, 3565)
 			.saturating_add(T::DbWeight::get().reads(2_u64))
 			.saturating_add(T::DbWeight::get().writes(2_u64))
 	}
@@ -105,12 +113,12 @@ impl<T: frame_system::Config> pallet_trust::WeightInfo for SubstrateWeight<T> {
 			.saturating_add(T::DbWeight::get().reads(2_u64))
 			.saturating_add(T::DbWeight::get().writes(2_u64))
 	}
-	/// Storage: Trust TrustRequestList (r:1 w:1)
-	/// Proof: Trust TrustRequestList (max_values: None, max_size: Some(100), added: 2575, mode: MaxEncodedLen)
-	/// Storage: Trust CurrentRequests (r:1 w:1)
-	/// Proof: Trust CurrentRequests (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	fn request_trust() -> Weight {
-		Weight::from_parts(14_000_000, 3565)
+	/// Storage: `Trust::TrustRevocation` (r:1 w:1)
+	/// Proof: `Trust::TrustRevocation` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentRevoked` (r:1 w:1)
+	/// Proof: `Trust::CurrentRevoked` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	fn remove_revoked_trust_heavy_storage() -> Weight {
+		Weight::from_parts(26_000_000, 3565)
 			.saturating_add(T::DbWeight::get().reads(2_u64))
 			.saturating_add(T::DbWeight::get().writes(2_u64))
 	}
@@ -146,7 +154,16 @@ impl<T: frame_system::Config> pallet_trust::WeightInfo for SubstrateWeight<T> {
 	/// Storage: Trust CurrentRequests (r:1 w:1)
 	/// Proof: Trust CurrentRequests (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
 	fn cancel_trust_request() -> Weight {
-		Weight::from_parts(16_000_000, 3565)
+		Weight::from_parts(15_000_000, 3565)
+			.saturating_add(T::DbWeight::get().reads(2_u64))
+			.saturating_add(T::DbWeight::get().writes(2_u64))
+	}
+	/// Storage: `Trust::TrustRequestList` (r:1 w:1)
+	/// Proof: `Trust::TrustRequestList` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentRequests` (r:1 w:1)
+	/// Proof: `Trust::CurrentRequests` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	fn cancel_trust_request_heavy_storage() -> Weight {
+		Weight::from_parts(24_000_000, 3565)
 			.saturating_add(T::DbWeight::get().reads(2_u64))
 			.saturating_add(T::DbWeight::get().writes(2_u64))
 	}
@@ -163,8 +180,8 @@ impl<T: frame_system::Config> pallet_trust::WeightInfo for SubstrateWeight<T> {
 
 // For backwards compatibility and tests
 impl WeightInfo for () {
-	/// Storage: Trust TrustParameterList (r:0 w:1)
-	/// Proof Skipped: Trust TrustParameterList (max_values: None, max_size: None, mode: Measured)
+	/// Storage: `Trust::TrustParameterList` (r:0 w:1)
+	/// Proof: `Trust::TrustParameterList` (`max_values`: None, `max_size`: Some(1091), added: 3566, mode: `MaxEncodedLen`)
 	fn set_trust_parameter() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -173,10 +190,10 @@ impl WeightInfo for () {
 		Weight::from_parts(9_000_000, 0)
 			.saturating_add(RocksDbWeight::get().writes(1_u64))
 	}
-	/// Storage: Trust TrustIssuance (r:1 w:1)
-	/// Proof: Trust TrustIssuance (max_values: None, max_size: Some(100), added: 2575, mode: MaxEncodedLen)
-	/// Storage: Trust CurrentIssued (r:1 w:1)
-	/// Proof: Trust CurrentIssued (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
+	/// Storage: `Trust::TrustIssuance` (r:1 w:1)
+	/// Proof: `Trust::TrustIssuance` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentIssued` (r:1 w:1)
+	/// Proof: `Trust::CurrentIssued` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	fn issue_trust() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `42`
@@ -199,16 +216,29 @@ impl WeightInfo for () {
 			.saturating_add(RocksDbWeight::get().reads(2_u64))
 			.saturating_add(RocksDbWeight::get().writes(2_u64))
 	}
-	/// Storage: Trust TrustRevocation (r:1 w:1)
-	/// Proof: Trust TrustRevocation (max_values: None, max_size: Some(100), added: 2575, mode: MaxEncodedLen)
-	/// Storage: Trust CurrentRevoked (r:1 w:1)
-	/// Proof: Trust CurrentRevoked (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
+	/// Storage: `Trust::TrustIssuance` (r:1 w:1)
+	/// Proof: `Trust::TrustIssuance` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentIssued` (r:1 w:1)
+	/// Proof: `Trust::CurrentIssued` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	fn issue_trust_repeatedly() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `1158`
+		//  Estimated: `3565`
+		// Minimum execution time: 19_000_000 picoseconds.
+		Weight::from_parts(26_000_000, 3565)
+			.saturating_add(RocksDbWeight::get().reads(2_u64))
+			.saturating_add(RocksDbWeight::get().writes(2_u64))
+	}
+	/// Storage: `Trust::TrustRevocation` (r:1 w:1)
+	/// Proof: `Trust::TrustRevocation` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentRevoked` (r:1 w:1)
+	/// Proof: `Trust::CurrentRevoked` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	fn revoke_trust() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `42`
 		//  Estimated: `3565`
-		// Minimum execution time: 13_000_000 picoseconds.
-		Weight::from_parts(14_000_000, 3565)
+		// Minimum execution time: 12_000_000 picoseconds.
+		Weight::from_parts(13_000_000, 3565)
 			.saturating_add(RocksDbWeight::get().reads(2_u64))
 			.saturating_add(RocksDbWeight::get().writes(2_u64))
 	}
@@ -251,16 +281,16 @@ impl WeightInfo for () {
 			.saturating_add(RocksDbWeight::get().reads(2_u64))
 			.saturating_add(RocksDbWeight::get().writes(2_u64))
 	}
-	/// Storage: Trust TrustRequestList (r:1 w:1)
-	/// Proof: Trust TrustRequestList (max_values: None, max_size: Some(100), added: 2575, mode: MaxEncodedLen)
-	/// Storage: Trust CurrentRequests (r:1 w:1)
-	/// Proof: Trust CurrentRequests (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
+	/// Storage: `Trust::TrustRequestList` (r:1 w:1)
+	/// Proof: `Trust::TrustRequestList` (`max_values`: None, `max_size`: Some(100), added: 2575, mode: `MaxEncodedLen`)
+	/// Storage: `Trust::CurrentRequests` (r:1 w:1)
+	/// Proof: `Trust::CurrentRequests` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	fn request_trust() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `42`
 		//  Estimated: `3565`
-		// Minimum execution time: 13_000_000 picoseconds.
-		Weight::from_parts(14_000_000, 3565)
+		// Minimum execution time: 12_000_000 picoseconds.
+		Weight::from_parts(13_000_000, 3565)
 			.saturating_add(RocksDbWeight::get().reads(2_u64))
 			.saturating_add(RocksDbWeight::get().writes(2_u64))
 	}
