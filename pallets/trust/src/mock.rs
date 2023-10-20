@@ -52,7 +52,7 @@ impl system::Config for Test {
 impl pallet_trust::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
-    type MaxTrustParameterSize = ConstU32<100>;
+    type MaxTrustParameterSize = ConstU32<1024>;
 }
 
 // Build genesis storage according to the mock runtime.

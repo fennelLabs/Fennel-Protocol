@@ -77,7 +77,7 @@ impl pallet_signal::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
     type Currency = Balances;
-    type MaxSize = ConstU32<100>;
+    type MaxSize = ConstU32<1024>;
     type LockId = MockLockIdentifier;
     type LockPrice = ConstU32<10>;
 }

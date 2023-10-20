@@ -9,7 +9,7 @@ fn test_set_trust_parameter() {
         System::set_block_number(1);
         assert_ok!(TrustModule::set_trust_parameter(
             RuntimeOrigin::signed(1),
-            BoundedVec::<u8, ConstU32<100>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
+            BoundedVec::<u8, ConstU32<1024>>::try_from("TEST".as_bytes().to_vec()).unwrap(),
             0
         ));
         System::assert_last_event(crate::Event::TrustParameterSet(1).into());

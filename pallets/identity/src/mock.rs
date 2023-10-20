@@ -52,7 +52,7 @@ impl system::Config for Test {
 impl pallet_identity::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
-    type MaxSize = ConstU32<1000>;
+    type MaxSize = ConstU32<1024>;
 }
 
 // Build genesis storage according to the mock runtime.
