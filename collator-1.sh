@@ -1,0 +1,2 @@
+ #!/bin/bash
+./target/release/fennel-node --collator --chain raw-parachain-chainspec.json --base-path /tmp/parachain/alice --port 40333 --rpc-port 9954 --rpc-methods Unsafe --name Fennel0 --node-key $(gsutil cat gs://whiteflag-0-admin/fennel-para-key.sh) --unsafe-rpc-external --rpc-external --rpc-cors=all -- --execution wasm --chain ./polkadotspec.json --port 30343 --rpc-port 9977 --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/12D3KooWLj8FgbwDtLQbA5ozWqqx6vM1n2rmjwQMczSiDveyWa5G --rpc-external --prometheus-external --rpc-cors all

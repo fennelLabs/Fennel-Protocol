@@ -1,4 +1,5 @@
-FROM rust:1.67
+FROM rust:1.70 as base
+WORKDIR /app
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update -y && \
     ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
@@ -8,10 +9,22 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install clang libclang-dev libclang1 llvm llvm-dev clang-tools -y && \
     apt-get upgrade -y
 
-RUN rustup update nightly && \
-    rustup default nightly-2022-11-15 && \
-    rustup target add wasm32-unknown-unknown --toolchain nightly-2022-11-15
+RUN rustup update nightly
+RUN rustup default nightly
+RUN rustup target add wasm32-unknown-unknown --toolchain nightly
+RUN cargo install cargo-chef
 
-WORKDIR /app
+FROM base as planner
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
+
+FROM base as builder
+COPY --from=planner /app/recipe.json recipe.json
+RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release
+
+FROM base as runtime
+COPY --from=builder /app/target/release/fennel-node /app/fennel-node
+COPY --from=builder /app/polkadotspec.json /app/polkadotspec.json
+COPY --from=builder /app/raw-parachain-chainspec.json /app/raw-parachain-chainspec.json
