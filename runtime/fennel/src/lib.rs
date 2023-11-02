@@ -251,6 +251,9 @@ parameter_types! {
 
     pub const SignalLockIdentifier: [u8; 8] = *b"fnlsignl";
     pub const SignalLockPrice: u32 = 100;
+    
+    pub const CertificateLockIdentifier: [u8; 8] = *b"fnlcertf";
+    pub const CertificateLockPrice: u32 = 100;
 
     // This part is copied from Substrate's `bin/node/runtime/src/lib.rs`.
     //  The `RuntimeBlockLength` and `RuntimeBlockWeights` exist here because the
@@ -717,6 +720,8 @@ impl pallet_certificate::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = pallet_certificate::weights::SubstrateWeight<Runtime>;
     type Currency = Balances;
+    type LockId = CertificateLockIdentifier;
+    type LockPrice = CertificateLockPrice;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.

@@ -42,6 +42,10 @@ pub mod pallet {
             Self::AccountId,
             Moment = frame_system::pallet_prelude::BlockNumberFor<Self>,
         >;
+        /// The identifier for the lock used to store certificate deposits.
+        type LockId: Get<LockIdentifier>;
+        /// The price of a certificate lock.
+        type LockPrice: Get<u32>;
     }
 
     #[pallet::pallet]

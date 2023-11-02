@@ -1,7 +1,7 @@
 use crate as pallet_certificate;
 use frame_support::parameter_types;
 use frame_system as system;
-use sp_core::H256;
+use sp_core::{ConstU32, H256};
 use sp_runtime::{
     traits::{BlakeTwo256, IdentityLookup},
     BuildStorage,
@@ -54,6 +54,7 @@ impl system::Config for Test {
 
 parameter_types! {
     pub const ExistentialDeposit: u128 = 1;
+    pub const MockLockIdentifier: [u8; 8] = *b"certlock";
 }
 
 impl pallet_balances::Config for Test {
@@ -76,6 +77,8 @@ impl pallet_certificate::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
     type Currency = Balances;
+    type LockId = MockLockIdentifier;
+    type LockPrice = ConstU32<10>;
 }
 
 // Build genesis storage according to the mock runtime.
