@@ -251,7 +251,7 @@ parameter_types! {
 
     pub const SignalLockIdentifier: [u8; 8] = *b"fnlsignl";
     pub const SignalLockPrice: u32 = 100;
-    
+
     pub const CertificateLockIdentifier: [u8; 8] = *b"fnlcertf";
     pub const CertificateLockPrice: u32 = 100;
 
