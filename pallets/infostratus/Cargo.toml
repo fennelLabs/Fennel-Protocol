@@ -1,0 +1,40 @@
+[package]
+authors = ['Fennel Labs <https://github.com/fennelLabs>']
+description = 'FRAME pallet providing base Infostratus logic.'
+edition = '2021'
+homepage = 'https://fennellabs.com'
+license = 'Unlicense'
+name = 'pallet-infostratus'
+publish = false
+readme = 'README.md'
+repository = 'https://github.com/fennelLabs/fennel-protocol/'
+version = '0.1.0'
+
+[package.metadata.docs.rs]
+targets = ['x86_64-unknown-linux-gnu']
+
+[dependencies]
+scale-info = { version = "2.1", default-features = false, features = ["derive"] }
+codec = { default-features = false, features = ['derive', 'max-encoded-len'], package = 'parity-scale-codec', version = '3.1' }
+frame-benchmarking = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', optional = true, branch = "release-polkadot-v1.1.0" }
+frame-support = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+frame-system = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+pallet-balances = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+
+[dev-dependencies]
+sp-core = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+sp-io = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+sp-runtime = { default-features = false, git = 'https://github.com/paritytech/polkadot-sdk.git', branch = "release-polkadot-v1.1.0" }
+
+
+[features]
+default = ['std']
+runtime-benchmarks = ['frame-benchmarking', 'frame-support/runtime-benchmarks', 'frame-system/runtime-benchmarks']
+std = [
+    'codec/std',
+    'frame-support/std',
+    'frame-system/std',
+    'frame-benchmarking/std',
+    'scale-info/std'
+]
+try-runtime = ['frame-support/try-runtime', 'frame-system/try-runtime']

@@ -3312,6 +3312,7 @@ dependencies = [
  "pallet-collective",
  "pallet-democracy",
  "pallet-identity 0.1.0",
+ "pallet-infostratus",
  "pallet-keystore",
  "pallet-preimage",
  "pallet-scheduler",
@@ -6687,6 +6688,21 @@ dependencies = [
  "sp-keyring",
  "sp-runtime",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-infostratus"
+version = "0.1.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]

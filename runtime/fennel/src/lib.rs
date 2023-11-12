@@ -53,6 +53,7 @@ use xcm_config::{RelayLocation, XcmConfig, XcmOriginToTransactDispatchOrigin};
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 
+pub use pallet_infostratus;
 pub use pallet_certificate;
 pub use pallet_identity;
 pub use pallet_keystore;
@@ -248,12 +249,16 @@ parameter_types! {
     pub const KeystoreMaxSize: u32 = 1024;
     pub const SignalMaxSize: u32 = 1024;
     pub const TrustParameterMaxSize: u32 = 1024;
+    pub const InfostratusMaxSize: u32 = 1024;
 
     pub const SignalLockIdentifier: [u8; 8] = *b"fnlsignl";
     pub const SignalLockPrice: u32 = 100;
 
     pub const CertificateLockIdentifier: [u8; 8] = *b"fnlcertf";
     pub const CertificateLockPrice: u32 = 100;
+
+    pub const InfostratusLockIdentifier: [u8; 8] = *b"infstrts";
+    pub const InfostratusLockPrice: u32 = 100;
 
     // This part is copied from Substrate's `bin/node/runtime/src/lib.rs`.
     //  The `RuntimeBlockLength` and `RuntimeBlockWeights` exist here because the
@@ -724,6 +729,15 @@ impl pallet_certificate::Config for Runtime {
     type LockPrice = CertificateLockPrice;
 }
 
+impl pallet_infostratus::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type WeightInfo = pallet_infostratus::weights::SubstrateWeight<Runtime>;
+    type Currency = Balances;
+    type MaxSize = InfostratusMaxSize;
+    type LockId = InfostratusLockIdentifier;
+    type LockPrice = InfostratusLockPrice;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
     pub enum Runtime
@@ -767,6 +781,7 @@ construct_runtime!(
         Signal: pallet_signal::{Pallet, Call, Storage, Event<T>} = 36,
         Identity: pallet_identity::{Pallet, Call, Storage, Event<T>} = 37,
         Certificate: pallet_certificate::{Pallet, Call, Storage, Event<T>} = 38,
+        Infostratus: pallet_infostratus::{Pallet, Call, Storage, Event<T>} = 39,
 
     }
 );
@@ -791,6 +806,7 @@ mod benches {
         [pallet_signal, Signal]
         [pallet_identity, Identity]
         [pallet_certificate, Certificate]
+        [pallet_infostratus, Infostratus]
     );
 }
 
