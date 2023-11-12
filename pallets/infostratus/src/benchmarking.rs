@@ -7,7 +7,7 @@ use crate::Pallet as Infostratus;
 use frame_benchmarking::{account as benchmark_account, v2::*};
 use frame_support::{sp_runtime::traits::Bounded, traits::Currency, BoundedVec};
 use frame_system::RawOrigin;
-use scale_info::prelude::{vec, format};
+use scale_info::prelude::{format, vec};
 
 pub fn get_account<T: Config>(name: &'static str) -> T::AccountId {
     let account: T::AccountId = benchmark_account(name, 0, 0);
@@ -28,8 +28,9 @@ mod benchmarks {
     fn create_submission_entry() -> Result<(), BenchmarkError> {
         let caller = get_origin::<T>("Spock");
         let caller_account: T::AccountId = get_account::<T>("Spock");
-        let target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
-        .unwrap();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
 
         T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
 
@@ -46,8 +47,9 @@ mod benchmarks {
     fn create_submission_entry_heavy_storage() -> Result<(), BenchmarkError> {
         let caller = get_origin::<T>("Spock");
         let caller_account: T::AccountId = get_account::<T>("Spock");
-        let target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
-        .unwrap();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
 
         T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
 
@@ -56,10 +58,7 @@ mod benchmarks {
                 format!("TEST{}", i).as_bytes().to_vec(),
             )
             .unwrap();
-            Infostratus::<T>::create_submission_entry(
-                caller.clone().into(),
-                loop_target,
-            )?;
+            Infostratus::<T>::create_submission_entry(caller.clone().into(), loop_target)?;
         }
 
         #[extrinsic_call]
@@ -77,8 +76,9 @@ mod benchmarks {
         let caller_account: T::AccountId = get_account::<T>("Leonard");
         let second_caller = get_origin::<T>("Montgomery");
         let second_caller_account: T::AccountId = get_account::<T>("Montgomery");
-        let target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
-        .unwrap();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
 
         T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
         T::Currency::make_free_balance_be(&second_caller_account, BalanceOf::<T>::max_value());
@@ -91,7 +91,10 @@ mod benchmarks {
         let caller_account_id: T::AccountId = get_account::<T>("Leonard");
         let second_caller_account_id: T::AccountId = get_account::<T>("Montgomery");
         assert!(SubmissionsList::<T>::contains_key(caller_account_id.clone(), target.clone()));
-        assert!(AssignmentsList::<T>::contains_key(second_caller_account_id.clone(), target.clone()));
+        assert!(AssignmentsList::<T>::contains_key(
+            second_caller_account_id.clone(),
+            target.clone()
+        ));
 
         Ok(())
     }
@@ -102,8 +105,9 @@ mod benchmarks {
         let caller_account: T::AccountId = get_account::<T>("Leonard");
         let second_caller = get_origin::<T>("Spock");
         let second_caller_account: T::AccountId = get_account::<T>("Spock");
-        let target = BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
-        .unwrap();
+        let target =
+            BoundedVec::<u8, <T as pallet::Config>::MaxSize>::try_from("TEST".as_bytes().to_vec())
+                .unwrap();
 
         T::Currency::make_free_balance_be(&caller_account, BalanceOf::<T>::max_value());
         T::Currency::make_free_balance_be(&second_caller_account, BalanceOf::<T>::max_value());
@@ -115,10 +119,7 @@ mod benchmarks {
                 format!("TEST{}", i).as_bytes().to_vec(),
             )
             .unwrap();
-            Infostratus::<T>::create_submission_entry(
-                caller.clone().into(),
-                loop_target,
-            )?;
+            Infostratus::<T>::create_submission_entry(caller.clone().into(), loop_target)?;
         }
 
         for i in 0..100_000 {
@@ -134,12 +135,19 @@ mod benchmarks {
         }
 
         #[extrinsic_call]
-        Infostratus::<T>::request_submission_assignment(second_caller, caller_account, target.clone());
+        Infostratus::<T>::request_submission_assignment(
+            second_caller,
+            caller_account,
+            target.clone(),
+        );
 
         let caller_account_id: T::AccountId = get_account::<T>("Leonard");
         let second_caller_account_id: T::AccountId = get_account::<T>("Spock");
         assert!(SubmissionsList::<T>::contains_key(caller_account_id.clone(), target.clone()));
-        assert!(AssignmentsList::<T>::contains_key(second_caller_account_id.clone(), target.clone()));
+        assert!(AssignmentsList::<T>::contains_key(
+            second_caller_account_id.clone(),
+            target.clone()
+        ));
 
         Ok(())
     }

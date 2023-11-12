@@ -50,7 +50,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
         Weight::from_parts(15_000_000, 3562)
             .saturating_add(T::DbWeight::get().reads(1_u64))
             .saturating_add(T::DbWeight::get().writes(1_u64))
-    } 
+    }
 }
 
 // For backwards compatibility and tests

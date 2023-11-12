@@ -26,7 +26,7 @@ pub mod pallet {
     };
     use frame_system::pallet_prelude::*;
 
-    use crate::{weights::WeightInfo, ASSIGNMENT_EXISTS, ASSIGNMENT_DOES_NOT_EXIST};
+    use crate::{weights::WeightInfo, ASSIGNMENT_DOES_NOT_EXIST, ASSIGNMENT_EXISTS};
 
     type BalanceOf<T> =
         <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
@@ -99,10 +99,14 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         /// Creates an on-chain event that a submission has been sent.
-        /// This means that the origin wants a piece of online information verified by the community.
+        /// This means that the origin wants a piece of online information verified by the
+        /// community.
         #[pallet::weight(T::WeightInfo::create_submission_entry())]
         #[pallet::call_index(0)]
-        pub fn create_submission_entry(origin: OriginFor<T>, resource_location: BoundedVec<u8, T::MaxSize>) -> DispatchResult {
+        pub fn create_submission_entry(
+            origin: OriginFor<T>,
+            resource_location: BoundedVec<u8, T::MaxSize>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             if T::Currency::total_balance(&who) < T::Currency::minimum_balance() {
@@ -122,7 +126,11 @@ pub mod pallet {
                 T::Currency::free_balance(&who),
             ));
 
-            <SubmissionsList<T>>::insert(&who, resource_location.clone(), ASSIGNMENT_DOES_NOT_EXIST);
+            <SubmissionsList<T>>::insert(
+                &who,
+                resource_location.clone(),
+                ASSIGNMENT_DOES_NOT_EXIST,
+            );
 
             Self::deposit_event(Event::SubmissionSent(who, resource_location));
 
@@ -132,17 +140,18 @@ pub mod pallet {
         #[pallet::weight(T::WeightInfo::request_submission_assignment())]
         #[pallet::call_index(1)]
         /// Creates an on-chain event that a submission has been assigned for the origin to verify.
-        pub fn request_submission_assignment(origin: OriginFor<T>, poster: T::AccountId, resource_location: BoundedVec<u8, T::MaxSize>) -> DispatchResult {
+        pub fn request_submission_assignment(
+            origin: OriginFor<T>,
+            poster: T::AccountId,
+            resource_location: BoundedVec<u8, T::MaxSize>,
+        ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             if T::Currency::total_balance(&who) < T::Currency::minimum_balance() {
                 return Err(Error::<T>::InsufficientBalance.into())
             }
 
-            ensure!(
-                &who != &poster,
-                Error::<T>::CannotAssignOwnSubmission
-            );
+            ensure!(&who != &poster, Error::<T>::CannotAssignOwnSubmission);
 
             ensure!(
                 SubmissionsList::<T>::contains_key(&poster, &resource_location),
@@ -161,10 +170,14 @@ pub mod pallet {
             ));
 
             <AssignmentsList<T>>::insert(&who, resource_location.clone(), ASSIGNMENT_EXISTS);
-            <SubmissionsList<T>>::try_mutate(&poster, resource_location.clone(), |value| -> DispatchResult {
-                *value = ASSIGNMENT_EXISTS;
-                Ok(())
-            })?;
+            <SubmissionsList<T>>::try_mutate(
+                &poster,
+                resource_location.clone(),
+                |value| -> DispatchResult {
+                    *value = ASSIGNMENT_EXISTS;
+                    Ok(())
+                },
+            )?;
 
             Self::deposit_event(Event::SubmissionAssigned(resource_location, who));
 

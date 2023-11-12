@@ -53,9 +53,9 @@ use xcm_config::{RelayLocation, XcmConfig, XcmOriginToTransactDispatchOrigin};
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 
-pub use pallet_infostratus;
 pub use pallet_certificate;
 pub use pallet_identity;
+pub use pallet_infostratus;
 pub use pallet_keystore;
 pub use pallet_signal;
 pub use pallet_trust;
