@@ -27,8 +27,6 @@ pub mod pallet {
 
     use crate::{weights::WeightInfo, CERTIFICATE_EXISTS};
 
-    const LOCK_ID: LockIdentifier = *b"certlock";
-
     type BalanceOf<T> =
         <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
@@ -103,7 +101,7 @@ pub mod pallet {
             );
             // Insert a placeholder value into storage - if the pair (who, recipient) exists, we
             // know there's a certificate present for the pair, regardless of value.
-            T::Currency::set_lock(LOCK_ID, &who, 10u32.into(), WithdrawReasons::all());
+            T::Currency::set_lock(T::LockId::get(), &who, 10u32.into(), WithdrawReasons::all());
 
             Self::deposit_event(Event::CertificateLock(
                 who.clone(),
@@ -133,7 +131,7 @@ pub mod pallet {
                 Error::<T>::CertificateNotOwned
             );
 
-            T::Currency::remove_lock(LOCK_ID, &who);
+            T::Currency::remove_lock(T::LockId::get(), &who);
             Self::deposit_event(Event::CertificateUnlock(
                 who.clone(),
                 T::Currency::free_balance(&who),
