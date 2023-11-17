@@ -8,6 +8,7 @@ fn test_send_certificate() {
         let _ = Balances::deposit_creating(&1, 100);
         assert_ok!(CertificateModule::send_certificate(RuntimeOrigin::signed(1), 1));
         System::assert_last_event(crate::Event::CertificateSent(1, 1).into());
+        assert_eq!(CertificateModule::certificate_list(1, 1), true);
     });
 }
 
@@ -22,6 +23,7 @@ fn test_send_existing_certificate() {
             CertificateModule::send_certificate(RuntimeOrigin::signed(1), 1),
             Error::<Test>::CertificateExists
         );
+        assert_eq!(CertificateModule::certificate_list(1, 1), true);
     });
 }
 
@@ -34,6 +36,7 @@ fn test_revoke_certificate() {
         System::assert_last_event(crate::Event::CertificateSent(1, 1).into());
         assert_ok!(CertificateModule::revoke_certificate(RuntimeOrigin::signed(1), 1));
         System::assert_last_event(crate::Event::CertificateRevoked(1, 1).into());
+        assert_eq!(CertificateModule::certificate_list(1, 1), false);
     });
 }
 
@@ -49,5 +52,6 @@ fn test_try_revoke_unowned_certificate() {
             CertificateModule::revoke_certificate(RuntimeOrigin::signed(2), 1),
             Error::<Test>::CertificateNotOwned
         );
+        assert_eq!(CertificateModule::certificate_list(1, 1), true);
     });
 }

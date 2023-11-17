@@ -108,7 +108,14 @@ pub mod pallet {
                 T::Currency::free_balance(&who),
             ));
 
-            <CertificateList<T>>::insert(&who, recipient.clone(), CERTIFICATE_EXISTS);
+            <CertificateList<T>>::try_mutate(
+                &who,
+                recipient.clone(),
+                |certificate| -> DispatchResult {
+                    *certificate = CERTIFICATE_EXISTS;
+                    Ok(())
+                },
+            )?;
 
             Self::deposit_event(Event::CertificateSent(recipient, who));
 
@@ -137,7 +144,14 @@ pub mod pallet {
                 T::Currency::free_balance(&who),
             ));
 
-            <CertificateList<T>>::remove(&who, recipient.clone());
+            <CertificateList<T>>::try_mutate(
+                &who,
+                recipient.clone(),
+                |certificate| -> DispatchResult {
+                    *certificate = !CERTIFICATE_EXISTS;
+                    Ok(())
+                },
+            )?;
 
             Self::deposit_event(Event::CertificateRevoked(recipient, who));
 

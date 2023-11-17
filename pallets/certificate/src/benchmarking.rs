@@ -81,7 +81,11 @@ mod benchmarks {
 
         let caller_account_id: T::AccountId = get_account::<T>("Leonard");
         let target_account_id: T::AccountId = get_account::<T>("Montgomery");
-        assert!(!CertificateList::<T>::contains_key(caller_account_id, target_account_id));
+        assert!(CertificateList::<T>::contains_key(
+            caller_account_id.clone(),
+            target_account_id.clone()
+        ));
+        assert!(!CertificateList::<T>::get(caller_account_id, target_account_id));
 
         Ok(())
     }
@@ -106,7 +110,11 @@ mod benchmarks {
 
         let caller_account_id: T::AccountId = get_account::<T>("Leonard");
         let target_account_id: T::AccountId = get_account::<T>("Montgomery");
-        assert!(!CertificateList::<T>::contains_key(caller_account_id, target_account_id));
+        assert!(CertificateList::<T>::contains_key(
+            caller_account_id.clone(),
+            target_account_id.clone()
+        ));
+        assert!(!CertificateList::<T>::get(caller_account_id, target_account_id));
 
         Ok(())
     }
