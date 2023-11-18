@@ -126,11 +126,14 @@ pub mod pallet {
                 T::Currency::free_balance(&who),
             ));
 
-            <SubmissionsList<T>>::insert(
+            <SubmissionsList<T>>::try_mutate(
                 &who,
                 resource_location.clone(),
-                ASSIGNMENT_DOES_NOT_EXIST,
-            );
+                |value| -> DispatchResult {
+                    *value = ASSIGNMENT_DOES_NOT_EXIST;
+                    Ok(())
+                },
+            )?;
 
             Self::deposit_event(Event::SubmissionSent(who, resource_location));
 
@@ -169,7 +172,14 @@ pub mod pallet {
                 T::Currency::free_balance(&who),
             ));
 
-            <AssignmentsList<T>>::insert(&who, resource_location.clone(), ASSIGNMENT_EXISTS);
+            <AssignmentsList<T>>::try_mutate(
+                &who,
+                resource_location.clone(),
+                |value| -> DispatchResult {
+                    *value = ASSIGNMENT_EXISTS;
+                    Ok(())
+                },
+            )?;
             <SubmissionsList<T>>::try_mutate(
                 &poster,
                 resource_location.clone(),
